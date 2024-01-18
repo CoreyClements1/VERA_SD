@@ -36,42 +36,11 @@ public class ButtonController : MonoBehaviour
                 }
              }
             
-            // if(button1){
-            //     if(Input.GetKeyDown(keyInput1)){
-            //         btn1.onClick.Invoke();
-            //         FadeToColor(btn1.colors.pressedColor, btn1);
-            //     } else if(Input.GetKeyUp(keyInput1)){
-            //         FadeToColor(btn1.colors.normalColor, btn1);
-            //     }
-            // }
-            // if(button2){
-            //     if(Input.GetKeyDown(keyInput2)){
-            //         btn2.onClick.Invoke();
-            //         FadeToColor(btn2.colors.pressedColor, btn2);
-            //     } else if(Input.GetKeyUp(keyInput2)){
-            //         FadeToColor(btn2.colors.normalColor, btn2);
-            //     }
-            // }
-            //  if(button3){
-            //     if(Input.GetKeyDown(keyInput3)){
-            //         btn3.onClick.Invoke();
-            //         FadeToColor(btn3.colors.pressedColor, btn3);
-            //     } else if(Input.GetKeyUp(keyInput3)){
-            //         FadeToColor(btn3.colors.normalColor, btn3);
-            //     }
-            // }
-            //  if(button4){
-            //     if(Input.GetKeyDown(keyInput4)){
-            //         btn4.onClick.Invoke();
-            //         FadeToColor(btn4.colors.pressedColor, btn4);
-            //     } else if(Input.GetKeyUp(keyInput4)){
-            //         FadeToColor(btn4.colors.normalColor, btn4);
-            //     }
             }
         }
     
     void FadeToColor(Color color, Button btn){
-            Graphic graphic = GetComponent<Graphic>();
+            Graphic graphic = btn.GetComponent<Graphic>();
             graphic.CrossFadeColor(color, btn.colors.fadeDuration, true, true);
         }
 }
