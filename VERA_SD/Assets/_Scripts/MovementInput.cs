@@ -6,10 +6,9 @@ public class MovementInput : MonoBehaviour
 {
     // Start is called before the first frame update
     InputActions _input = null;
-    [SerializeField] float speed = 10f;
-    [SerializeField] float rotateDegrees = 15f;
-    public float turnPress = 0;
-    public float ForwardPress = 0;
+    public float turnLPress = 0;
+    public float turnRPress = 0;
+    public float forwardPress = 0;
 
     float rotationValue = 0;
     private void OnEnable(){
@@ -39,18 +38,17 @@ public class MovementInput : MonoBehaviour
         _input.Movement.Disable();
     }
 
+    // These functions set the value to 1 to signify that it was pressed
     private void SetLookLeft(InputAction.CallbackContext ctx){
-        turnPress = rotateDegrees;
-        Debug.Log(turnPress);
+        turnLPress = ctx.ReadValue<float>();
+        // Debug.Log(ctx.ReadValue<float>());
     }
 
     private void SetLookRight(InputAction.CallbackContext ctx){
-        turnPress = -rotateDegrees;
-        Debug.Log(turnPress);
+        turnRPress = ctx.ReadValue<float>();
     }
 
     private void SetForward(InputAction.CallbackContext ctx){
-        ForwardPress = speed;
-        Debug.Log(ForwardPress);
+        forwardPress = ctx.ReadValue<float>();
     }
 }
