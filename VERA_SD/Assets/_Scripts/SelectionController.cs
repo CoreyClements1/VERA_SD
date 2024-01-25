@@ -7,12 +7,12 @@ using UnityEditor.Experimental.GraphView;
 
 public class SelectionController : MonoBehaviour
 {
-    [SerializeField] Material highlightMaterial;
     private Material originalMaterial;
     private List<GameObject> interactables = new List<GameObject>();
     private int counter = 0;
-    private string currentObj;
+    public string currentObj;
 
+    [SerializeField] Material highlightMaterial;
     [SerializeField] GameObject Arrow;
     [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
     [SerializeField] TextMeshPro Text;
@@ -107,10 +107,5 @@ public class SelectionController : MonoBehaviour
     {
         UpdateSelectables();
         return interactables;
-    }
-
-    public string getSelection()
-    {
-        return currentObj;
     }
 }
