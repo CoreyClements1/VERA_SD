@@ -8,6 +8,11 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class MovementController : MonoBehaviour
 {
+
+
+    #region VARIABLES
+
+
     [SerializeField] Transform Rig;
     Vector3 _userMoveInput = Vector3.zero;
     Vector3 _userLookInput = Vector3.zero;
@@ -18,8 +23,12 @@ public class MovementController : MonoBehaviour
     [SerializeField] float speed = 1f;
     [SerializeField] float rotationValue = 15f;
 
-    private void Awake(){
-    }
+
+    #endregion
+
+
+    #region FIXED UPDATE
+
 
     private void FixedUpdate(){
         // Debug.Log(movementActions.Movement.Forward.ReadValue<float>());
@@ -50,6 +59,13 @@ public class MovementController : MonoBehaviour
         
     }
 
+
+    #endregion
+
+
+    #region MOVEMENT FUNCTIONS
+
+
     private Vector3 GetMoveInput(){
         return Rig.transform.forward * speed;
     }
@@ -69,5 +85,10 @@ public class MovementController : MonoBehaviour
     private void UserLook(){
         Rig.transform.eulerAngles = Rig.transform.eulerAngles + _userLookInput;
     }
+
+
+    #endregion
+
+
 }
 
