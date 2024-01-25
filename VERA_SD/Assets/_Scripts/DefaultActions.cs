@@ -9,11 +9,12 @@ public class DefaultActions : MonoBehaviour
     // ExampleInteractions provides a simple sample interaction which can be triggered by interactables
     //DefaultActions uses ExampleInteractions as a base structure but uses More Relevent Default Functionality// Atleast that is the goal.
     #region VARIABLES
+    
 
+    [SerializeField] private GrabTracker grabHandler;
     private bool isGrabbing = false;
     private Renderer rend;
-    private GameObject grabbedObject;
-
+    // private GameObject grabbedObject;
 
     #endregion
 
@@ -23,19 +24,32 @@ public class DefaultActions : MonoBehaviour
 
     // Start
     //--------------------------------------//
-    private void Start()
+    private void Awake()
     //--------------------------------------//
     {
+        grabHandler = FindObjectOfType<GrabTracker>();
+        if (grabHandler == null)
+        {
+            Debug.LogError("GrabTracker is not assigned or not found.");
+        }
+        else
+        {
+            Debug.Log("GrabTracker found.");
+        }
         rend = GetComponent<Renderer>();
-
     } // END Start
 
     private void Update()
     {
-        if (isGrabbing)
-        {
-            UpdateGrabbedObjectPosition();
-        }
+        // grabHandler = GetComponent<GrabTracker>();
+        // if (grabHandler == null)
+        // {
+        //     Debug.LogError("GrabTracker is not assigned or not found.");
+        // }
+        // else
+        // {
+        //     Debug.Log("GrabTracker found.");
+        // }
     }
 
     #endregion
@@ -45,10 +59,19 @@ public class DefaultActions : MonoBehaviour
     //
     public void GrabOrRelease(){
         if(GetComponent<XRGrabInteractable>() != null){
-            if(isGrabbing==false ){
-                GrabObject(gameObject);
+            if (isGrabbing == false)
+            {
+                if (grabHandler.GetGrabbedObject() == null)
+                {
+                    GrabObject(gameObject);
+                }
+                else
+                {
+                    ReleaseObject();
+                }
             }
-            else{
+            else
+            {
                 ReleaseObject();
             }
         }
@@ -60,10 +83,11 @@ public class DefaultActions : MonoBehaviour
 
     void GrabObject(GameObject obj){
         isGrabbing = true;
-        grabbedObject = obj;
+        grabHandler.SetGrabbedObject(obj);
+        // grabbedObject = obj;
 
         // Disable gravity during grab
-        Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null){
             rb.useGravity = false;
             rb.freezeRotation = true;
@@ -71,19 +95,19 @@ public class DefaultActions : MonoBehaviour
         // use camera rotation
         Quaternion cameraRotation = Camera.main.transform.rotation;
         // Apply the camera rotation to the grabbed object
-        grabbedObject.transform.rotation = cameraRotation;
+        obj.transform.rotation = cameraRotation;
         // Snap the grabbed object to the bottom right of the player's camera
         Vector3 offset = new Vector3(0.75f, 0f, 0.25f); // Adjust the offset as needed
-        grabbedObject.transform.position = Camera.main.ViewportToWorldPoint(offset);
+        obj.transform.position = Camera.main.ViewportToWorldPoint(offset);
         // }
     }
 
     // ReleaseObject method
     void ReleaseObject(){
         isGrabbing = false;
-
+        GameObject obj = grabHandler.GetGrabbedObject();
         // Enable gravity during release
-        Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.useGravity = true;
@@ -93,9 +117,9 @@ public class DefaultActions : MonoBehaviour
         Vector3 frontOffset = new Vector3(0f, 0f, 1.0f); // Adjust the offset as needed// adjust for distance before drop
         Vector3 targetPosition = transform.position + transform.forward * frontOffset.z;
 
-        StartCoroutine(MoveObjectSmoothly(grabbedObject.transform, targetPosition, 0.75f)); // Adjust the duration as needed + makes it slower - makes it faster
+        StartCoroutine(MoveObjectSmoothly(obj.transform, targetPosition, 0.75f)); // Adjust the duration as needed + makes it slower - makes it faster
 
-        grabbedObject = null;
+        grabHandler.SetGrabbedObject(null);
     }
 
     IEnumerator MoveObjectSmoothly(Transform objectTransform, Vector3 targetPosition, float duration){
@@ -111,82 +135,7 @@ public class DefaultActions : MonoBehaviour
 
         // objectTransform.position = targetPosition; // Ensure it reaches the exact target position
     }
-
-    void UpdateGrabbedObjectPosition(){
-        // Update the position of the grabbed object to stay at the bottom right of the player' camera
-        Vector3 offset = new Vector3(0.75f, 0f, 0.25f); // Adjust the offset as needed
-
-        //use camera rotation
-        Quaternion cameraRotation = Camera.main.transform.rotation;
-        // Apply the camera rotation to the grabbed object
-        grabbedObject.transform.rotation = cameraRotation;
-        grabbedObject.transform.position = Camera.main.ViewportToWorldPoint(offset);
-    }
-
-    // Sets the color of the interactable's mesh
-    //--------------------------------------//
-    public void ChangeColor(string color)
-    //--------------------------------------//
-    {
-        switch(color.ToLower())
-        {
-            case "r":
-            case "red":
-                rend.material.SetColor("_Color", Color.red);
-                break;
-            case "g":
-            case "green":
-                rend.material.SetColor("_Color", Color.green);
-                break;
-            case "b":
-            case "blue":
-                rend.material.SetColor("_Color", Color.blue);
-                break;
-            case "y":
-            case "yellow":
-                rend.material.SetColor("_Color", Color.yellow);
-                break;
-            case "p":
-            case "purple":
-                rend.material.SetColor("_Color", Color.magenta);
-                break;
-            default:
-                rend.material.SetColor("_Color", Color.black);
-                break;
-        }
-
-    } // END SetColor
-
-
-    // Destroys the interactable
-    //--------------------------------------//
-    public void DestroyInteractable()
-    //--------------------------------------//
-    {
-        Destroy(gameObject);
-
-    } // END DestroyInteractable
-
-
-    // Grows the interactable
-    //--------------------------------------//
-    public void Grow()
-    //--------------------------------------//
-    {
-        transform.localScale = transform.localScale * 1.5f;
-
-    } // END Grow
-
-
-    // Shrinks the interactable
-    //--------------------------------------//
-    public void Shrink()
-    //--------------------------------------//
-    {
-        transform.localScale = transform.localScale * .666f;
-
-    } // END Shrink
-
+    
     #endregion
 
 
