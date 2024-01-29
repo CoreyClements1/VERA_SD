@@ -21,7 +21,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] MovementInput _input;
 
     [SerializeField] float speed = 1f;
-    [SerializeField] float rotationValue = 15f;
+    [SerializeField] public float rotationValue = 15f;
 
 
     #endregion
