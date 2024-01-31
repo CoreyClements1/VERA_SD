@@ -1808,11 +1808,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7439cb1a51611d84ba7877ebd1203edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 2100000, guid: 044121cb8b36e544abcf431736e045a4, type: 2}
-  Arrow: {fileID: 0}
-  playerCam: {fileID: 657184243000505050}
-  Text: {fileID: 0}
+  currentObj: 
   selectRadius: 2.92
+  playerCam: {fileID: 657184243000505050}
+  outlineColor: {r: 1, g: 0, b: 0.98853016, a: 1}
+  outlineWidth: 5
+  highlightDuration: 3
+  Arrow: {fileID: 0}
+  Text: {fileID: 0}
 --- !u!1 &993601023
 GameObject:
   m_ObjectHideFlags: 0
@@ -9125,7 +9128,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8077369853213202151}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 923364831}
+        m_TargetAssemblyTypeName: SelectionController, Assembly-CSharp
+        m_MethodName: HighlightAll
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &4276137997331336868
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9552,12 +9567,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9049db971256b5c4d9e5b212f242156e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionController: {fileID: 923364831}
-  InteractablesGroup: {fileID: 1484173731}
-  InteractionMainMenu: {fileID: 6934424887553078386}
-  original: {fileID: 4751587967605115181, guid: 861ac9c0ae0bdde4cae75bd05937f093,
-    type: 3}
-  parent: {fileID: 4500364201055935693}
 --- !u!114 &4500364201055935697
 MonoBehaviour:
   m_ObjectHideFlags: 0

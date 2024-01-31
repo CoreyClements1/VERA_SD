@@ -7,39 +7,48 @@ using UnityEditor.Experimental.GraphView;
 
 public class SelectionController : MonoBehaviour
 {
-    private Material originalMaterial;
     private List<GameObject> interactables = new List<GameObject>();
     private int counter = 0;
+    private GameObject previousObj;
+    private Outline outline;
     public string currentObj;
 
-    [SerializeField] Material highlightMaterial;
-    [SerializeField] GameObject Arrow;
-    [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
-    [SerializeField] TextMeshPro Text;
     [SerializeField] float selectRadius;
+    [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
+    [SerializeField] Color outlineColor;
+    [SerializeField] float outlineWidth = 5f;
+    [SerializeField] float highlightDuration = 3f;
+    [SerializeField] GameObject Arrow;
+    [SerializeField] TextMeshPro Text;
 
     public void SelectionCycle()
     {
         if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
+        currentObj = interactables[counter].name;
 
-        if (originalMaterial != null) // We need to revert the previous object's material
+        if (previousObj != null)
         {
-            // Avoid going out of bounds, the item before [index 0] is [index last]
-            if (counter == 0)
-                interactables[interactables.Count - 1].GetComponent<Renderer>().material = originalMaterial;
-            else
-                interactables[counter - 1].GetComponent<Renderer>().material = originalMaterial;
+            previousObj.GetComponent<Outline>().enabled = false;
         }
 
-        // Save material and highlight it
-        Renderer renderer = interactables[counter].GetComponent<Renderer>();
-        originalMaterial = renderer.material;
-        renderer.material = highlightMaterial;
-        currentObj = interactables[counter].name;
+        if (interactables[counter].GetComponent<Outline>() != null)
+        {
+            outline = interactables[counter].GetComponent<Outline>();
+        }
+        else
+        {
+            outline = interactables[counter].AddComponent<Outline>();
+        }
+
+        outline.enabled = true;
+        outline.OutlineMode = Outline.Mode.OutlineVisible;
+        outline.OutlineColor = outlineColor;
+        outline.OutlineWidth = outlineWidth;
 
         // Logic for determining target's object position relative to player
         //ObjectInView();
 
+        previousObj = interactables[counter];
         // Loop back around once end of list
         if (counter == interactables.Count - 1)
             counter = 0;
@@ -93,6 +102,40 @@ public class SelectionController : MonoBehaviour
                 Text.text = "ON SCREEN";
                 Text.color = Color.green;
             }
+        }
+    }
+
+    public void HighlightAll()
+    {
+        if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
+        StartCoroutine(highlight());
+    }
+
+    IEnumerator highlight()
+    {
+        foreach (GameObject obj in interactables)
+        {
+            if (obj.GetComponent<Outline>() != null)
+            {
+                outline = obj.GetComponent<Outline>();
+                outline.enabled = true;
+                outline.OutlineMode = Outline.Mode.OutlineVisible;
+                outline.OutlineColor = outlineColor;
+                outline.OutlineWidth = outlineWidth;
+            }
+            else
+            {
+                outline = obj.AddComponent<Outline>();
+                outline.enabled = true;
+                outline.OutlineMode = Outline.Mode.OutlineVisible;
+                outline.OutlineColor = outlineColor;
+                outline.OutlineWidth = outlineWidth;
+            }
+        }
+        yield return new WaitForSeconds(highlightDuration);
+        foreach (GameObject obj in interactables)
+        {
+            obj.GetComponent<Outline>().enabled = false;
         }
     }
 
