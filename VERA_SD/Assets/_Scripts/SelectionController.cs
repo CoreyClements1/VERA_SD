@@ -11,6 +11,7 @@ public class SelectionController : MonoBehaviour
     private int counter = 0;
     private GameObject previousObj;
     private Outline outline;
+    private GameObject lookTarget;
     public string currentObj;
 
     [SerializeField] float selectRadius;
@@ -46,7 +47,7 @@ public class SelectionController : MonoBehaviour
         outline.OutlineWidth = outlineWidth;
 
         // Logic for determining target's object position relative to player
-        //ObjectInView();
+        ObjectInView();
 
         previousObj = interactables[counter];
         // Loop back around once end of list
@@ -72,8 +73,9 @@ public class SelectionController : MonoBehaviour
 
     void ObjectInView()
     {
-        Vector3 target = interactables[counter].transform.position;
-
+        lookTarget = interactables[counter];
+        Vector3 target = lookTarget.transform.position;
+       
         // Normally this would have the player's position relative to camera but not yet!
         Vector3 playerScreenPos = playerCam.WorldToScreenPoint(playerCam.transform.position);
         Vector3 targetScreenPos = playerCam.WorldToScreenPoint(target);
@@ -90,7 +92,7 @@ public class SelectionController : MonoBehaviour
             if (isOffScreen)
             {
                 Arrow.SetActive(true);
-                Arrow.transform.LookAt(targetPosition);
+                //Arrow.transform.LookAt(targetPosition);
                 Text.text = "OFF SCREEN";
                 Text.color = Color.red;
 
@@ -98,10 +100,18 @@ public class SelectionController : MonoBehaviour
             else
             {
                 Arrow.SetActive(true);
-                Arrow.transform.LookAt(targetPosition);
+                //Arrow.transform.LookAt(targetPosition);
                 Text.text = "ON SCREEN";
                 Text.color = Color.green;
             }
+        }
+    }
+
+    private void Update()
+    {
+        if (lookTarget != null)
+        {
+            Arrow.transform.LookAt(lookTarget.transform);
         }
     }
 
