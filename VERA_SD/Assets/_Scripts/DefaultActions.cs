@@ -14,6 +14,10 @@ public class DefaultActions : MonoBehaviour
     [SerializeField] private GrabTracker grabHandler;
     private bool isGrabbing = false;
     private Renderer rend;
+    private Transform originalParent;
+    private Vector3 originalLocalPosition;
+    private Quaternion originalLocalRotation;
+    private Vector3 offsetFromAttachTransform;
     // private GameObject grabbedObject;
 
     #endregion
@@ -37,6 +41,8 @@ public class DefaultActions : MonoBehaviour
             Debug.Log("GrabTracker found.");
         }
         rend = GetComponent<Renderer>();
+        Debug.Log("localPosition"+transform.localPosition);
+        Debug.Log("GlobalPosition"+transform.position);
     } // END Start
 
     private void Update()
@@ -91,14 +97,36 @@ public class DefaultActions : MonoBehaviour
         if (rb != null){
             rb.useGravity = false;
             rb.freezeRotation = true;
+            rb.isKinematic = true;
         }
         // use camera rotation
+        
+        XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
+        //use camera rotationXRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
         Quaternion cameraRotation = Camera.main.transform.rotation;
-        // Apply the camera rotation to the grabbed object
-        obj.transform.rotation = cameraRotation;
+        Vector3 offset = new Vector3(0.75f, 0.25f, 0.25f); // Adjust the offset as needed
+        Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
+
+        if (grabInteractable != null && grabInteractable.attachTransform != null)
+        {
+            originalParent = transform.parent;
+            // originalLocalPosition = transform.localPosition;
+            // originalLocalRotation = transform.localRotation;
+            offsetFromAttachTransform = transform.position - grabInteractable.attachTransform.localPosition;
+            transform.SetParent(Camera.main.transform, true);
+            // transform.localPosition = offset + grabInteractable.attachTransform.InverseTransformPoint(grabInteractable.attachTransform.localPosition);
+            transform.localRotation = Quaternion.Inverse(grabInteractable.attachTransform.localRotation);
+            transform.position = targetPosition;
+        }
+        else
+        {
+            Debug.LogWarning("XR Grab Interactable component or Attach Transform not found. Using default rotation.");
+
+            // If XR Grab Interactable or Attach Transform is not available, use camera rotation
+            obj.transform.rotation = cameraRotation;
+            obj.transform.position = targetPosition;
+        }
         // Snap the grabbed object to the bottom right of the player's camera
-        Vector3 offset = new Vector3(0.75f, 0f, 0.25f); // Adjust the offset as needed
-        obj.transform.position = Camera.main.ViewportToWorldPoint(offset);
         // }
     }
 
@@ -107,18 +135,22 @@ public class DefaultActions : MonoBehaviour
         isGrabbing = false;
         GameObject obj = grabHandler.GetGrabbedObject();
         // Enable gravity during release
+        transform.parent = originalParent;
+        // transform.localPosition = originalLocalPosition;
+        // transform.localRotation = originalLocalRotation;
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.useGravity = true;
             rb.freezeRotation = false;
+            rb.isKinematic = false;
         }
         // Place the grabbed object in front of the player with smooth interpolation
-        Vector3 frontOffset = new Vector3(0f, 0f, 1.0f); // Adjust the offset as needed// adjust for distance before drop
-        Vector3 targetPosition = transform.position + transform.forward * frontOffset.z;
+        Vector3 offset = new Vector3(0.5f, 0.5f, 1.0f); // Adjust the offset as needed// adjust for distance before drop
+        Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
 
         StartCoroutine(MoveObjectSmoothly(obj.transform, targetPosition, 0.75f)); // Adjust the duration as needed + makes it slower - makes it faster
-
+        
         grabHandler.SetGrabbedObject(null);
     }
 
