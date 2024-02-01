@@ -14,11 +14,6 @@ public class DefaultActions : MonoBehaviour
     [SerializeField] private GrabTracker grabHandler;
     private bool isGrabbing = false;
     private Renderer rend;
-    private Transform originalParent;
-    private Vector3 originalLocalPosition;
-    private Quaternion originalLocalRotation;
-    private Vector3 offsetFromAttachTransform;
-    // private GameObject grabbedObject;
 
     #endregion
 
@@ -41,21 +36,13 @@ public class DefaultActions : MonoBehaviour
             Debug.Log("GrabTracker found.");
         }
         rend = GetComponent<Renderer>();
-        Debug.Log("localPosition"+transform.localPosition);
-        Debug.Log("GlobalPosition"+transform.position);
+        // Debug.Log("localPosition"+transform.localPosition);
+        // Debug.Log("GlobalPosition"+transform.position);
     } // END Start
 
     private void Update()
     {
-        // grabHandler = GetComponent<GrabTracker>();
-        // if (grabHandler == null)
-        // {
-        //     Debug.LogError("GrabTracker is not assigned or not found.");
-        // }
-        // else
-        // {
-        //     Debug.Log("GrabTracker found.");
-        // }
+        
     }
 
     #endregion
@@ -90,8 +77,7 @@ public class DefaultActions : MonoBehaviour
     void GrabObject(GameObject obj){
         isGrabbing = true;
         grabHandler.SetGrabbedObject(obj);
-        // grabbedObject = obj;
-
+        grabHandler.SetGrabParent(transform.parent);
         // Disable gravity during grab
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null){
@@ -104,26 +90,27 @@ public class DefaultActions : MonoBehaviour
         XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
         //use camera rotationXRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
         Quaternion cameraRotation = Camera.main.transform.rotation;
-        Vector3 offset = new Vector3(0.75f, 0.25f, 0.25f); // Adjust the offset as needed
+        Vector3 offset = new Vector3(0.5f, 0.5f, 0.5f); // Adjust the offset as needed
         Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
 
         if (grabInteractable != null && grabInteractable.attachTransform != null)
         {
-            originalParent = transform.parent;
-            // originalLocalPosition = transform.localPosition;
-            // originalLocalRotation = transform.localRotation;
-            offsetFromAttachTransform = transform.position - grabInteractable.attachTransform.localPosition;
-            transform.SetParent(Camera.main.transform, true);
-            // transform.localPosition = offset + grabInteractable.attachTransform.InverseTransformPoint(grabInteractable.attachTransform.localPosition);
-            transform.localRotation = Quaternion.Inverse(grabInteractable.attachTransform.localRotation);
-            transform.position = targetPosition;
+            
+            Quaternion grabRotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+
+            grabInteractable.attachTransform.SetParent(Camera.main.transform, true);
+            transform.SetParent(grabInteractable.attachTransform, true);
+            
+            grabInteractable.attachTransform.position = targetPosition;
+            grabInteractable.attachTransform.rotation = grabRotation;
+
+            
         }
         else
         {
             Debug.LogWarning("XR Grab Interactable component or Attach Transform not found. Using default rotation.");
-
+            transform.SetParent(Camera.main.transform, true);
             // If XR Grab Interactable or Attach Transform is not available, use camera rotation
-            obj.transform.rotation = cameraRotation;
             obj.transform.position = targetPosition;
         }
         // Snap the grabbed object to the bottom right of the player's camera
@@ -134,8 +121,13 @@ public class DefaultActions : MonoBehaviour
     void ReleaseObject(){
         isGrabbing = false;
         GameObject obj = grabHandler.GetGrabbedObject();
+        obj.transform.SetParent(grabHandler.GetGrabParent(),true);
         // Enable gravity during release
-        transform.parent = originalParent;
+        XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
+        if(grabInteractable != null && grabInteractable.attachTransform != null){
+            // Debug.Log(grabInteractable.attachTransform);
+            grabInteractable.attachTransform.SetParent(obj.transform, true);
+        }
         // transform.localPosition = originalLocalPosition;
         // transform.localRotation = originalLocalRotation;
         Rigidbody rb = obj.GetComponent<Rigidbody>();
