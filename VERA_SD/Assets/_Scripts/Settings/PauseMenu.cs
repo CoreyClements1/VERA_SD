@@ -3,16 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 public class PauseMenu : MonoBehaviour
 {
+
+    //PauseMenu handles all interactions done when a user wants to adjust their settings.
+
+    #region VARIABLES
     private bool pauseEnabled;
     public GameObject pauseMenu;
     public GameObject settings;
     public GameObject snapTurningImages;
+    public Slider slider;
     [SerializeField] private GameObject player;
     private int index;
     private string currentName;
+    public TextMeshProUGUI sliderText;
+
+    #endregion
     // Start is called before the first frame update
+
+    #region FUNCTIONS
     void Start()
     {
         pauseEnabled = false;
@@ -46,6 +57,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    //this function switches to the snap turning panel
     public void snapTurning()
     {
         
@@ -60,6 +72,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    //this function changes the degree in which a user turns
     public void changeTurning()
     {
         string name = EventSystem.current.currentSelectedGameObject.name;
@@ -90,6 +103,8 @@ public class PauseMenu : MonoBehaviour
         }
         
     }
+
+    //this function switches to the movement speed panel
     public void movementSpeed()
     {
         for (int i = 0; i < settings.transform.childCount; i++)
@@ -102,4 +117,12 @@ public class PauseMenu : MonoBehaviour
 
         }
     }
+    //this function changes the amount a user can move forward per press
+    public void changeMovementSpeed()
+    {
+        sliderText.text = slider.value.ToString();
+        player.GetComponent<MovementController>().speed = slider.value;
+    }
+
+    #endregion
 }

@@ -20,7 +20,7 @@ public class MovementController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] MovementInput _input;
 
-    [SerializeField] float speed = 1f;
+    [SerializeField] public float speed = 1f;
     [SerializeField] public float rotationValue = 15f;
 
 
