@@ -7,39 +7,49 @@ using UnityEditor.Experimental.GraphView;
 
 public class SelectionController : MonoBehaviour
 {
-    private Material originalMaterial;
     private List<GameObject> interactables = new List<GameObject>();
     private int counter = 0;
+    private GameObject previousObj;
+    private Outline outline;
+    private GameObject lookTarget;
     public string currentObj;
 
-    [SerializeField] Material highlightMaterial;
-    [SerializeField] GameObject Arrow;
-    [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
-    [SerializeField] TextMeshPro Text;
     [SerializeField] float selectRadius;
+    [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
+    [SerializeField] Color outlineColor;
+    [SerializeField] float outlineWidth = 5f;
+    [SerializeField] float highlightDuration = 3f;
+    [SerializeField] GameObject Arrow;
+    [SerializeField] TextMeshPro Text;
 
     public void SelectionCycle()
     {
         if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
-
-        if (originalMaterial != null) // We need to revert the previous object's material
-        {
-            // Avoid going out of bounds, the item before [index 0] is [index last]
-            if (counter == 0)
-                interactables[interactables.Count - 1].GetComponent<Renderer>().material = originalMaterial;
-            else
-                interactables[counter - 1].GetComponent<Renderer>().material = originalMaterial;
-        }
-
-        // Save material and highlight it
-        Renderer renderer = interactables[counter].GetComponent<Renderer>();
-        originalMaterial = renderer.material;
-        renderer.material = highlightMaterial;
         currentObj = interactables[counter].name;
 
-        // Logic for determining target's object position relative to player
-        //ObjectInView();
+        if (previousObj != null)
+        {
+            previousObj.GetComponent<Outline>().enabled = false;
+        }
 
+        if (interactables[counter].GetComponent<Outline>() != null)
+        {
+            outline = interactables[counter].GetComponent<Outline>();
+        }
+        else
+        {
+            outline = interactables[counter].AddComponent<Outline>();
+        }
+
+        outline.enabled = true;
+        outline.OutlineMode = Outline.Mode.OutlineVisible;
+        outline.OutlineColor = outlineColor;
+        outline.OutlineWidth = outlineWidth;
+
+        // Logic for determining target's object position relative to player
+        ObjectInView();
+
+        previousObj = interactables[counter];
         // Loop back around once end of list
         if (counter == interactables.Count - 1)
             counter = 0;
@@ -63,8 +73,9 @@ public class SelectionController : MonoBehaviour
 
     void ObjectInView()
     {
-        Vector3 target = interactables[counter].transform.position;
-
+        lookTarget = interactables[counter];
+        Vector3 target = lookTarget.transform.position;
+       
         // Normally this would have the player's position relative to camera but not yet!
         Vector3 playerScreenPos = playerCam.WorldToScreenPoint(playerCam.transform.position);
         Vector3 targetScreenPos = playerCam.WorldToScreenPoint(target);
@@ -81,7 +92,7 @@ public class SelectionController : MonoBehaviour
             if (isOffScreen)
             {
                 Arrow.SetActive(true);
-                Arrow.transform.LookAt(targetPosition);
+                //Arrow.transform.LookAt(targetPosition);
                 Text.text = "OFF SCREEN";
                 Text.color = Color.red;
 
@@ -89,10 +100,52 @@ public class SelectionController : MonoBehaviour
             else
             {
                 Arrow.SetActive(true);
-                Arrow.transform.LookAt(targetPosition);
+                //Arrow.transform.LookAt(targetPosition);
                 Text.text = "ON SCREEN";
                 Text.color = Color.green;
             }
+        }
+    }
+
+    private void Update()
+    {
+        if (lookTarget != null)
+        {
+            Arrow.transform.LookAt(lookTarget.transform);
+        }
+    }
+
+    public void HighlightAll()
+    {
+        if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
+        StartCoroutine(highlight());
+    }
+
+    IEnumerator highlight()
+    {
+        foreach (GameObject obj in interactables)
+        {
+            if (obj.GetComponent<Outline>() != null)
+            {
+                outline = obj.GetComponent<Outline>();
+                outline.enabled = true;
+                outline.OutlineMode = Outline.Mode.OutlineVisible;
+                outline.OutlineColor = outlineColor;
+                outline.OutlineWidth = outlineWidth;
+            }
+            else
+            {
+                outline = obj.AddComponent<Outline>();
+                outline.enabled = true;
+                outline.OutlineMode = Outline.Mode.OutlineVisible;
+                outline.OutlineColor = outlineColor;
+                outline.OutlineWidth = outlineWidth;
+            }
+        }
+        yield return new WaitForSeconds(highlightDuration);
+        foreach (GameObject obj in interactables)
+        {
+            obj.GetComponent<Outline>().enabled = false;
         }
     }
 

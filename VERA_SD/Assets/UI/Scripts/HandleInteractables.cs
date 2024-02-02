@@ -141,7 +141,6 @@ public class HandleInteractables: MonoBehaviour
     public void ChangeSelection()
     {
         string tmp = "" + selectionController.currentObj + "1";
-        Debug.Log(tmp);
         selectBttn.onClick.RemoveAllListeners();
         selectBttn.onClick.AddListener(() => nextLevel(InteractionMainMenu, parent.transform.Find(tmp).gameObject));
     }
