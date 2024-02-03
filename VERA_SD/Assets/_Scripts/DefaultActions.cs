@@ -170,21 +170,33 @@ public class DefaultActions : MonoBehaviour
 
     Vector3 FindAdjustedPosition(Vector3 start, Vector3 end, GameObject obj)
     {
-        RaycastHit hit;
         Vector3 adjustedPosition = end;
 
         // Perform a Raycast to find the first collision along the path
         // obj.SetActive(false);
-        int ogLayer = obj.layer;
+        // int ogLayer = obj.layer;
         // Debug.Log("ogLayer; "+ogLayer);
-        obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+        // obj.layer = LayerMask.NameToLayer("Ignore Raycast");
         // Debug.Log("NamerToLayer; "+LayerMask.NameToLayer("Ignore Raycast"));
-        int layerMask = ~LayerMask.GetMask("Ignore Raycast");
+        // int layerMask = ~LayerMask.GetMask("Ignore Raycast");
+        Collider[] relaventColliders = obj.GetComponentsInChildren<Collider>();
 
-        if (Physics.Raycast(start, (end - start), out hit, Vector3.Distance(start, end),layerMask))
-        {
-            // Move to the point just before the collision
-            adjustedPosition = hit.point - (end - start).normalized * 0.1f; // Adjust the offset as needed
+        // Move to the point just before the collision
+        RaycastHit[] hits = Physics.RaycastAll(start, (end - start), Vector3.Distance(start, end));
+        foreach ( RaycastHit hitC in hits) {
+            foreach(Collider c in relaventColliders){
+                if(hitC.collider != c){
+                    adjustedPosition = adjustedPosition = hitC.point - (end - start).normalized * 0.1f;
+                    break;
+                }
+            }
+            if(adjustedPosition!=end){
+                break;
+            }
+        }
+{
+            
+             // Adjust the offset as needed
             
             // Debug.Log("RayCase"+Physics.Raycast(start, (end - start).normalized, out hit, Vector3.Distance(start, end)));
             // Debug.Log("hitpoint: "+hit.collider);
@@ -192,7 +204,6 @@ public class DefaultActions : MonoBehaviour
             // Debug.Log("adjustedPosition"+adjustedPosition);
         }
 
-        obj.layer = ogLayer;
         
         // obj.SetActive(true);
 
