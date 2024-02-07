@@ -29,11 +29,11 @@ public class DefaultActions : MonoBehaviour
         grabHandler = FindObjectOfType<GrabTracker>();
         if (grabHandler == null)
         {
-            Debug.LogError("GrabTracker is not assigned or not found.");
+            // Debug.LogError("GrabTracker is not assigned or not found.");
         }
         else
         {
-            Debug.Log("GrabTracker found.");
+            // Debug.Log("GrabTracker found.");
         }
         rend = GetComponent<Renderer>();
         // Debug.Log("localPosition"+transform.localPosition);
@@ -82,6 +82,7 @@ public class DefaultActions : MonoBehaviour
         isGrabbing = true;
         grabHandler.SetGrabbedObject(obj);
         grabHandler.SetGrabParent(transform.parent);
+        grabHandler.SetRB(obj.GetComponent<Rigidbody>());
         // Disable gravity during grab
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
@@ -89,13 +90,14 @@ public class DefaultActions : MonoBehaviour
             rb.useGravity = false;
             rb.freezeRotation = true;
             rb.isKinematic = true;
+            rb.interpolation = RigidbodyInterpolation.None;
         }
         // use camera rotation
 
         XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
         //use camera rotationXRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
         Quaternion cameraRotation = Camera.main.transform.rotation;
-        Vector3 offset = new Vector3(0.5f, 0.5f, 0.5f); // Adjust the offset as needed
+        Vector3 offset = new Vector3(0.75f, 0.25f, 0.5f); // Adjust the offset as needed
         Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
 
         if (grabInteractable != null && grabInteractable.attachTransform != null)
@@ -112,7 +114,7 @@ public class DefaultActions : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("XR Grab Interactable component or Attach Transform not found. Using default rotation.");
+            // Debug.LogWarning("XR Grab Interactable component or Attach Transform not found. Using default rotation.");
             Quaternion grabRotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
             transform.SetParent(Camera.main.transform, true);
             // If XR Grab Interactable or Attach Transform is not available, use camera rotation
@@ -144,7 +146,7 @@ public class DefaultActions : MonoBehaviour
         // Vector3 center = new Vector3(0.5f, 0.5f, 0.0f);
         Vector3 zero = Camera.main.ViewportToWorldPoint(Vector3.zero);
         // obj.transform.localRotation = Quaternion.identity;
-        Vector3 offset = new Vector3(0.5f, 0.5f, 3.0f); // Adjust the offset as needed// adjust for distance before drop
+        Vector3 offset = new Vector3(0.5f, 0.5f, 2.0f); // Adjust the offset as needed// adjust for distance before drop
         Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
         // Check for collisions along the path
         if (CheckCollisions(zero, targetPosition))
@@ -156,15 +158,16 @@ public class DefaultActions : MonoBehaviour
         else
         {
             // If no collision, move to the target position
-            Debug.Log("Entered");
+            // Debug.Log("Entered");
             obj.transform.position = targetPosition;
         }
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.useGravity = true;
-            rb.freezeRotation = false;
-            rb.isKinematic = false;
+            rb.useGravity = grabHandler.GetGravity();
+            rb.freezeRotation = grabHandler.GetfreezeRotation();
+            rb.isKinematic = grabHandler.GetKinematic();
+            rb.interpolation = grabHandler.GetInterpolation();
         }
         grabHandler.SetGrabbedObject(null);
     }
@@ -178,26 +181,58 @@ public class DefaultActions : MonoBehaviour
 
     Vector3 FindAdjustedPosition(Vector3 start, Vector3 end, GameObject obj)
     {
-        RaycastHit hit;
+        // RaycastHit hit;
         Vector3 adjustedPosition = end;
 
         // Perform a Raycast to find the first collision along the path
-        int ogLayer = obj.layer;
-        // Debug.Log("ogLayer; "+ogLayer);
-        obj.layer = LayerMask.NameToLayer("Ignore Raycast");
-        // Debug.Log("NamerToLayer; "+LayerMask.NameToLayer("Ignore Raycast"));
-        int layerMask = ~LayerMask.GetMask("Ignore Raycast");
+        // int ogLayer = obj.layer;
+        // // Debug.Log("ogLayer; "+ogLayer);
+        // obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+        // // Debug.Log("NamerToLayer; "+LayerMask.NameToLayer("Ignore Raycast"));
+        // int layerMask = ~LayerMask.GetMask("Ignore Raycast");
 
-        // Collider[] relaventColliders = obj.GetComponentsInChildren<Collider>();
+        // /*
+        Collider[] relaventColliders = obj.GetComponentsInChildren<Collider>();
 
         // Move to the point just before the collision
-        if (Physics.Raycast(start, (end - start), out hit, Vector3.Distance(start, end), layerMask))
+        // Debug.Log(relaventColliders);
+        RaycastHit[] hits = Physics.RaycastAll(start, (end - start), Vector3.Distance(start, end));
+        System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+        // Debug.Log(hits);
+        foreach (RaycastHit hitC in hits)
         {
-
-            // Adjust the offset as needed
-            adjustedPosition = adjustedPosition = hit.point - (end - start).normalized * 0.1f;
+            // Debug.Log(hitC);
+            bool isIn = false;
+            foreach (Collider c in relaventColliders)
+            {
+                // Debug.Log("childCollider:" + c);
+                // Debug.Log("hit:" + hitC.collider);
+                if (hitC.collider == c)
+                {
+                    // adjustedPosition = hitC.point - (end - start).normalized * 0.1f;
+                    isIn = true;
+                    break;
+                }
+            }
+            if (isIn == false)
+            {
+                adjustedPosition = hitC.point - (end - start).normalized * 0.1f;
+            }
+            if (adjustedPosition != end)
+            {
+                break;
+            }
         }
-        obj.layer = ogLayer;
+        // */
+
+        // Move to the point just before the collision
+        // if (Physics.Raycast(start, (end - start), out hit, Vector3.Distance(start, end), layerMask))
+        // {
+
+        //     // Adjust the offset as needed
+        //     adjustedPosition = adjustedPosition = hit.point - (end - start).normalized * 0.1f;
+        // }
+        // obj.layer = ogLayer;
 
         return adjustedPosition;
     }
