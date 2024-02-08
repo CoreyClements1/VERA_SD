@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+// TODO
+// ADD CHECK FOR WHEN LIMITS MAX OR MIN ARE 0
 public class DoorOpener : MonoBehaviour
 {
     private HingeJoint joint;
@@ -13,18 +14,26 @@ public class DoorOpener : MonoBehaviour
 
     public void Open()
     {
-        if (!isOpen)
+        if (!isOpen && joint.limits.max != 0)
         {
             this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.max);
+            isOpen = true;
+        } else
+        {
+            this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.min);
             isOpen = true;
         }
     }
 
     public void Close()
     {
-        if (isOpen)
+        if (isOpen && joint.limits.max != 0)
         {
             this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, -joint.limits.max);
+            isOpen = false;
+        } else
+        {
+            this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, -joint.limits.min);
             isOpen = false;
         }
     }
