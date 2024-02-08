@@ -7,12 +7,17 @@ using UnityEditor.Experimental.GraphView;
 
 public class SelectionController : MonoBehaviour
 {
+
+    #region VARIABLES
+
+
     private List<GameObject> interactables = new List<GameObject>();
     private int counter = 0;
     private GameObject previousObj;
     private Outline outline;
     private GameObject lookTarget;
     public string currentObj;
+    private bool manualHighlightCancel = false;
 
     [SerializeField] float selectRadius;
     [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
@@ -22,16 +27,50 @@ public class SelectionController : MonoBehaviour
     [SerializeField] GameObject Arrow;
     [SerializeField] TextMeshPro Text;
 
-    public void SelectionCycle()
+
+    #endregion
+
+
+    #region MONOBEHAVIOUR
+
+
+    // Update
+    //--------------------------------------//
+    private void Update()
+    //--------------------------------------//
     {
+        if (lookTarget != null)
+        {
+            Arrow.transform.LookAt(lookTarget.transform);
+        }
+
+    } // END Update
+
+
+    #endregion
+
+
+    #region SELECTION
+
+
+    // SelectionCycle
+    //--------------------------------------//
+    public void SelectionCycle()
+    //--------------------------------------//
+    {
+        // Cancel highlighting if all highlighted
+        PulseCancelHighlights();
+
         if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
         currentObj = interactables[counter].name;
 
+        // De-highlight previous object
         if (previousObj != null)
         {
             previousObj.GetComponent<Outline>().enabled = false;
         }
 
+        // Get current object and get / add outline component
         if (interactables[counter].GetComponent<Outline>() != null)
         {
             outline = interactables[counter].GetComponent<Outline>();
@@ -41,6 +80,7 @@ public class SelectionController : MonoBehaviour
             outline = interactables[counter].AddComponent<Outline>();
         }
 
+        // Enable outline
         outline.enabled = true;
         outline.OutlineMode = Outline.Mode.OutlineVisible;
         outline.OutlineColor = outlineColor;
@@ -54,22 +94,40 @@ public class SelectionController : MonoBehaviour
         if (counter == interactables.Count - 1)
             counter = 0;
         else counter++;
-    }
 
+    } // END SelectionCycle
+
+
+    // Updates highlightable selectables; returns true if there are selectables, false if there are none
+    //--------------------------------------//
     bool UpdateSelectables()
+    //--------------------------------------//
     {
         // Honestly a suspicious way of doing this: Get all objs in radius > Loop through and find all objs with IInteractable
         interactables.Clear(); // Clear the list first to avoid dupes
+
+        // Get all colliders nearby
         Collider[] colliders = Physics.OverlapSphere(playerCam.transform.position, selectRadius);
 
+        // On each collider, check if there is an interactable component, add to interactables list if yes
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject.GetComponent<IInteractable>() != null)
                 interactables.Add(collider.gameObject);
         }
+
+        // Return whether there are interactables nearby or not
         //Debug.Log("I see " + interactables.Count);
         return (interactables.Count > 0) ? true : false;
-    }
+
+    } // END UpdateSelectables
+
+
+    #endregion
+
+
+    #region OBJECT IN VIEW
+
 
     void ObjectInView()
     {
@@ -107,22 +165,31 @@ public class SelectionController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (lookTarget != null)
-        {
-            Arrow.transform.LookAt(lookTarget.transform);
-        }
-    }
 
+    #endregion
+
+
+    #region HIGHLIGHTING
+
+
+    // Highlights all nearby selectables
+    //--------------------------------------//
     public void HighlightAll()
+    //--------------------------------------//
     {
         if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
         StartCoroutine(highlight());
-    }
 
+    } // END HighlightAll
+
+
+    // Coroutine to highlight all interactables
+    //--------------------------------------//
     IEnumerator highlight()
+    //--------------------------------------//
     {
+        manualHighlightCancel = false;
+
         foreach (GameObject obj in interactables)
         {
             if (obj.GetComponent<Outline>() != null)
@@ -143,22 +210,68 @@ public class SelectionController : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(highlightDuration);
+
+        // If we manually cancelled highlighting during coroutine, don't cancel highlighting again
+        if (!manualHighlightCancel)
+        {
+            foreach (GameObject obj in interactables)
+            {
+                obj.GetComponent<Outline>().enabled = false;
+            }
+        }
+
+    } // END highlight
+
+
+    // Pulse cancels all highlighted components
+    //--------------------------------------//
+    public void PulseCancelHighlights()
+    //--------------------------------------//
+    {
+        manualHighlightCancel = true;
+
         foreach (GameObject obj in interactables)
         {
-            obj.GetComponent<Outline>().enabled = false;
+            if (obj.GetComponent<Outline>() != null)
+            {
+                outline = obj.GetComponent<Outline>();
+                outline.enabled = false;
+            }
         }
-    }
 
+    } // END PulseCancelHighlights
+
+
+    #endregion
+
+
+    #region OTHER
+
+
+    // OnDrawGizmosSelected
+    //--------------------------------------//
     private void OnDrawGizmosSelected()
+    //--------------------------------------//
     {
         // This assumes that the radius is drawn from player's camera, may not be true later!
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(playerCam.transform.position, selectRadius);
-    }
+    
+    } // END OnDrawGizmosSelected
 
+
+    // grabInteractables
+    //--------------------------------------//
     public List<GameObject> grabInteractables()
+    //--------------------------------------//
     {
         UpdateSelectables();
         return interactables;
-    }
-}
+    
+    } // END grabInteractables
+
+
+    #endregion
+
+
+} // END SelectionController.cs

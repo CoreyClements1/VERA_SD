@@ -18,6 +18,36 @@ public class VERA_Interactable : MonoBehaviour, IInteractable
     #endregion
 
 
+    #region INIT
+
+
+    // Awake
+    //--------------------------------------//
+    private void Awake()
+    //--------------------------------------//
+    {
+        ConfirmCollider();
+
+    } // END Awake
+
+
+    // Spawns a dummy collider if no collider is present (for finding interactables by colliders)
+    //--------------------------------------//
+    private void ConfirmCollider()
+    //--------------------------------------//
+    {
+        // If no collider present, add a trigger collider
+        if (GetComponent<Collider>() == null)
+        {
+            gameObject.AddComponent<SphereCollider>().isTrigger = true;
+        }
+
+    } // END ConfirmCollider
+
+
+    #endregion
+
+
     #region IINTERACTABLE FUNCTIONS
 
 
