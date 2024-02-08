@@ -11,7 +11,7 @@ public class DoorOpener : MonoBehaviour
         joint = GetComponent<HingeJoint>();
     }
 
-    private void Open()
+    public void Open()
     {
         if (!isOpen)
         {
@@ -20,7 +20,7 @@ public class DoorOpener : MonoBehaviour
         }
     }
 
-    private void Close()
+    public void Close()
     {
         if (isOpen)
         {
