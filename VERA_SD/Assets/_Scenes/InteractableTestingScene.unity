@@ -654,8 +654,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 993601024}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &224847778
 GameObject:
@@ -687,9 +687,9 @@ Transform:
   m_Children:
   - {fileID: 16581783}
   - {fileID: 1199262761}
-  - {fileID: 2218496724435676035}
+  - {fileID: 1534215127}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &263569200
 GameObject:
@@ -786,7 +786,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &599916901
 GameObject:
@@ -883,8 +883,8 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 993601024}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &662923627
 GameObject:
@@ -915,10 +915,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292ca6b0d36c760458b7498a73a5729d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  rotateDegrees: 15
-  turnPress: 0
-  ForwardPress: 0
+  turnLPress: 0
+  turnRPress: 0
+  forwardPress: 0
+  state: 0
+  movementControlledByTree: 0
 --- !u!4 &662923629
 Transform:
   m_ObjectHideFlags: 0
@@ -932,7 +933,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
@@ -1025,8 +1026,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 993601024}
-  m_RootOrder: 2
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &952453721
 GameObject:
@@ -1116,18 +1117,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-
-  m_GameObject: {fileID: 993601023}
+  m_GameObject: {fileID: 952453721}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.13618568, y: 0.96315414, z: -0.3347026}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 599916905}
-  - {fileID: 78653978}
-  - {fileID: 705507995}
+  m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1199262759
 GameObject:
@@ -1205,7 +1202,7 @@ Transform:
   m_Children:
   - {fileID: 41326372}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1534215118
 PrefabInstance:
@@ -1344,6 +1341,26 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 4547a9dd-944c-41c2-96f8-403404c271ef
     m_ActionName: Movement/Return[/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2af11ca3-6f6f-4db7-bc7e-bfd9b4d4d8e1
+    m_ActionName: Movement/Switch[/Keyboard/g]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2f8f7c03-4e4f-47a3-8204-856cb6cc6dbf
+    m_ActionName: MovementT2/Movement
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 563851b5-0d42-4a80-a6d3-79118aae959c
+    m_ActionName: MovementT2/TurnLeft[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0bddb94d-dc95-4d6b-915e-4ba90cecf135
+    m_ActionName: MovementT2/TurnRight[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1c0309ce-ad28-47c7-9391-7fbd329e7ad9
+    m_ActionName: MovementT2/Switch[/Keyboard/g]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Movement
@@ -1361,10 +1378,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292ca6b0d36c760458b7498a73a5729d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.0001
-  rotateDegrees: 15
-  turnPress: 0
-  ForwardPress: 0
+  turnLPress: 0
+  turnRPress: 0
+  forwardPress: 0
+  state: 0
+  movementControlledByTree: 0
 --- !u!4 &1534215127 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185,
@@ -1385,6 +1403,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rig: {fileID: 1534215127}
   _input: {fileID: 662923628}
+  speed: 5
+  rotationValue: 15
 --- !u!1 &1865694586
 GameObject:
   m_ObjectHideFlags: 0
@@ -1480,5 +1500,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

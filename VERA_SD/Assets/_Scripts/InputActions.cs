@@ -62,6 +62,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Switch"",
+                    ""type"": ""Button"",
+                    ""id"": ""2af11ca3-6f6f-4db7-bc7e-bfd9b4d4d8e1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -108,6 +117,145 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Return"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""74c97900-5384-4e7a-9a7e-1890dc1cbbb7"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""MovementT2"",
+            ""id"": ""3cd2666b-154a-46cd-a24e-e8e32278a342"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""2f8f7c03-4e4f-47a3-8204-856cb6cc6dbf"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LookUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""563851b5-0d42-4a80-a6d3-79118aae959c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LookDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""0bddb94d-dc95-4d6b-915e-4ba90cecf135"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""800a2d8a-8605-4eec-81dc-fff13732f987"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""5110997b-b468-44ac-bade-cd3eb24778b4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Switch"",
+                    ""type"": ""Button"",
+                    ""id"": ""1c0309ce-ad28-47c7-9391-7fbd329e7ad9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""4896be0e-1b40-41f1-ac4a-07f638bdd45f"",
+                    ""path"": ""<Joystick>/stick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0edaa9a-d945-4162-8f97-eb93086f7a2a"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LookUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b111663f-b438-4ae4-9c95-592489ea923b"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LookDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e92ed35-54dc-4fee-bbbd-95b7c1244fd6"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea0bc520-a8b6-401a-bdfd-90267d6cd29f"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d03fa16-9703-4b4a-9aa9-12603043be27"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -120,6 +268,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Movement_Forward = m_Movement.FindAction("Forward", throwIfNotFound: true);
         m_Movement_TurnRight = m_Movement.FindAction("TurnRight", throwIfNotFound: true);
         m_Movement_Return = m_Movement.FindAction("Return", throwIfNotFound: true);
+        m_Movement_Switch = m_Movement.FindAction("Switch", throwIfNotFound: true);
+        // MovementT2
+        m_MovementT2 = asset.FindActionMap("MovementT2", throwIfNotFound: true);
+        m_MovementT2_Movement = m_MovementT2.FindAction("Movement", throwIfNotFound: true);
+        m_MovementT2_LookUp = m_MovementT2.FindAction("LookUp", throwIfNotFound: true);
+        m_MovementT2_LookDown = m_MovementT2.FindAction("LookDown", throwIfNotFound: true);
+        m_MovementT2_Interact = m_MovementT2.FindAction("Interact", throwIfNotFound: true);
+        m_MovementT2_Menu = m_MovementT2.FindAction("Menu", throwIfNotFound: true);
+        m_MovementT2_Switch = m_MovementT2.FindAction("Switch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,6 +342,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Forward;
     private readonly InputAction m_Movement_TurnRight;
     private readonly InputAction m_Movement_Return;
+    private readonly InputAction m_Movement_Switch;
     public struct MovementActions
     {
         private @InputActions m_Wrapper;
@@ -193,6 +351,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Forward => m_Wrapper.m_Movement_Forward;
         public InputAction @TurnRight => m_Wrapper.m_Movement_TurnRight;
         public InputAction @Return => m_Wrapper.m_Movement_Return;
+        public InputAction @Switch => m_Wrapper.m_Movement_Switch;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -214,6 +373,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Return.started += instance.OnReturn;
             @Return.performed += instance.OnReturn;
             @Return.canceled += instance.OnReturn;
+            @Switch.started += instance.OnSwitch;
+            @Switch.performed += instance.OnSwitch;
+            @Switch.canceled += instance.OnSwitch;
         }
 
         private void UnregisterCallbacks(IMovementActions instance)
@@ -230,6 +392,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Return.started -= instance.OnReturn;
             @Return.performed -= instance.OnReturn;
             @Return.canceled -= instance.OnReturn;
+            @Switch.started -= instance.OnSwitch;
+            @Switch.performed -= instance.OnSwitch;
+            @Switch.canceled -= instance.OnSwitch;
         }
 
         public void RemoveCallbacks(IMovementActions instance)
@@ -247,11 +412,107 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         }
     }
     public MovementActions @Movement => new MovementActions(this);
+
+    // MovementT2
+    private readonly InputActionMap m_MovementT2;
+    private List<IMovementT2Actions> m_MovementT2ActionsCallbackInterfaces = new List<IMovementT2Actions>();
+    private readonly InputAction m_MovementT2_Movement;
+    private readonly InputAction m_MovementT2_LookUp;
+    private readonly InputAction m_MovementT2_LookDown;
+    private readonly InputAction m_MovementT2_Interact;
+    private readonly InputAction m_MovementT2_Menu;
+    private readonly InputAction m_MovementT2_Switch;
+    public struct MovementT2Actions
+    {
+        private @InputActions m_Wrapper;
+        public MovementT2Actions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_MovementT2_Movement;
+        public InputAction @LookUp => m_Wrapper.m_MovementT2_LookUp;
+        public InputAction @LookDown => m_Wrapper.m_MovementT2_LookDown;
+        public InputAction @Interact => m_Wrapper.m_MovementT2_Interact;
+        public InputAction @Menu => m_Wrapper.m_MovementT2_Menu;
+        public InputAction @Switch => m_Wrapper.m_MovementT2_Switch;
+        public InputActionMap Get() { return m_Wrapper.m_MovementT2; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MovementT2Actions set) { return set.Get(); }
+        public void AddCallbacks(IMovementT2Actions instance)
+        {
+            if (instance == null || m_Wrapper.m_MovementT2ActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MovementT2ActionsCallbackInterfaces.Add(instance);
+            @Movement.started += instance.OnMovement;
+            @Movement.performed += instance.OnMovement;
+            @Movement.canceled += instance.OnMovement;
+            @LookUp.started += instance.OnLookUp;
+            @LookUp.performed += instance.OnLookUp;
+            @LookUp.canceled += instance.OnLookUp;
+            @LookDown.started += instance.OnLookDown;
+            @LookDown.performed += instance.OnLookDown;
+            @LookDown.canceled += instance.OnLookDown;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
+            @Menu.started += instance.OnMenu;
+            @Menu.performed += instance.OnMenu;
+            @Menu.canceled += instance.OnMenu;
+            @Switch.started += instance.OnSwitch;
+            @Switch.performed += instance.OnSwitch;
+            @Switch.canceled += instance.OnSwitch;
+        }
+
+        private void UnregisterCallbacks(IMovementT2Actions instance)
+        {
+            @Movement.started -= instance.OnMovement;
+            @Movement.performed -= instance.OnMovement;
+            @Movement.canceled -= instance.OnMovement;
+            @LookUp.started -= instance.OnLookUp;
+            @LookUp.performed -= instance.OnLookUp;
+            @LookUp.canceled -= instance.OnLookUp;
+            @LookDown.started -= instance.OnLookDown;
+            @LookDown.performed -= instance.OnLookDown;
+            @LookDown.canceled -= instance.OnLookDown;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
+            @Menu.started -= instance.OnMenu;
+            @Menu.performed -= instance.OnMenu;
+            @Menu.canceled -= instance.OnMenu;
+            @Switch.started -= instance.OnSwitch;
+            @Switch.performed -= instance.OnSwitch;
+            @Switch.canceled -= instance.OnSwitch;
+        }
+
+        public void RemoveCallbacks(IMovementT2Actions instance)
+        {
+            if (m_Wrapper.m_MovementT2ActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMovementT2Actions instance)
+        {
+            foreach (var item in m_Wrapper.m_MovementT2ActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MovementT2ActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MovementT2Actions @MovementT2 => new MovementT2Actions(this);
     public interface IMovementActions
     {
         void OnTurnLeft(InputAction.CallbackContext context);
         void OnForward(InputAction.CallbackContext context);
         void OnTurnRight(InputAction.CallbackContext context);
         void OnReturn(InputAction.CallbackContext context);
+        void OnSwitch(InputAction.CallbackContext context);
+    }
+    public interface IMovementT2Actions
+    {
+        void OnMovement(InputAction.CallbackContext context);
+        void OnLookUp(InputAction.CallbackContext context);
+        void OnLookDown(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
+        void OnMenu(InputAction.CallbackContext context);
+        void OnSwitch(InputAction.CallbackContext context);
     }
 }
