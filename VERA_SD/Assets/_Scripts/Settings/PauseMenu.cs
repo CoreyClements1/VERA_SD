@@ -11,13 +11,26 @@ public class PauseMenu : MonoBehaviour
 
     #region VARIABLES
     private bool pauseEnabled;
+    private bool saveEnabled;
     public GameObject pauseMenu;
     public GameObject settings;
     public GameObject snapTurningImages;
+    public GameObject saveProgressScreen;
+    public GameObject options;
+    public GameObject typeOptions;
+    public GameObject typeImages;
     public Slider slider;
     [SerializeField] private GameObject player;
     private int index;
+    private int typeIndex;
+    private string typeCurrentName;
     private string currentName;
+    private float prevSnap;
+    private float prevSpeed;
+    private int prevIndex;
+    private int prevTypeIndex;
+    private List<bool> typeArray;
+    private List<bool> optionsArray;
     public TextMeshProUGUI sliderText;
 
     #endregion
@@ -27,31 +40,39 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         pauseEnabled = false;
-        Debug.Log("testing function");
+        saveEnabled = false;
         currentName = "free";
+        typeCurrentName = "T1";
         index = 2;
+        typeIndex = 0;
+        prevIndex = index;
+        prevTypeIndex = typeIndex;
+        prevSnap = player.GetComponent<MovementController>().rotationValue;
+        prevSpeed = player.GetComponent<MovementController>().speed;
+
+        typeArray = new List<bool>();
+        optionsArray = new List<bool>();
+        for(int i = 0; i < typeOptions.transform.childCount; i++)
+        {
+            typeArray.Add(typeOptions.transform.GetChild(i).GetComponent<Toggle>().isOn);
+        }
+
+        for (int i = 0; i < options.transform.childCount; i++)
+        {
+            optionsArray.Add(typeOptions.transform.GetChild(i).GetComponent<Toggle>().isOn);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !pauseEnabled)
         {
-            pauseEnabled = !pauseEnabled;
+            pauseEnabled = true;
             pauseMenu.gameObject.SetActive(pauseEnabled);
             if(pauseEnabled)
                 Time.timeScale = 0;
-            if (!pauseEnabled)
-            {
-                Time.timeScale = 1;
-                for (int i = 0; i < settings.transform.childCount; i++)
-                {
-                    Transform child = transform.GetChild(i);
-                    child.gameObject.SetActive(false);
-                    
-
-                }
-            }
+            
             
             
         }
@@ -72,7 +93,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    //this function changes the degree in which a user turns
+    //this function changes the degree in which a user turns. Yes this is very ugly and I will fix it in the future when it bugs me too much
     public void changeTurning()
     {
         string name = EventSystem.current.currentSelectedGameObject.name;
@@ -84,6 +105,8 @@ public class PauseMenu : MonoBehaviour
                 snapTurningImages.transform.GetChild(0).gameObject.SetActive(true);
                 snapTurningImages.transform.GetChild(index).gameObject.SetActive(false);
                 player.GetComponent<MovementController>().rotationValue = 90f;
+                optionsArray[0] = true;
+                optionsArray[index] = false;
                 index = 0;             
             }
             else if (name == "45")
@@ -91,6 +114,8 @@ public class PauseMenu : MonoBehaviour
                 snapTurningImages.transform.GetChild(1).gameObject.SetActive(true);
                 snapTurningImages.transform.GetChild(index).gameObject.SetActive(false);
                 player.GetComponent<MovementController>().rotationValue = 45f;
+                optionsArray[1] = true;
+                optionsArray[index] = false;
                 index = 1;
             }
             else if (name == "free")
@@ -98,8 +123,11 @@ public class PauseMenu : MonoBehaviour
                 snapTurningImages.transform.GetChild(2).gameObject.SetActive(true);
                 snapTurningImages.transform.GetChild(index).gameObject.SetActive(false);
                 player.GetComponent<MovementController>().rotationValue = 15f;
+                optionsArray[2] = true;
+                optionsArray[index] = false;
                 index = 2;
             }
+
         }
         
     }
@@ -124,5 +152,131 @@ public class PauseMenu : MonoBehaviour
         player.GetComponent<MovementController>().speed = slider.value;
     }
 
+    //this function activates the save screen window
+    public void SaveScreenActive()
+    {
+        saveEnabled = !saveEnabled;
+        saveProgressScreen.gameObject.SetActive(saveEnabled);
+        
+
+    }
+    
+    //saves all changes a user makes before returning to experiment
+    public void SaveChanges()
+    {
+        prevSnap = player.GetComponent<MovementController>().rotationValue;
+        prevSpeed = player.GetComponent<MovementController>().speed;
+        prevIndex = index;
+        prevTypeIndex = typeIndex;
+        for (int i = 0; i < settings.transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            child.gameObject.SetActive(false);
+        }
+
+        pauseEnabled = false;
+        Time.timeScale = 1;
+    }
+
+    //removes all changes a user makes
+    public void RemoveChanges()
+    {
+        
+        player.GetComponent<MovementController>().rotationValue = prevSnap;
+        player.GetComponent<MovementController>().speed = prevSpeed;
+        index = prevIndex;
+        typeIndex = prevTypeIndex;
+        slider.value = prevSpeed;
+        
+        //once type 3 is added, we'll remove -1
+        for(int i = 0; i < typeOptions.transform.childCount - 1; i++)
+        {
+           
+            Transform child = typeOptions.transform.GetChild(i);
+           
+
+            if (typeArray[i])
+            {
+                
+                child.GetComponent<Toggle>().isOn = false;
+                typeImages.transform.GetChild(i).gameObject.SetActive(false);
+                
+            }
+           
+            if (i == typeIndex)
+            {
+                child.GetComponent<Toggle>().isOn = true;
+                typeImages.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            
+        }
+
+        for(int i = 0; i < options.transform.childCount; i++)
+        {
+            Transform child = options.transform.GetChild(i);
+            if (optionsArray[i])
+            {
+                child.GetComponent<Toggle>().isOn = false;
+                snapTurningImages.transform.GetChild(i).gameObject.SetActive(false);
+            }
+
+            if(i == index)
+            {
+                child.GetComponent<Toggle>().isOn = true;
+                snapTurningImages.transform.GetChild(i).gameObject.SetActive(true);
+            }
+        }
+        for (int i = 0; i < settings.transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            child.gameObject.SetActive(false);
+
+
+        }
+
+        pauseEnabled = false;
+        Time.timeScale = 1;
+    }
+
+    //menu activation for selection movement type
+    public void TypeSelection()
+    {
+        for (int i = 0; i < settings.transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.name != "Type Selection")
+                child.gameObject.SetActive(false);
+            else
+                child.gameObject.SetActive(true);
+
+        }
+    }
+
+    //changes type selection and changes image
+    public void ChangeTypeSelection()
+    {
+        string name = EventSystem.current.currentSelectedGameObject.name;
+        if(name != typeCurrentName)
+        {
+            typeCurrentName = name;
+            for (int i = 0; i < typeOptions.transform.childCount - 1; i++)
+            {
+
+                if (typeOptions.transform.GetChild(i).name == name)
+                {
+                    typeImages.transform.GetChild(i).gameObject.SetActive(true);
+                    typeImages.transform.GetChild(typeIndex).gameObject.SetActive(false);
+
+                    typeArray[i] = true;
+                    typeArray[typeIndex] = false;
+                    
+                    typeIndex = i;
+                    break;
+                }
+
+            }
+        }
+       
+    }
     #endregion
 }
