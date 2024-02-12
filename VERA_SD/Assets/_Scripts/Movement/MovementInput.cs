@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class MovementInput : MonoBehaviour
@@ -19,12 +21,10 @@ public class MovementInput : MonoBehaviour
     public float interactPress = 0;
     public float menuPress = 0;
     public float state = 0;
-    float rotationValue = 0;
-
     // If true, movement will not be done via input actions, but called via the tree
     [SerializeField] private bool movementControlledByTree = false;
     // Variable to change the accessibility level to change controls for movement.
-    [SerializeField] private int accessLevel = 1;
+    [SerializeField] public int accessLevel = 1;
 
     #endregion
 
@@ -65,6 +65,8 @@ public class MovementInput : MonoBehaviour
             _input.MovementT2.Interact.performed += setInteract;
 
             _input.MovementT2.Menu.performed += setMenu;
+
+            // _input.MovementT2.Switch.performed += setState;
         }
 
     }
@@ -81,7 +83,9 @@ public class MovementInput : MonoBehaviour
 
             _input.Movement.TurnRight.performed -= SetLookRight;
             // _input.Movement.TurnRight.canceled -= SetLookRight;
-            // _input.Movement.Switch.performed -= SetStage2;
+
+            // _input.Movement.Switch.performed -= setState;
+
             _input.Movement.Disable();
         }
         // Level 2 of accessibility 
@@ -96,6 +100,8 @@ public class MovementInput : MonoBehaviour
             _input.MovementT2.Interact.performed -= setInteract;
 
             _input.MovementT2.Menu.performed -= setMenu;
+
+            // _input.MovementT2.Switch.performed -= setState;
 
             _input.MovementT2.Disable();
         }
@@ -177,9 +183,16 @@ public class MovementInput : MonoBehaviour
         menuPress = ctx.ReadValue<float>();
     }
 
-    private void switchAccess1(InputAction.CallbackContext ctx)
+    private void setState(InputActionMap actionMap)
     {
-
+        // state = ctx.ReadValue<float>();
+        // if (accessLevel == 1){
+        //     accessLevel = 2;
+        // } else {
+        //     accessLevel = 1;
+        // }
+        // if (actionMap.enabled)
+        //     return;
     }
     #endregion
 

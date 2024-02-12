@@ -14,6 +14,7 @@ public class MovementController : MonoBehaviour
 
 
     [SerializeField] Transform Rig;
+    
     Vector3 _userMoveInput = Vector3.zero;
     Vector3 _userLookInput = Vector3.zero;
 
