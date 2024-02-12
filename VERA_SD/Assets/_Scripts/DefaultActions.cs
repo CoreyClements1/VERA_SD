@@ -12,6 +12,8 @@ public class DefaultActions : MonoBehaviour
     [SerializeField] private GrabTracker grabHandler;
     private bool isGrabbing = false;
     private Renderer rend;
+    private HingeJoint joint;//<----------------------------------------------------------------------
+    private bool reverse;//<----------------------------------------------------------------------
 
 
     #endregion
@@ -25,6 +27,8 @@ public class DefaultActions : MonoBehaviour
     private void Awake()
     //--------------------------------------//
     {
+        joint = GetComponent<HingeJoint>();//<----------------------------------------------------------------------
+        reverse = false;//<----------------------------------------------------------------------
         grabHandler = FindObjectOfType<GrabTracker>();
         if (grabHandler == null)
         {
@@ -145,6 +149,54 @@ public class DefaultActions : MonoBehaviour
 
         }
     }//End Throw
+
+    //OpenAndClose
+    //--------------------------------------//
+     public void OpenAndClose()//<----------------------------------------------------------------------
+    //--------------------------------------//
+    {
+        // Debug.Log("joint.angle:" + joint.angle);
+        //collision makes joint angle be offsetted from 0 so if its close to 0 then its closed so open
+        if (Mathf.Floor(Mathf.Abs(joint.angle)) == 0)
+        {
+            //if has two way opening checks greater than 45 to make sure player can move through door
+            if (joint.limits.max > 45 && joint.limits.min < -45)
+            {
+                // Debug.Log("entered Open");
+                //depending on reverse state flop between directions
+                if (reverse == false)
+                {
+                    this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.max);
+                }
+                else
+                {
+                    this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.min);
+                }
+            }
+            //if has positive opening
+            else if (joint.limits.max > 45)
+            {
+                this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.max);
+            }
+            //if has negative opening
+            else if (joint.limits.min < -45)
+            {
+                this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.min);
+            }
+        }
+        //is open so close
+        else
+        {
+            // Debug.Log("entered Close");
+            //reverse reverse
+            reverse = !reverse;
+            this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, -joint.angle);
+        }
+        //has problems when collisions if kinetatic is disables
+        //for better accessability, if it has the option to move outwards from player do that
+        //but will require to know which direction the player is opening door from and has to decide based on that to open with min or max
+        //might also want to have a smooth animation for opening
+    }//End OpenAndClose
 
 
     #endregion
