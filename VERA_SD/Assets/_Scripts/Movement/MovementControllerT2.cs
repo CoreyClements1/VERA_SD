@@ -30,21 +30,25 @@ public class MovementControllerT2 : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
     private void FixedUpdate(){
+        // Switch input checks
         bool lookUpPressed = _input.upPress > 0.1f;
         bool lookDownPressed = _input.downPress > 0.1f;
         bool interactPressed = _input.interactPress > 0.1f;
         bool menuPressed = _input.menuPress > 0.1f;
         bool statePressed = _input.state > 0.1f;
 
+        // Movement
         _userMoveInput = GetMoveInput();
         UserMove();
+
+        // Continous forward movement
         _rigidbody.AddRelativeForce(_userMoveInput, ForceMode.Force);
 
         if(_userMoveInput != Vector3.zero)
         {
             Debug.Log(_userMoveInput);
         }
-
+        // Switch Inputs 
         if(lookUpPressed)
         {
             Debug.Log(_input.upPress + " Turn U");
@@ -92,9 +96,10 @@ public class MovementControllerT2 : MonoBehaviour
     }
     private void UserMove()
     {   
+        // Checks input for the movement while limiting left and right movement
         bool movementCheck = (_userMoveInput.z > 0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f) || 
                              (_userMoveInput.z < -0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f);
-        // Limits the movement from right and left
+        
         if(movementCheck)
         {
             _userMoveInput = new Vector3(_userMoveInput.x,
