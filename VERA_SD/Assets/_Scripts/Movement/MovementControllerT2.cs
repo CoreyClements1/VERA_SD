@@ -91,10 +91,22 @@ public class MovementControllerT2 : MonoBehaviour
         return new Vector3(_input.stickInput.x, 0.0f, _input.stickInput.y);
     }
     private void UserMove()
-    {
-        _userMoveInput = new Vector3(_userMoveInput.x * speed * _rigidbody.mass,
+    {   
+        bool movementCheck = (_userMoveInput.z > 0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f) || 
+                             (_userMoveInput.z < -0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f);
+        // Limits the movement from right and left
+        if(movementCheck)
+        {
+            _userMoveInput = new Vector3(_userMoveInput.x,
                                         _userMoveInput.y,
-                                        _userMoveInput.z);
+                                        _userMoveInput.z * speed * _rigidbody.mass);
+            Debug.Log("Moving");
+        } else {
+            _userMoveInput = new Vector3(0,
+                                        0,
+                                        0);
+            Debug.Log("Not Moving");
+        }
     }
     private Vector3 GetLookUpInput()
     {
