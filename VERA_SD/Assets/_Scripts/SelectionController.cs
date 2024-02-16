@@ -117,7 +117,7 @@ public class SelectionController : MonoBehaviour
         }
 
         // Return whether there are interactables nearby or not
-        //Debug.Log("I see " + interactables.Count);
+        Debug.Log("I see " + interactables.Count);
         return (interactables.Count > 0) ? true : false;
 
     } // END UpdateSelectables
