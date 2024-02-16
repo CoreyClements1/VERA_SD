@@ -4,9 +4,19 @@ using UnityEngine;
 
 public class TorchKey : MonoBehaviour
 {
-    public void Response()
+    [SerializeField] GrabTracker tracker;
+    [SerializeField] GameObject door;
+    public void Open()
     {
-        Debug.Log("worked!");
+        if (tracker.grabbedObject != null && tracker.grabbedObject.name == "Torch Key")
+        {
+            Debug.Log("SUCCESS!");
+            door.SetActive(false);
+        } else
+        {
+            Debug.Log("NO KEY!!!!! GET OUT!!!");
+        }
+
     }
 
 }
