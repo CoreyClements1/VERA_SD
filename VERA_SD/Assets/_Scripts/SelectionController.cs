@@ -122,6 +122,27 @@ public class SelectionController : MonoBehaviour
 
     } // END UpdateSelectables
 
+    // Grabs all the selectables in the scene, is used to create associating buttons in tree UI
+    //--------------------------------------//
+    public List<GameObject> grabAllSelectables()
+    //--------------------------------------//
+    {
+        // Honestly a suspicious way of doing this, not to mention expensive, do it once please
+        List<GameObject> interactables = new List<GameObject>();
+
+        // Get all GameObjects nearby
+        //Collider[] colliders = Physics.OverlapSphere(playerCam.transform.position, selectRadius);
+        GameObject[] objects = FindObjectsOfType<GameObject>();
+
+        // On each object, check if there is an interactable component, add to interactables list if yes
+        foreach (GameObject obj in objects)
+        {
+            if (obj.GetComponent<IInteractable>() != null)
+                interactables.Add(obj);
+        }
+
+        return interactables;
+    } // END grabAllSelectables
 
     #endregion
 
@@ -258,18 +279,6 @@ public class SelectionController : MonoBehaviour
         Gizmos.DrawWireSphere(playerCam.transform.position, selectRadius);
     
     } // END OnDrawGizmosSelected
-
-
-    // grabInteractables
-    //--------------------------------------//
-    public List<GameObject> grabInteractables()
-    //--------------------------------------//
-    {
-        UpdateSelectables();
-        return interactables;
-    
-    } // END grabInteractables
-
 
     #endregion
 

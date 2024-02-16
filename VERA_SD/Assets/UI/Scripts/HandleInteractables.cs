@@ -22,7 +22,7 @@ public class HandleInteractables: MonoBehaviour
 
     void Awake()
     {
-        interactables = selectionController.grabInteractables();
+        interactables = selectionController.grabAllSelectables();
         foreach (GameObject interactable in interactables)
         {
             List<GameObject> levels = SetupLevels(interactable);
