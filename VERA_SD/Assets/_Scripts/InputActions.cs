@@ -28,7 +28,16 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             ""id"": ""642c6098-82ed-42cf-b600-68fedf660957"",
             ""actions"": [
                 {
-                    ""name"": ""TurnLeft"",
+                    ""name"": ""StickInput"",
+                    ""type"": ""Value"",
+                    ""id"": ""b986b2ee-57d2-4bd0-920a-8cc321866fc5"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Switch1"",
                     ""type"": ""Button"",
                     ""id"": ""031b3c3e-de57-4459-b0d2-907ddecd52c0"",
                     ""expectedControlType"": ""Button"",
@@ -37,7 +46,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Forward"",
+                    ""name"": ""Switch2"",
                     ""type"": ""Button"",
                     ""id"": ""acfd4668-68f5-45b6-b94e-6648f08964e8"",
                     ""expectedControlType"": ""Button"",
@@ -46,7 +55,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""TurnRight"",
+                    ""name"": ""Switch3"",
                     ""type"": ""Button"",
                     ""id"": ""f94dfefa-fdc9-46ba-9bbd-c4194e119eb5"",
                     ""expectedControlType"": ""Button"",
@@ -55,7 +64,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Return"",
+                    ""name"": ""Switch4"",
                     ""type"": ""Button"",
                     ""id"": ""4547a9dd-944c-41c2-96f8-403404c271ef"",
                     ""expectedControlType"": ""Button"",
@@ -64,7 +73,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Switch"",
+                    ""name"": ""SwitchLevel"",
                     ""type"": ""Button"",
                     ""id"": ""2af11ca3-6f6f-4db7-bc7e-bfd9b4d4d8e1"",
                     ""expectedControlType"": ""Button"",
@@ -76,23 +85,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""4fe474ae-2699-4773-afe1-a0c9c9239889"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TurnLeft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""07c48c65-5eb3-4c8c-a168-1bd7a3e12df3"",
                     ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Forward"",
+                    ""action"": ""Switch2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -103,7 +101,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""TurnRight"",
+                    ""action"": ""Switch3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -114,7 +112,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Return"",
+                    ""action"": ""Switch4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -125,7 +123,29 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Switch"",
+                    ""action"": ""SwitchLevel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b2f6dd5-1f41-4211-b5bc-fc8c6621b3c7"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StickInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4fe474ae-2699-4773-afe1-a0c9c9239889"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -275,11 +295,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
 }");
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
-        m_Movement_TurnLeft = m_Movement.FindAction("TurnLeft", throwIfNotFound: true);
-        m_Movement_Forward = m_Movement.FindAction("Forward", throwIfNotFound: true);
-        m_Movement_TurnRight = m_Movement.FindAction("TurnRight", throwIfNotFound: true);
-        m_Movement_Return = m_Movement.FindAction("Return", throwIfNotFound: true);
-        m_Movement_Switch = m_Movement.FindAction("Switch", throwIfNotFound: true);
+        m_Movement_StickInput = m_Movement.FindAction("StickInput", throwIfNotFound: true);
+        m_Movement_Switch1 = m_Movement.FindAction("Switch1", throwIfNotFound: true);
+        m_Movement_Switch2 = m_Movement.FindAction("Switch2", throwIfNotFound: true);
+        m_Movement_Switch3 = m_Movement.FindAction("Switch3", throwIfNotFound: true);
+        m_Movement_Switch4 = m_Movement.FindAction("Switch4", throwIfNotFound: true);
+        m_Movement_SwitchLevel = m_Movement.FindAction("SwitchLevel", throwIfNotFound: true);
         // MovementT2
         m_MovementT2 = asset.FindActionMap("MovementT2", throwIfNotFound: true);
         m_MovementT2_Movement = m_MovementT2.FindAction("Movement", throwIfNotFound: true);
@@ -349,20 +370,22 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     // Movement
     private readonly InputActionMap m_Movement;
     private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
-    private readonly InputAction m_Movement_TurnLeft;
-    private readonly InputAction m_Movement_Forward;
-    private readonly InputAction m_Movement_TurnRight;
-    private readonly InputAction m_Movement_Return;
-    private readonly InputAction m_Movement_Switch;
+    private readonly InputAction m_Movement_StickInput;
+    private readonly InputAction m_Movement_Switch1;
+    private readonly InputAction m_Movement_Switch2;
+    private readonly InputAction m_Movement_Switch3;
+    private readonly InputAction m_Movement_Switch4;
+    private readonly InputAction m_Movement_SwitchLevel;
     public struct MovementActions
     {
         private @InputActions m_Wrapper;
         public MovementActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @TurnLeft => m_Wrapper.m_Movement_TurnLeft;
-        public InputAction @Forward => m_Wrapper.m_Movement_Forward;
-        public InputAction @TurnRight => m_Wrapper.m_Movement_TurnRight;
-        public InputAction @Return => m_Wrapper.m_Movement_Return;
-        public InputAction @Switch => m_Wrapper.m_Movement_Switch;
+        public InputAction @StickInput => m_Wrapper.m_Movement_StickInput;
+        public InputAction @Switch1 => m_Wrapper.m_Movement_Switch1;
+        public InputAction @Switch2 => m_Wrapper.m_Movement_Switch2;
+        public InputAction @Switch3 => m_Wrapper.m_Movement_Switch3;
+        public InputAction @Switch4 => m_Wrapper.m_Movement_Switch4;
+        public InputAction @SwitchLevel => m_Wrapper.m_Movement_SwitchLevel;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -372,40 +395,46 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MovementActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MovementActionsCallbackInterfaces.Add(instance);
-            @TurnLeft.started += instance.OnTurnLeft;
-            @TurnLeft.performed += instance.OnTurnLeft;
-            @TurnLeft.canceled += instance.OnTurnLeft;
-            @Forward.started += instance.OnForward;
-            @Forward.performed += instance.OnForward;
-            @Forward.canceled += instance.OnForward;
-            @TurnRight.started += instance.OnTurnRight;
-            @TurnRight.performed += instance.OnTurnRight;
-            @TurnRight.canceled += instance.OnTurnRight;
-            @Return.started += instance.OnReturn;
-            @Return.performed += instance.OnReturn;
-            @Return.canceled += instance.OnReturn;
-            @Switch.started += instance.OnSwitch;
-            @Switch.performed += instance.OnSwitch;
-            @Switch.canceled += instance.OnSwitch;
+            @StickInput.started += instance.OnStickInput;
+            @StickInput.performed += instance.OnStickInput;
+            @StickInput.canceled += instance.OnStickInput;
+            @Switch1.started += instance.OnSwitch1;
+            @Switch1.performed += instance.OnSwitch1;
+            @Switch1.canceled += instance.OnSwitch1;
+            @Switch2.started += instance.OnSwitch2;
+            @Switch2.performed += instance.OnSwitch2;
+            @Switch2.canceled += instance.OnSwitch2;
+            @Switch3.started += instance.OnSwitch3;
+            @Switch3.performed += instance.OnSwitch3;
+            @Switch3.canceled += instance.OnSwitch3;
+            @Switch4.started += instance.OnSwitch4;
+            @Switch4.performed += instance.OnSwitch4;
+            @Switch4.canceled += instance.OnSwitch4;
+            @SwitchLevel.started += instance.OnSwitchLevel;
+            @SwitchLevel.performed += instance.OnSwitchLevel;
+            @SwitchLevel.canceled += instance.OnSwitchLevel;
         }
 
         private void UnregisterCallbacks(IMovementActions instance)
         {
-            @TurnLeft.started -= instance.OnTurnLeft;
-            @TurnLeft.performed -= instance.OnTurnLeft;
-            @TurnLeft.canceled -= instance.OnTurnLeft;
-            @Forward.started -= instance.OnForward;
-            @Forward.performed -= instance.OnForward;
-            @Forward.canceled -= instance.OnForward;
-            @TurnRight.started -= instance.OnTurnRight;
-            @TurnRight.performed -= instance.OnTurnRight;
-            @TurnRight.canceled -= instance.OnTurnRight;
-            @Return.started -= instance.OnReturn;
-            @Return.performed -= instance.OnReturn;
-            @Return.canceled -= instance.OnReturn;
-            @Switch.started -= instance.OnSwitch;
-            @Switch.performed -= instance.OnSwitch;
-            @Switch.canceled -= instance.OnSwitch;
+            @StickInput.started -= instance.OnStickInput;
+            @StickInput.performed -= instance.OnStickInput;
+            @StickInput.canceled -= instance.OnStickInput;
+            @Switch1.started -= instance.OnSwitch1;
+            @Switch1.performed -= instance.OnSwitch1;
+            @Switch1.canceled -= instance.OnSwitch1;
+            @Switch2.started -= instance.OnSwitch2;
+            @Switch2.performed -= instance.OnSwitch2;
+            @Switch2.canceled -= instance.OnSwitch2;
+            @Switch3.started -= instance.OnSwitch3;
+            @Switch3.performed -= instance.OnSwitch3;
+            @Switch3.canceled -= instance.OnSwitch3;
+            @Switch4.started -= instance.OnSwitch4;
+            @Switch4.performed -= instance.OnSwitch4;
+            @Switch4.canceled -= instance.OnSwitch4;
+            @SwitchLevel.started -= instance.OnSwitchLevel;
+            @SwitchLevel.performed -= instance.OnSwitchLevel;
+            @SwitchLevel.canceled -= instance.OnSwitchLevel;
         }
 
         public void RemoveCallbacks(IMovementActions instance)
@@ -511,11 +540,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     public MovementT2Actions @MovementT2 => new MovementT2Actions(this);
     public interface IMovementActions
     {
-        void OnTurnLeft(InputAction.CallbackContext context);
-        void OnForward(InputAction.CallbackContext context);
-        void OnTurnRight(InputAction.CallbackContext context);
-        void OnReturn(InputAction.CallbackContext context);
-        void OnSwitch(InputAction.CallbackContext context);
+        void OnStickInput(InputAction.CallbackContext context);
+        void OnSwitch1(InputAction.CallbackContext context);
+        void OnSwitch2(InputAction.CallbackContext context);
+        void OnSwitch3(InputAction.CallbackContext context);
+        void OnSwitch4(InputAction.CallbackContext context);
+        void OnSwitchLevel(InputAction.CallbackContext context);
     }
     public interface IMovementT2Actions
     {

@@ -1,5 +1,7 @@
 
 using JetBrains.Rider.Unity.Editor;
+using TMPro;
+using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
 using UnityEditor.Rendering;
 using UnityEditor.SearchService;
@@ -12,8 +14,9 @@ public class MovementController : MonoBehaviour
 
     #region VARIABLES
 
-
+    Rigidbody _rigidbody = null;
     [SerializeField] Transform Rig;
+    [SerializeField] Transform Camera;
     
     Vector3 _userMoveInput = Vector3.zero;
     Vector3 _userLookInput = Vector3.zero;
@@ -23,41 +26,98 @@ public class MovementController : MonoBehaviour
 
     [SerializeField] public float speed = 1f;
     [SerializeField] public float rotationValue = 15f;
-
-
+    [SerializeField] public float rotationValueVertical = 10f;
+    [SerializeField] public float turnCooldown = 1.0f;
+    float lastPressTime = 0f;
+    [SerializeField] int currentLvl = 1;
     #endregion
 
+    #region START
+    void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+    }
+    #endregion
 
     #region FIXED UPDATE
 
 
     private void FixedUpdate(){
         // Debug.Log(movementActions.Movement.Forward.ReadValue<float>());
-        bool forwardDown = _input.forwardPress > 0.1f;
-        bool turnLDown = _input.turnLPress > 0.1f;
-        bool rightRDown =  _input.turnRPress > 0.1f;
+        bool switchDown1 = _input.buttonPress1 > 0.1f;
+        bool switchDown2 = _input.buttonPress2 > 0.1f;
+        bool switchDown3 =  _input.buttonPress3 > 0.1f;
+        bool switchDown4 = _input.buttonPress4 > 0.1f;
+        bool statePressed = _input.state > 0.1f;
+        if(currentLvl == 1){
+            if(switchDown1){
+                Debug.Log(_input.buttonPress1 + " Turn L");
+                _userLookInput = GetTurnLInput();
+                UserLook();
+                _input.buttonPress1 = 0;
+            }
 
-        if(forwardDown){
-            Debug.Log(_input.forwardPress + " Forward");
-            _userMoveInput = GetMoveInput();
-            UserMove();
-            _input.forwardPress = 0;
-        }
+            if(switchDown2){
+                Debug.Log(_input.buttonPress2 + " Forward");
+                _userMoveInput = GetMoveInput();
+                UserMove();
+                _input.buttonPress2 = 0;
+            }
 
-        if(turnLDown){
-            Debug.Log(_input.turnLPress + " Turn L");
-            _userLookInput = GetTurnLInput();
-            UserLook();
-            _input.turnLPress = 0;
-        }
+            if(switchDown3)
+            {
+                Debug.Log(_input.buttonPress3 + " Turn R");
+                _userLookInput = GetTurnRInput();
+                UserLook();
+                _input.buttonPress3 = 0;
+            }
+            if(switchDown4)
+            {
+                Debug.Log("Back to tree");
+                _input.buttonPress4 = 0;
+            }
+            if(statePressed)
+            {
+                currentLvl = 2;
+                _input.state = 0;
+                Debug.Log("Level: " + currentLvl);
+            }
+        } else if(currentLvl == 2){
 
-        if(rightRDown){
-            Debug.Log(_input.turnRPress + " Turn R");
-            _userLookInput = GetTurnRInput();
-            UserLook();
-            _input.turnRPress = 0;
+            _userMoveInput = GetMoveInputAnalog();
+            UserMoveAnalog();
+
+            if(switchDown1){
+                Debug.Log(_input.buttonPress1 + " Turn U");
+                _userLookInput = GetLookUpInput();
+                UserLookVertical();
+                _input.buttonPress1 = 0;
+            }
+
+            if(switchDown2){
+                Debug.Log(_input.buttonPress2 + " Turn D");
+                _userLookInput = GetLookDownInput();
+                UserLookVertical();
+                _input.buttonPress2 = 0;
+            }
+
+            if(switchDown3)
+            {
+                Debug.Log("Interact change goes here");
+                _input.buttonPress3 = 0;
+            }
+            if(switchDown4)
+            {
+                Debug.Log("Menu change goes here");
+                _input.buttonPress4 = 0;
+            }
+            if(statePressed)
+            {
+                currentLvl = 1;
+                Debug.Log("Lvl" + currentLvl);
+                _input.state = 0;
+            }
         }
-        
     }
 
 
@@ -85,10 +145,62 @@ public class MovementController : MonoBehaviour
 
     private void UserLook(){
         Rig.transform.eulerAngles = Rig.transform.eulerAngles + _userLookInput;
+    }   
+    private void UserLookVertical()
+    {
+        Camera.transform.eulerAngles = Camera.transform.eulerAngles + _userLookInput;
     }
 
-
     #endregion
+    private Vector3 GetMoveInputAnalog()
+    {
+        return new Vector3(_input.stickInput.x, 0.0f, _input.stickInput.y);
+    }
+    private void UserMoveAnalog()
+    {   
+        // Checks input for the movement while limiting left and right movement
+        bool movementCheck = (_userMoveInput.z > 0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f) || 
+                             (_userMoveInput.z < -0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f);
+        bool turnCheck = (_userMoveInput.x > 0.8f || _userMoveInput.x < -0.8f) && _userMoveInput.z < 0.9f && _userMoveInput.z > -0.9f;
+        // Turning
+        if(turnCheck)
+        {   
+            _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            float currentTime = Time.time;
+            float diffSecs = currentTime - lastPressTime;
+            if(diffSecs >= turnCooldown)
+            {
+                lastPressTime = currentTime;
+                _userLookInput = new Vector3(0, rotationValue * Mathf.Round(_userMoveInput.x),0);
+                UserLook();
+            }
+            else
+            {
+                Debug.Log("Turning on cooldown");
+            }
+        }
+        else if(movementCheck)
+        {
+            _rigidbody.constraints = /*RigidbodyConstraints.FreezePositionY |*/ RigidbodyConstraints.FreezeRotation;
+            _userMoveInput = new Vector3(/*_userMoveInput.x*/0,
+                                        /* _userMoveInput.y*/0,
+                                        _userMoveInput.z * speed * _rigidbody.mass);
+            // Continous forward movement
+            Debug.Log(_userMoveInput);
+            _rigidbody.AddRelativeForce(_userMoveInput, ForceMode.Force);
+            
+            // Debug.Log("Moving");
+        } 
+    }
+    private Vector3 GetLookUpInput()
+    {
+        return new Vector3 (-rotationValueVertical, 0, 0);
+    }
+    private Vector3 GetLookDownInput()
+    {
+        return new Vector3 (rotationValueVertical, 0, 0);
+    }
+
 
 
 }

@@ -6,7 +6,16 @@
             "id": "642c6098-82ed-42cf-b600-68fedf660957",
             "actions": [
                 {
-                    "name": "TurnLeft",
+                    "name": "StickInput",
+                    "type": "Value",
+                    "id": "b986b2ee-57d2-4bd0-920a-8cc321866fc5",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Switch1",
                     "type": "Button",
                     "id": "031b3c3e-de57-4459-b0d2-907ddecd52c0",
                     "expectedControlType": "Button",
@@ -15,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Forward",
+                    "name": "Switch2",
                     "type": "Button",
                     "id": "acfd4668-68f5-45b6-b94e-6648f08964e8",
                     "expectedControlType": "Button",
@@ -24,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TurnRight",
+                    "name": "Switch3",
                     "type": "Button",
                     "id": "f94dfefa-fdc9-46ba-9bbd-c4194e119eb5",
                     "expectedControlType": "Button",
@@ -33,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Return",
+                    "name": "Switch4",
                     "type": "Button",
                     "id": "4547a9dd-944c-41c2-96f8-403404c271ef",
                     "expectedControlType": "Button",
@@ -42,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Switch",
+                    "name": "SwitchLevel",
                     "type": "Button",
                     "id": "2af11ca3-6f6f-4db7-bc7e-bfd9b4d4d8e1",
                     "expectedControlType": "Button",
@@ -54,23 +63,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "4fe474ae-2699-4773-afe1-a0c9c9239889",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TurnLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "07c48c65-5eb3-4c8c-a168-1bd7a3e12df3",
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Forward",
+                    "action": "Switch2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -81,7 +79,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TurnRight",
+                    "action": "Switch3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -92,7 +90,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Return",
+                    "action": "Switch4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -103,7 +101,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Switch",
+                    "action": "SwitchLevel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b2f6dd5-1f41-4211-b5bc-fc8c6621b3c7",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StickInput",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4fe474ae-2699-4773-afe1-a0c9c9239889",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Switch1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
