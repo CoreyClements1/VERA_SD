@@ -53,6 +53,13 @@ public class MovementController : MonoBehaviour
         bool switchDown3 =  _input.buttonPress3 > 0.1f;
         bool switchDown4 = _input.buttonPress4 > 0.1f;
         bool statePressed = _input.state > 0.1f;
+
+        if(_characterController.isGrounded == false)
+        {
+            _userMoveInput += Physics.gravity;
+            _characterController.Move(_userMoveInput * speed * Time.deltaTime);
+        }
+
         if(currentLvl == 1){
             if(switchDown1){
                 Debug.Log(_input.buttonPress1 + " Turn L");
@@ -144,7 +151,8 @@ public class MovementController : MonoBehaviour
     private void UserMove(){
         // Rig.transform.forward
         _userMoveInput = new Vector3(_userMoveInput.x, _userMoveInput.y, _userMoveInput.z);
-        Rig.position = Rig.position + _userMoveInput;
+        // Rig.position = Rig.position + _userMoveInput;
+        _characterController.Move(_userMoveInput * speed * Time.deltaTime  * 1.5f);
     }
 
     private void UserLook(){
@@ -198,12 +206,6 @@ public class MovementController : MonoBehaviour
             
             // Debug.Log("Moving");
         } 
-
-        if(_characterController.isGrounded == false)
-            {
-                _userMoveInput += Physics.gravity;
-                _characterController.Move(_userMoveInput * speed * Time.deltaTime);
-            }
     }
     private Vector3 GetLookUpInput()
     {
