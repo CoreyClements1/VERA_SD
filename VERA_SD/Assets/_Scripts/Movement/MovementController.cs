@@ -1,4 +1,5 @@
 
+using System.IO.Compression;
 using JetBrains.Rider.Unity.Editor;
 using TMPro;
 using Unity.VisualScripting;
@@ -6,6 +7,7 @@ using Unity.XR.CoreUtils;
 using UnityEditor.Rendering;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class MovementController : MonoBehaviour
@@ -14,7 +16,8 @@ public class MovementController : MonoBehaviour
 
     #region VARIABLES
 
-    Rigidbody _rigidbody = null;
+    // Rigidbody _rigidbody = null;
+    CharacterController _characterController = null;
     [SerializeField] Transform Rig;
     [SerializeField] Transform Camera;
     
@@ -35,7 +38,8 @@ public class MovementController : MonoBehaviour
     #region START
     void Start()
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        // _rigidbody = GetComponent<Rigidbody>();
+        _characterController = GetComponent<CharacterController>();
     }
     #endregion
 
@@ -165,7 +169,7 @@ public class MovementController : MonoBehaviour
         // Turning
         if(turnCheck)
         {   
-            _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            // _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
             float currentTime = Time.time;
             float diffSecs = currentTime - lastPressTime;
             if(diffSecs >= turnCooldown)
@@ -181,16 +185,25 @@ public class MovementController : MonoBehaviour
         }
         else if(movementCheck)
         {
-            _rigidbody.constraints = /*RigidbodyConstraints.FreezePositionY |*/ RigidbodyConstraints.FreezeRotation;
-            _userMoveInput = new Vector3(/*_userMoveInput.x*/0,
-                                        /* _userMoveInput.y*/0,
-                                        _userMoveInput.z * speed * _rigidbody.mass);
+            // _rigidbody.constraints = /*RigidbodyConstraints.FreezePositionY |*/ RigidbodyConstraints.FreezeRotation;
+            _userMoveInput = transform.right * _userMoveInput.x + transform.forward * _userMoveInput.z;
             // Continous forward movement
+            if(_characterController.isGrounded == false)
+            {
+                _userMoveInput += Physics.gravity;
+            }
             Debug.Log(_userMoveInput);
-            _rigidbody.AddRelativeForce(_userMoveInput, ForceMode.Force);
+            _characterController.Move(_userMoveInput * speed * Time.deltaTime);
+            // _rigidbody.AddRelativeForce(_userMoveInput, ForceMode.Force);
             
             // Debug.Log("Moving");
         } 
+
+        if(_characterController.isGrounded == false)
+            {
+                _userMoveInput += Physics.gravity;
+                _characterController.Move(_userMoveInput * speed * Time.deltaTime);
+            }
     }
     private Vector3 GetLookUpInput()
     {
