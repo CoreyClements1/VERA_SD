@@ -15,8 +15,6 @@ public class MovementController : MonoBehaviour
 
 
     #region VARIABLES
-
-    // Rigidbody _rigidbody = null;
     CharacterController _characterController = null;
     [SerializeField] Transform Rig;
     [SerializeField] Transform Camera;
@@ -30,15 +28,16 @@ public class MovementController : MonoBehaviour
     [SerializeField] public float speed = 1f;
     [SerializeField] public float rotationValue = 15f;
     [SerializeField] public float rotationValueVertical = 10f;
+    // variables for analog turning (level 2)
     [SerializeField] public float turnCooldown = 1.0f;
     float lastPressTime = 0f;
+    // determines which level of accessibity the user is on
     [SerializeField] int currentLvl = 1;
     #endregion
 
     #region START
     void Start()
     {
-        // _rigidbody = GetComponent<Rigidbody>();
         _characterController = GetComponent<CharacterController>();
     }
     #endregion
@@ -47,19 +46,21 @@ public class MovementController : MonoBehaviour
 
 
     private void FixedUpdate(){
-        // Debug.Log(movementActions.Movement.Forward.ReadValue<float>());
+        // These check if the switch has been pressed
         bool switchDown1 = _input.buttonPress1 > 0.1f;
         bool switchDown2 = _input.buttonPress2 > 0.1f;
         bool switchDown3 =  _input.buttonPress3 > 0.1f;
         bool switchDown4 = _input.buttonPress4 > 0.1f;
         bool statePressed = _input.state > 0.1f;
 
+        // If the user is in the air then gravity will bring them down until grounded
         if(_characterController.isGrounded == false)
         {
             _userMoveInput += Physics.gravity;
             _characterController.Move(_userMoveInput * speed * Time.deltaTime);
         }
 
+        // Level 1 Accessibity controls 
         if(currentLvl == 1){
             if(switchDown1){
                 Debug.Log(_input.buttonPress1 + " Turn L");
@@ -137,37 +138,42 @@ public class MovementController : MonoBehaviour
 
     #region MOVEMENT FUNCTIONS
 
-
+    // Returns a value to be used to calculate the distance traveled for level 1 movement
     private Vector3 GetMoveInput(){
         return Rig.transform.forward * speed;
     }
-
+    // Returns a value to be used to turn the rig a set amount of degrees
     private Vector3 GetTurnLInput(){
         return new Vector3 (0, -rotationValue, 0);
     }
     private Vector3 GetTurnRInput(){
         return new Vector3 (0, rotationValue, 0);
     }
+    // Controls forward movement for level 1
     private void UserMove(){
-        // Rig.transform.forward
         _userMoveInput = new Vector3(_userMoveInput.x, _userMoveInput.y, _userMoveInput.z);
-        // Rig.position = Rig.position + _userMoveInput;
+        // Moves the rig
         _characterController.Move(_userMoveInput * speed * Time.deltaTime  * 1.5f);
     }
-
+    // Rotates the rig based on if the rotation is left or right.
     private void UserLook(){
         Rig.transform.eulerAngles = Rig.transform.eulerAngles + _userLookInput;
     }   
+    // References the camera instead of the rig itself since vertical adjustsments caused the rig to 
+    //      rotate instead of just the camera.
     private void UserLookVertical()
     {
         Camera.transform.eulerAngles = Camera.transform.eulerAngles + _userLookInput;
     }
 
-    #endregion
+    // Translates user stick input into a vector value for movement
     private Vector3 GetMoveInputAnalog()
     {
         return new Vector3(_input.stickInput.x, 0.0f, _input.stickInput.y);
     }
+    // Controls movement through the stick
+    //      Direct forward and back on the stick does locomotion in the respective directions
+    //      Left and right causes the rig to turn left and right which gets put on a cooldown
     private void UserMoveAnalog()
     {   
         // Checks input for the movement while limiting left and right movement
@@ -177,7 +183,6 @@ public class MovementController : MonoBehaviour
         // Turning
         if(turnCheck)
         {   
-            // _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
             float currentTime = Time.time;
             float diffSecs = currentTime - lastPressTime;
             if(diffSecs >= turnCooldown)
@@ -193,7 +198,6 @@ public class MovementController : MonoBehaviour
         }
         else if(movementCheck)
         {
-            // _rigidbody.constraints = /*RigidbodyConstraints.FreezePositionY |*/ RigidbodyConstraints.FreezeRotation;
             _userMoveInput = transform.right * _userMoveInput.x + transform.forward * _userMoveInput.z;
             // Continous forward movement
             if(_characterController.isGrounded == false)
@@ -202,11 +206,9 @@ public class MovementController : MonoBehaviour
             }
             Debug.Log(_userMoveInput);
             _characterController.Move(_userMoveInput * speed * Time.deltaTime);
-            // _rigidbody.AddRelativeForce(_userMoveInput, ForceMode.Force);
-            
-            // Debug.Log("Moving");
         } 
     }
+    // Generates a rotation value to be used later
     private Vector3 GetLookUpInput()
     {
         return new Vector3 (-rotationValueVertical, 0, 0);
@@ -217,6 +219,6 @@ public class MovementController : MonoBehaviour
     }
 
 
-
+    #endregion
 }
 
