@@ -150,13 +150,11 @@ public class MovementInput : MonoBehaviour
     {
         buttonPress1 = 1f;
     }
-
-    public void TreeTurnRight()
+    public void TreeMoveForward()
     {
         buttonPress2 = 1f;
     }
-
-    public void TreeMoveForward()
+    public void TreeTurnRight()
     {
         buttonPress3 = 1f;
     }

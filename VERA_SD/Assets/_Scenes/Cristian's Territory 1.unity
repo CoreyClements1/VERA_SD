@@ -135,6 +135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 16581783}
   - component: {fileID: 16581782}
+  - component: {fileID: 16581784}
   m_Layer: 0
   m_Name: InputActionManager
   m_TagString: Untagged
@@ -172,6 +173,25 @@ Transform:
   m_Father: {fileID: 224847779}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &16581784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16581781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 292ca6b0d36c760458b7498a73a5729d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonPress1: 0
+  buttonPress2: 0
+  buttonPress3: 0
+  buttonPress4: 0
+  stickInput: {x: 0, y: 0}
+  state: 0
+  movementControlledByTree: 1
 --- !u!1 &41326365
 GameObject:
   m_ObjectHideFlags: 0
@@ -2705,7 +2725,7 @@ GameObject:
   - component: {fileID: 5267252977478359099}
   - component: {fileID: 3199469345735177500}
   m_Layer: 0
-  m_Name: Button 3
+  m_Name: Button 3 Right
   m_TagString: Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4883,7 +4903,7 @@ GameObject:
   - component: {fileID: 8043739913362259840}
   - component: {fileID: 2634816780099722623}
   m_Layer: 0
-  m_Name: Forward
+  m_Name: Button 1 Left
   m_TagString: Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5636,7 +5656,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Forward
+  m_text: Left
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5861,6 +5881,7 @@ GameObject:
   - component: {fileID: 6468442522333908636}
   - component: {fileID: 5531948732369000396}
   - component: {fileID: 6873022366796114232}
+  - component: {fileID: 6873022366796114233}
   m_Layer: 2
   m_Name: XR Origin Hands (XR Rig)
   m_TagString: Untagged
@@ -6304,7 +6325,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8043739913362259840}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 16581784}
+        m_TargetAssemblyTypeName: MovementInput, Assembly-CSharp
+        m_MethodName: TreeTurnLeft
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &2661182192873531331
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7958,7 +7991,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5267252977478359099}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 16581784}
+        m_TargetAssemblyTypeName: MovementInput, Assembly-CSharp
+        m_MethodName: TreeTurnRight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &3206435553255484943
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12221,9 +12266,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Left
-
-'
+  m_text: Forward
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12516,7 +12559,7 @@ GameObject:
   - component: {fileID: 6068549417796383236}
   - component: {fileID: 9078778975005732482}
   m_Layer: 0
-  m_Name: Left
+  m_Name: Button 2 Forward
   m_TagString: Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13848,6 +13891,26 @@ MonoBehaviour:
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6873022366796114233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2218496724435676032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1728fa3e1a4cd3c4295b78eaaae6dbfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rig: {fileID: 2218496724435676035}
+  Camera: {fileID: 657184242823343870}
+  _input: {fileID: 16581784}
+  speed: 3
+  rotationValue: 15
+  rotationValueVertical: 10
+  turnCooldown: 1
+  currentLvl: 1
 --- !u!114 &6873022366796114238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16858,7 +16921,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6068549417796383236}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 16581784}
+        m_TargetAssemblyTypeName: MovementInput, Assembly-CSharp
+        m_MethodName: TreeMoveForward
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9081655338624029290
 GameObject:
   m_ObjectHideFlags: 0
