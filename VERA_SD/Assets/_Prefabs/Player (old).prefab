@@ -12210,7 +12210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2861081720201987775}
   m_Layer: 0
-  m_Name: Player (WIP)
+  m_Name: Player (old)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
