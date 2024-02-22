@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ActionAssets:
   - {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  - {fileID: -944628639613478452, guid: 4e6fc4177c24ef84cb4141dc273754ad, type: 3}
 --- !u!4 &16581783
 Transform:
   m_ObjectHideFlags: 0
@@ -5859,6 +5860,7 @@ GameObject:
   - component: {fileID: 6873022366796114226}
   - component: {fileID: 6468442522333908636}
   - component: {fileID: 5531948732369000396}
+  - component: {fileID: 6873022366796114232}
   m_Layer: 2
   m_Name: XR Origin Hands (XR Rig)
   m_TagString: Untagged
@@ -9830,6 +9832,8 @@ MonoBehaviour:
   InteractionMainMenu: {fileID: 6934424887553078386}
   original: {fileID: 4751587967605115181, guid: 861ac9c0ae0bdde4cae75bd05937f093,
     type: 3}
+  original2: {fileID: 0}
+  original1: {fileID: 0}
   parent: {fileID: 4500364201055935693}
 --- !u!114 &4518286994762730736
 MonoBehaviour:
@@ -13765,6 +13769,85 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.76072, z: 0}
+--- !u!114 &6873022366796114232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2218496724435676032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 4e6fc4177c24ef84cb4141dc273754ad,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b986b2ee-57d2-4bd0-920a-8cc321866fc5
+    m_ActionName: Movement/StickInput
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 031b3c3e-de57-4459-b0d2-907ddecd52c0
+    m_ActionName: Movement/Switch1[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: acfd4668-68f5-45b6-b94e-6648f08964e8
+    m_ActionName: Movement/Switch2[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f94dfefa-fdc9-46ba-9bbd-c4194e119eb5
+    m_ActionName: Movement/Switch3[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4547a9dd-944c-41c2-96f8-403404c271ef
+    m_ActionName: Movement/Switch4[/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2af11ca3-6f6f-4db7-bc7e-bfd9b4d4d8e1
+    m_ActionName: Movement/SwitchLevel[/Keyboard/g]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2f8f7c03-4e4f-47a3-8204-856cb6cc6dbf
+    m_ActionName: MovementT2/Movement
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 563851b5-0d42-4a80-a6d3-79118aae959c
+    m_ActionName: MovementT2/LookUp[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0bddb94d-dc95-4d6b-915e-4ba90cecf135
+    m_ActionName: MovementT2/LookDown[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 800a2d8a-8605-4eec-81dc-fff13732f987
+    m_ActionName: MovementT2/Interact[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5110997b-b468-44ac-bade-cd3eb24778b4
+    m_ActionName: MovementT2/Menu[/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1c0309ce-ad28-47c7-9391-7fbd329e7ad9
+    m_ActionName: MovementT2/Switch[/Keyboard/g]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Movement
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!114 &6873022366796114238
 MonoBehaviour:
   m_ObjectHideFlags: 0

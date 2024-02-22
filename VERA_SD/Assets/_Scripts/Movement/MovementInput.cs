@@ -115,20 +115,23 @@ public class MovementInput : MonoBehaviour
 
     // These functions set the value to 1 to signify that it was pressed
     private void SetPressed1(InputAction.CallbackContext ctx){
-        buttonPress1 = ctx.ReadValue<float>();
-        // Debug.Log(ctx.ReadValue<float>());
+        if (!movementControlledByTree)
+            buttonPress1 = ctx.ReadValue<float>();
     }
 
     private void SetPressed2(InputAction.CallbackContext ctx){
-        buttonPress2 = ctx.ReadValue<float>();
+        if (!movementControlledByTree)
+            buttonPress2 = ctx.ReadValue<float>();
     }
 
     private void SetPressed3(InputAction.CallbackContext ctx){
-        buttonPress3 = ctx.ReadValue<float>();
+        if (!movementControlledByTree)
+            buttonPress3 = ctx.ReadValue<float>();
     }
 
     private void SetPressed4(InputAction.CallbackContext ctx){
-        buttonPress4 = ctx.ReadValue<float>();
+        if (!movementControlledByTree)
+            buttonPress4 = ctx.ReadValue<float>();
     }
 
     // private void SetStage2(InputAction.CallbackContext ctx){
