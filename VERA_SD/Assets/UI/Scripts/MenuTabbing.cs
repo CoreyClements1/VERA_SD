@@ -14,7 +14,6 @@ public class MenuTabbing : MonoBehaviour
     List<GameObject> UIElements;
     List<GameObject> Submenus;
     int active;
-    List<TMP_Dropdown.OptionData> menuItems;
     List<Transform> menuOptions;
     int activeMenuItem;
     
@@ -89,6 +88,10 @@ public class MenuTabbing : MonoBehaviour
             Image dropdown =g.GetComponent<Image>();
             dropdown.color =  c;
         }
+         if(g.GetComponent<Button>() != null){
+            Image dropdown =g.GetComponent<Image>();
+            dropdown.color =  c;
+        }
 
     }
 
@@ -149,18 +152,10 @@ public class MenuTabbing : MonoBehaviour
                         menuOptions.Add(greatGrandchild.GetChild(j));
                     }
                     Debug.Log(menuOptions.Count);
-                    // menuOptions.RemoveAt(0);
-                    // GameObject temp = grandchild.gameObject;
-                    // GameObject temp1 = temp0.Find("Viewport");
-                    // GameObject temp2 = temp1.Find("Content");
                     activeMenuItem = 0;
-                    // menuOptions = temp.GetComponentsInChildren<GameObject>().Where(go => go.name == "Item Background" && (go.transform.parent == transform || go.transform.parent.parent == transform)).ToList();
-                    // menuItems[0].image.color
-                    
-                    
-                    // Debug.Log(itemBackgrounds.Count);
-                    
-                    // Debug.Log(UIElements[active].GetComponent<TMP_Dropdown>().MenuItems);
+            }
+            if((UIElements[active].GetComponent<Button>() != null) && (Submenus[i].name == "Button")){
+                    Submenus[i].SetActive(true);
             }
 
         }
@@ -175,6 +170,11 @@ public class MenuTabbing : MonoBehaviour
             UIElements[active].GetComponent<Toggle>().isOn = true;
         }
     }
+
+    public void handleButton(){
+       UIElements[active].GetComponent<Button>().onClick.Invoke();
+    }
+    
 
     public void increaseSlider(){
         if(UIElements[active].GetComponent<Slider>().value < UIElements[active].GetComponent<Slider>().maxValue){
@@ -206,6 +206,9 @@ public class MenuTabbing : MonoBehaviour
     }
     public void selectDropdown(){
         UIElements[active].GetComponent<TMP_Dropdown>().value = activeMenuItem;
+    }
+    public void buttonCheck(){
+        Debug.Log("Pressed");
     }
     
 
