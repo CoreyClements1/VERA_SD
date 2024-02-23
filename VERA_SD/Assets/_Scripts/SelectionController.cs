@@ -4,6 +4,8 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 using TMPro;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class SelectionController : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class SelectionController : MonoBehaviour
 
     private List<GameObject> interactables = new List<GameObject>();
     private int counter = 0;
+    [SerializeField] HandleInteractables treeBase;
     private GameObject previousObj;
     private Outline outline;
     private GameObject lookTarget;
@@ -43,7 +46,7 @@ public class SelectionController : MonoBehaviour
         {
             Arrow.transform.LookAt(lookTarget.transform);
         }
-
+        SelectedInRange();
     } // END Update
 
 
@@ -51,7 +54,20 @@ public class SelectionController : MonoBehaviour
 
 
     #region SELECTION
+    public void SelectedInRange()
+    {
+        UpdateSelectables();
+        if (previousObj != null && !interactables.Contains(previousObj))
+        {
+            // Previous current object is out of range, deselect it
+            previousObj.GetComponent<Outline>().enabled = false;
+            previousObj = null;
+            currentObj = null;
+            lookTarget = null;
+            treeBase.RemoveListeners();
+        }
 
+    }
 
     // SelectionCycle
     //--------------------------------------//
@@ -154,7 +170,7 @@ public class SelectionController : MonoBehaviour
     {
         lookTarget = interactables[counter];
         Vector3 target = lookTarget.transform.position;
-       
+
         // Normally this would have the player's position relative to camera but not yet!
         Vector3 playerScreenPos = playerCam.WorldToScreenPoint(playerCam.transform.position);
         Vector3 targetScreenPos = playerCam.WorldToScreenPoint(target);
@@ -277,7 +293,7 @@ public class SelectionController : MonoBehaviour
         // This assumes that the radius is drawn from player's camera, may not be true later!
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(playerCam.transform.position, selectRadius);
-    
+
     } // END OnDrawGizmosSelected
 
     #endregion

@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System.Linq;
 
-public class HandleInteractables: MonoBehaviour
+public class HandleInteractables : MonoBehaviour
 {
     [SerializeField] SelectionController selectionController;
     private List<GameObject> interactables;
@@ -43,7 +43,7 @@ public class HandleInteractables: MonoBehaviour
         //number of levels
         int NumLevels = size / 2;
         List<GameObject> Levels = new List<GameObject>();
-        Debug.Log(size.ToString() +" "+NumLevels.ToString()+ " " + Interactable.name);
+        Debug.Log(size.ToString() + " " + NumLevels.ToString() + " " + Interactable.name);
         for (int i = 0; i < NumLevels; i++)
         {
             if (i < NumLevels - 1)
@@ -80,7 +80,7 @@ public class HandleInteractables: MonoBehaviour
 
         }
         Debug.Log(Levels.Count);
-        
+
         return Levels;
     }
 
@@ -107,7 +107,7 @@ public class HandleInteractables: MonoBehaviour
             // setup all 3 buttons on that level 
             for (int j = 0; j < 3; j++)
             {
-                
+
                 // Levels that need a more options button
                 if (i < (numLevels - 1))
                 {
@@ -132,7 +132,7 @@ public class HandleInteractables: MonoBehaviour
                 // Final Level
                 else
                 {
-                    if(counter < Size)
+                    if (counter < Size)
                     {
                         GameObject obj = levels[i].transform.Find((j + 1).ToString()).gameObject;
                         Button btn = obj.GetComponent<Button>();
@@ -185,5 +185,9 @@ public class HandleInteractables: MonoBehaviour
         string tmp = "" + selectionController.currentObj + "1";
         selectBttn.onClick.RemoveAllListeners();
         selectBttn.onClick.AddListener(() => nextLevel(InteractionMainMenu, parent.transform.Find(tmp).gameObject));
+    }
+    public void RemoveListeners()
+    {
+        selectBttn.onClick.RemoveAllListeners();
     }
 }
