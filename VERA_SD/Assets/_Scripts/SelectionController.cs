@@ -87,6 +87,8 @@ public class SelectionController : MonoBehaviour
         PulseCancelHighlights();
 
         if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
+
+        if (counter >= interactables.Count) counter = 0;
         currentObj = interactables[counter].name;
 
         // De-highlight previous object
