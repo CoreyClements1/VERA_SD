@@ -167,7 +167,7 @@ public class HandleInteractables : MonoBehaviour
 
     }
 
-    void back(GameObject previous, GameObject current)
+    public void back(GameObject previous, GameObject current)
     {
         current.SetActive(false);
         previous.SetActive(true);

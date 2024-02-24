@@ -30,11 +30,19 @@ public class SelectionController : MonoBehaviour
     [SerializeField] GameObject Arrow;
     [SerializeField] TextMeshPro Text;
 
+    private GameObject interactSub;
+
 
     #endregion
 
 
     #region MONOBEHAVIOUR
+    void Awake()
+    {
+        interactSub = GameObject.Find("Interact Sub");
+        Debug.Log(interactSub);
+
+    }
 
 
     // Update
@@ -62,9 +70,10 @@ public class SelectionController : MonoBehaviour
             // Previous current object is out of range, deselect it
             previousObj.GetComponent<Outline>().enabled = false;
             previousObj = null;
-            currentObj = null;
             lookTarget = null;
             treeBase.RemoveListeners();
+            treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
+            currentObj = null;
         }
 
     }
@@ -133,7 +142,7 @@ public class SelectionController : MonoBehaviour
         }
 
         // Return whether there are interactables nearby or not
-        Debug.Log("I see " + interactables.Count);
+        // Debug.Log("I see " + interactables.Count);
         return (interactables.Count > 0) ? true : false;
 
     } // END UpdateSelectables
