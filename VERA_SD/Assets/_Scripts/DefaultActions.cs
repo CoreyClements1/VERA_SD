@@ -13,8 +13,10 @@ public class DefaultActions : MonoBehaviour
     private bool isGrabbing = false;
     private Renderer rend;
     private HingeJoint joint;//<----------------------------------------------------------------------
+    private ConfigurableJoint gJoint;
     private bool reverse;//<----------------------------------------------------------------------
-
+    private bool startP;
+    private bool gReverse;
 
     #endregion
 
@@ -29,7 +31,10 @@ public class DefaultActions : MonoBehaviour
     {
         joint = GetComponent<HingeJoint>();//<----------------------------------------------------------------------
         reverse = false;//<----------------------------------------------------------------------
+        startP = true;
+        gReverse = false;
         grabHandler = FindObjectOfType<GrabTracker>();
+        gJoint = GetComponent<ConfigurableJoint>();
         if (grabHandler == null)
         {
             // Debug.LogError("GrabTracker is not assigned or not found.");
@@ -53,7 +58,9 @@ public class DefaultActions : MonoBehaviour
 
 
     #region DEFAULT ASSIGNABLE FUNCTIONS
-
+    //new = local rotation * global rotation
+    //newnew = new*axis
+    //newnew + motionaxis *
 
     // Grab/Release
     //--------------------------------------//
@@ -152,7 +159,7 @@ public class DefaultActions : MonoBehaviour
 
     //OpenAndClose
     //--------------------------------------//
-     public void OpenAndClose()//<----------------------------------------------------------------------
+    public void OpenAndClose()//<----------------------------------------------------------------------
     //--------------------------------------//
     {
         // Debug.Log("joint.angle:" + joint.angle);
@@ -198,7 +205,50 @@ public class DefaultActions : MonoBehaviour
         //might also want to have a smooth animation for opening
     }//End OpenAndClose
 
+    public void Drawer()
+    {
+        Vector3 V = Vector3.zero;
+        if (gJoint.xMotion != ConfigurableJointMotion.Locked)
+        {
+            V += this.transform.forward;
 
+        }
+        if (gJoint.yMotion != ConfigurableJointMotion.Locked)
+        {
+            V += this.transform.up;
+
+        }
+        if (gJoint.zMotion != ConfigurableJointMotion.Locked)
+        {
+            V += this.transform.right;
+        }
+
+        if (startP == true)
+        {
+            if (gReverse == false)
+            {
+                this.transform.position += V * gJoint.linearLimit.limit;
+            }
+            else
+            {
+                this.transform.position -= V * gJoint.linearLimit.limit;
+            }
+            startP = false;
+        }
+        else
+        {
+            if (gReverse == false)
+            {
+                this.transform.position -= V * gJoint.linearLimit.limit;
+            }
+            else
+            {
+                this.transform.position += V * gJoint.linearLimit.limit;
+            }
+            startP = true;
+            gReverse = !gReverse;
+        }
+    }
     #endregion
 
 
