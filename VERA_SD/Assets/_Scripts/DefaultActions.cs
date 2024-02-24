@@ -207,31 +207,31 @@ public class DefaultActions : MonoBehaviour
 
     public void Drawer()
     {
-        Vector3 V = Vector3.zero;
+        Vector3 movementDirection = Vector3.zero;
+
         if (gJoint.xMotion != ConfigurableJointMotion.Locked)
         {
-            V += this.transform.forward;
-
+            movementDirection += this.transform.TransformDirection(gJoint.axis);
         }
         if (gJoint.yMotion != ConfigurableJointMotion.Locked)
         {
-            V += this.transform.up;
-
+            movementDirection += this.transform.TransformDirection(gJoint.secondaryAxis);
         }
         if (gJoint.zMotion != ConfigurableJointMotion.Locked)
         {
-            V += this.transform.right;
+            Vector3 crossAxis = Vector3.Cross(gJoint.axis, gJoint.secondaryAxis);
+            movementDirection += this.transform.TransformDirection(crossAxis);
         }
 
         if (startP == true)
         {
             if (gReverse == false)
             {
-                this.transform.position += V * gJoint.linearLimit.limit;
+                this.transform.position += movementDirection * gJoint.linearLimit.limit;
             }
             else
             {
-                this.transform.position -= V * gJoint.linearLimit.limit;
+                this.transform.position -= movementDirection * gJoint.linearLimit.limit;
             }
             startP = false;
         }
@@ -239,11 +239,11 @@ public class DefaultActions : MonoBehaviour
         {
             if (gReverse == false)
             {
-                this.transform.position -= V * gJoint.linearLimit.limit;
+                this.transform.position -= movementDirection * gJoint.linearLimit.limit;
             }
             else
             {
-                this.transform.position += V * gJoint.linearLimit.limit;
+                this.transform.position += movementDirection * gJoint.linearLimit.limit;
             }
             startP = true;
             gReverse = !gReverse;
