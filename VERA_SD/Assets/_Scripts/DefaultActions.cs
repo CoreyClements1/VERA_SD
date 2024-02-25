@@ -223,17 +223,38 @@ public class DefaultActions : MonoBehaviour
             movementDirection += this.transform.TransformDirection(crossAxis);
         }
 
+        // Debug.Log(CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit));
+        // Debug.Log(CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit));
+
         if (startP == true)
         {
-            if (gReverse == false)
+            if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true && CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit) == true)
             {
-                this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                if (gReverse == false)
+                {
+                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                }
+                else
+                {
+                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                }
+                startP = false;
             }
             else
             {
-                this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true)
+                {
+                    gReverse = false;
+                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                    startP = false;
+                }
+                else
+                {
+                    gReverse = true;
+                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                    startP = false;
+                }
             }
-            startP = false;
         }
         else
         {
@@ -248,13 +269,52 @@ public class DefaultActions : MonoBehaviour
             startP = true;
             gReverse = !gReverse;
         }
+
     }
     #endregion
 
-
+    //if positive direction and negative return true then maybe just do code above
+    //else if positive direction have a code where it swaps from positive to starting
+    //else if negative have a code where it swaps from negative to starting
     #region HELPER FUNCTIONS
 
+    //might have to find last collider then check from that position to the limit
+    bool CheckCollisionAndMove(Vector3 direction, float limit)
+    {
+        // Ray ray = new Ray(transform.position, direction);
+        // if (Physics.Raycast(ray, limit))
+        // {
+        //     // Collision detected, do not move
+        //     Debug.Log("Collision detected, cannot move.");
+        // }
+        Collider[] relaventColliders = this.GetComponentsInChildren<Collider>();
+        //Returns an unordered list of objects hit by the raycast from the player to the target position
+        // Debug.Log(direction);
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, limit);
+        //Sort the Raycast List by distance from player
+        System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+        // Debug.Log(hits.Length);
+        // Debug.Log(relaventColliders.Length);
+        // Debug.Log(relaventColliders[i]);
+        if (hits.Length > 0)
+        {
+            Debug.Log(hits[hits.Length - 1].collider);
 
+            for (int i = 0; i < relaventColliders.Length; i++)
+            {
+                // Debug.Log(relaventColliders[i]);
+                // Debug.Log(hits[hits.Length - 1].collider);
+                if (hits[hits.Length - 1].collider == relaventColliders[i])
+                {
+                    return true;
+                }
+            }
+            Debug.Log("Collision detected");
+            return false;
+        }
+        return true;
+
+    }
     // GrabObject
     //--------------------------------------//
     void GrabObject(GameObject obj)
