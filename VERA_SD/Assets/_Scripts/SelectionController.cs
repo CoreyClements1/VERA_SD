@@ -18,6 +18,7 @@ public class SelectionController : MonoBehaviour
     private GameObject lookTarget;
     public string currentObj;
     private bool manualHighlightCancel = false;
+    private GrabTracker grabTracker;
 
     [SerializeField] float selectRadius;
     [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
@@ -33,6 +34,21 @@ public class SelectionController : MonoBehaviour
 
     #region MONOBEHAVIOUR
 
+    // Start
+    //--------------------------------------//
+    private void Start()
+    //--------------------------------------//
+    {
+        grabTracker = FindObjectOfType<GrabTracker>();
+        if (grabTracker == null)
+        {
+            // Debug.LogError("GrabTracker is not assigned or not found.");
+        }
+        else
+        {
+            // Debug.Log("GrabTracker found.");
+        }
+    } // END Start
 
     // Update
     //--------------------------------------//
@@ -85,6 +101,12 @@ public class SelectionController : MonoBehaviour
         outline.OutlineMode = Outline.Mode.OutlineVisible;
         outline.OutlineColor = outlineColor;
         outline.OutlineWidth = outlineWidth;
+
+        // Disable arrow if object is grabbed
+        if (Object.ReferenceEquals(grabTracker.GetGrabbedObject(), interactables[counter]))
+            Arrow.SetActive(false);
+        else
+            Arrow.SetActive(true);
 
         // Logic for determining target's object position relative to player
         ObjectInView();
@@ -170,16 +192,12 @@ public class SelectionController : MonoBehaviour
         {
             if (isOffScreen)
             {
-                Arrow.SetActive(true);
-                //Arrow.transform.LookAt(targetPosition);
                 Text.text = "OFF SCREEN";
                 Text.color = Color.red;
 
             }
             else
             {
-                Arrow.SetActive(true);
-                //Arrow.transform.LookAt(targetPosition);
                 Text.text = "ON SCREEN";
                 Text.color = Color.green;
             }

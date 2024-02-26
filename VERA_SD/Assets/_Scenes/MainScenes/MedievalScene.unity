@@ -18824,6 +18824,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2842787105805475243, guid: 471afe30082787841983b6078690b650,
+        type: 3}
+      propertyPath: m_Name
+      value: ArrowUIPoint
+      objectReference: {fileID: 0}
     - target: {fileID: 2946151538635000891, guid: 471afe30082787841983b6078690b650,
         type: 3}
       propertyPath: m_AnchorMax.y

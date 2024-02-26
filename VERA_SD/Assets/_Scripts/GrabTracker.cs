@@ -15,6 +15,7 @@ public class GrabTracker : MonoBehaviour
     private bool freezeRotation;
     private bool isKinematic;
     private RigidbodyInterpolation rigidbodyInterp;
+    private GameObject arrow;
 
 
     #endregion
@@ -27,6 +28,11 @@ public class GrabTracker : MonoBehaviour
     void Start()
     //--------------------------------------//
     {
+        arrow = GameObject.Find("ArrowUIPoint");
+        if (arrow == null)
+            Debug.LogError("Arrow UI object not found!");
+        else
+            Debug.Log("Arrow UI object found");
     } //End Start
 
     // UPDATE
@@ -121,6 +127,10 @@ public class GrabTracker : MonoBehaviour
     public void SetGrabbedObject(GameObject obj)
     //--------------------------------------//
     {
+        if (obj != null)
+            arrow.SetActive(false);
+        else 
+            arrow.SetActive(true);
         grabbedObject = obj;
     }//End SetGrabbedObject
 
