@@ -27,6 +27,7 @@ public class SelectionController : MonoBehaviour
     [SerializeField] float highlightDuration = 3f;
     [SerializeField] GameObject Arrow;
     [SerializeField] TextMeshPro Text;
+    [SerializeField] bool useCameraSelect = false;
 
 
     #endregion
@@ -103,10 +104,14 @@ public class SelectionController : MonoBehaviour
         outline.OutlineWidth = outlineWidth;
 
         // Disable arrow if object is grabbed
-        if (Object.ReferenceEquals(grabTracker.GetGrabbedObject(), interactables[counter]))
+        if (grabTracker.GetGrabbedObject() == interactables[counter])
             Arrow.SetActive(false);
         else
             Arrow.SetActive(true);
+
+        // Make sure the camera doesn't snap to the grabbed object
+        if (useCameraSelect && (grabTracker.GetGrabbedObject() != interactables[counter]))
+            CameraSnap(interactables[counter]);
 
         // Logic for determining target's object position relative to player
         ObjectInView();
@@ -202,6 +207,12 @@ public class SelectionController : MonoBehaviour
                 Text.color = Color.green;
             }
         }
+    }
+
+    void CameraSnap(GameObject target)
+    {
+        
+        playerCam.transform.parent.LookAt(target.transform);
     }
 
 
