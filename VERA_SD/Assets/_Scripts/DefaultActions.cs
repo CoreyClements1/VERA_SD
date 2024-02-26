@@ -226,9 +226,55 @@ public class DefaultActions : MonoBehaviour
         // Debug.Log(CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit));
         // Debug.Log(CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit));
 
+        // if (startP == true)
+        // {
+        //     if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true && CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit) == true)
+        //     {
+        //         if (gReverse == false)
+        //         {
+        //             this.transform.position += movementDirection * gJoint.linearLimit.limit;
+        //         }
+        //         else
+        //         {
+        //             this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+        //         }
+        //         startP = false;
+        //     }
+        //     else
+        //     {
+        //         if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true)
+        //         {
+        //             gReverse = false;
+        //             this.transform.position += movementDirection * gJoint.linearLimit.limit;
+        //             startP = false;
+        //         }
+        //         else
+        //         {
+        //             gReverse = true;
+        //             this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+        //             startP = false;
+        //         }
+        //     }
+        // }
+        // else
+        // {
+        //     if (gReverse == false)
+        //     {
+        //         this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+        //     }
+        //     else
+        //     {
+        //         this.transform.position += movementDirection * gJoint.linearLimit.limit;
+        //     }
+        //     startP = true;
+        //     gReverse = !gReverse;
+        // }
+
+        // Debug.Log("positive: " + testFunction(movementDirection, transform.position, gJoint.linearLimit.limit));
+        // Debug.Log("negative: " + testFunction(-movementDirection, transform.position, gJoint.linearLimit.limit));
         if (startP == true)
         {
-            if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true && CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit) == true)
+            if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true && testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
             {
                 if (gReverse == false)
                 {
@@ -242,17 +288,21 @@ public class DefaultActions : MonoBehaviour
             }
             else
             {
-                if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true)
+                if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
                 {
                     gReverse = false;
                     this.transform.position += movementDirection * gJoint.linearLimit.limit;
                     startP = false;
                 }
-                else
+                else if (testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
                 {
                     gReverse = true;
                     this.transform.position -= movementDirection * gJoint.linearLimit.limit;
                     startP = false;
+                }
+                else
+                {
+                    Debug.Log("OOPS");
                 }
             }
         }
@@ -278,6 +328,48 @@ public class DefaultActions : MonoBehaviour
     //else if negative have a code where it swaps from negative to starting
     #region HELPER FUNCTIONS
 
+    bool testFunction(Vector3 direction, Vector3 pos, float limit)
+    {
+        Physics.queriesHitBackfaces = true;
+        Collider[] relaventColliders = this.GetComponentsInChildren<Collider>();
+        Ray ray = new Ray(pos, direction);
+        RaycastHit hit;
+        if (Physics.Raycast(pos, direction, out hit, Mathf.Infinity))
+        {
+            // Physics.queriesHitBackfaces = false;
+            Debug.Log("hitcollider: " + hit.collider);
+            Debug.Log("hitpoint: " + hit.point);
+            Debug.Log("hitdistnce: " + hit.distance);
+            foreach (Collider c in relaventColliders)
+            {
+                Debug.Log("childCollider: " + c);
+                if (hit.collider == c)
+                {
+                    return testFunction(direction, hit.point, limit);
+                }
+            }
+            RaycastHit reverseHit;
+            if (Physics.Raycast(hit.point, -direction, out reverseHit, Mathf.Infinity))
+            {
+                if (reverseHit.distance >= limit)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
     //might have to find last collider then check from that position to the limit
     bool CheckCollisionAndMove(Vector3 direction, float limit)
     {
