@@ -6,14 +6,15 @@ using UnityEngine;
 public class DefaultActions : MonoBehaviour
 {
 
-    // ExampleInteractions provides a simple sample interaction which can be triggered by interactables
-    //DefaultActions uses ExampleInteractions as a base structure but uses More Relevent Default Functionality// Atleast that is the goal.
     #region VARIABLES
 
 
     [SerializeField] private GrabTracker grabHandler;
     private bool isGrabbing = false;
     private Renderer rend;
+    private HingeJoint joint;//<----------------------------------------------------------------------
+    private bool reverse;//<----------------------------------------------------------------------
+
 
     #endregion
 
@@ -26,6 +27,8 @@ public class DefaultActions : MonoBehaviour
     private void Awake()
     //--------------------------------------//
     {
+        joint = GetComponent<HingeJoint>();//<----------------------------------------------------------------------
+        reverse = false;//<----------------------------------------------------------------------
         grabHandler = FindObjectOfType<GrabTracker>();
         if (grabHandler == null)
         {
@@ -36,32 +39,42 @@ public class DefaultActions : MonoBehaviour
             // Debug.Log("GrabTracker found.");
         }
         rend = GetComponent<Renderer>();
-        // Debug.Log("localPosition"+transform.localPosition);
-        // Debug.Log("GlobalPosition"+transform.position);
     } // END Start
 
+    // Update
+    //--------------------------------------//
     private void Update()
+    //--------------------------------------//
     {
 
-    }
+    }//End Update
 
     #endregion
 
 
-    #region SAMPLE INTERACTIONS
-    //
+    #region DEFAULT ASSIGNABLE FUNCTIONS
+
+
+    // Grab/Release
+    //--------------------------------------//
     public void GrabOrRelease()
+    //--------------------------------------//
     {
+        //Object Must be grabbable
         if (GetComponent<XRGrabInteractable>() != null)
         {
             if (isGrabbing == false)
             {
+                //Checks if there is an Object grabbed or not
+                //Can probably remove above if statement//Will remove later
                 if (grabHandler.GetGrabbedObject() == null)
                 {
+                    //if not holding anything grab current object
                     GrabObject(gameObject);
                 }
                 else
                 {
+                    //if holding something drop grabbed object
                     ReleaseObject();
                 }
             }
@@ -74,16 +87,137 @@ public class DefaultActions : MonoBehaviour
         {
             Debug.LogError("Not A Grab Interactable");
         }
-    }
-    //
+    }//END Grab/Release
 
+
+    //Throw
+    //--------------------------------------//
+    public void Throw()
+    //--------------------------------------//
+    {
+        //Get Grabbed object
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
+        {
+            isGrabbing = false;
+            //Setting object parent back to original
+            obj.transform.SetParent(grabHandler.GetGrabParent(), true);
+
+            //if object had a different orientation set using Attach Transform in XRGrabInteractable then restore original parent for it
+            XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
+            if (grabInteractable != null && grabInteractable.attachTransform != null)
+            {
+                grabInteractable.attachTransform.SetParent(obj.transform, true);
+            }
+
+            // Adjust the offset as needed//
+            Vector3 offset = new Vector3(0.5f, 0.5f, 0.5f);
+            Vector3 zero = Camera.main.ViewportToWorldPoint(Vector3.zero);
+            Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
+            //Checks if there is a collision between player and held object //to account for teleporting past a wall or something
+            if (CheckCollisions(zero, targetPosition))
+            {
+                // If there is a collision, move to the point just before the collision
+                Vector3 adjustedPosition = FindAdjustedPosition(zero, targetPosition, obj);
+                obj.transform.position = adjustedPosition;
+            }
+            else
+            {
+                // If no collision, move to the target position
+                obj.transform.position = targetPosition;
+            }
+
+
+            //Setting RigidBody back to normal
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                //Gravity must be true else object wont fall to the ground
+                rb.useGravity = true;
+                rb.freezeRotation = grabHandler.GetfreezeRotation();
+                //Kinematic must be false or else force cannot be acted on it
+                rb.isKinematic = false;
+                rb.interpolation = grabHandler.GetInterpolation();
+                //Force acted in the direction the user is looking
+                Vector3 throwDirection = Camera.main.transform.forward;
+                rb.AddForce(throwDirection * 10f, ForceMode.Impulse);
+            }
+            grabHandler.SetGrabbedObject(null);
+
+        }
+    }//End Throw
+
+    //OpenAndClose
+    //--------------------------------------//
+     public void OpenAndClose()//<----------------------------------------------------------------------
+    //--------------------------------------//
+    {
+        // Debug.Log("joint.angle:" + joint.angle);
+        //collision makes joint angle be offsetted from 0 so if its close to 0 then its closed so open
+        if (Mathf.Floor(Mathf.Abs(joint.angle)) == 0)
+        {
+            //if has two way opening checks greater than 45 to make sure player can move through door
+            if (joint.limits.max > 45 && joint.limits.min < -45)
+            {
+                // Debug.Log("entered Open");
+                //depending on reverse state flop between directions
+                if (reverse == false)
+                {
+                    this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.max);
+                }
+                else
+                {
+                    this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.min);
+                }
+            }
+            //if has positive opening
+            else if (joint.limits.max > 45)
+            {
+                this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.max);
+            }
+            //if has negative opening
+            else if (joint.limits.min < -45)
+            {
+                this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.min);
+            }
+        }
+        //is open so close
+        else
+        {
+            // Debug.Log("entered Close");
+            //reverse reverse
+            reverse = !reverse;
+            this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, -joint.angle);
+        }
+        //has problems when collisions if kinetatic is disables
+        //for better accessability, if it has the option to move outwards from player do that
+        //but will require to know which direction the player is opening door from and has to decide based on that to open with min or max
+        //might also want to have a smooth animation for opening
+    }//End OpenAndClose
+
+
+    #endregion
+
+
+    #region HELPER FUNCTIONS
+
+
+    // GrabObject
+    //--------------------------------------//
     void GrabObject(GameObject obj)
+    //--------------------------------------//
     {
         isGrabbing = true;
+
+        //Saving Values of Grabbed Object
         grabHandler.SetGrabbedObject(obj);
         grabHandler.SetGrabParent(transform.parent);
         grabHandler.SetRB(obj.GetComponent<Rigidbody>());
-        // Disable gravity during grab
+
+        //Change RigidBody Values
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -92,61 +226,64 @@ public class DefaultActions : MonoBehaviour
             rb.isKinematic = true;
             rb.interpolation = RigidbodyInterpolation.None;
         }
-        // use camera rotation
 
-        XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
-        //use camera rotationXRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
-        Quaternion cameraRotation = Camera.main.transform.rotation;
-        Vector3 offset = new Vector3(0.75f, 0.25f, 0.5f); // Adjust the offset as needed
+        // Adjust the offset as needed
+        Vector3 offset = new Vector3(0.75f, 0.25f, 0.5f);
         Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
-
+        //if Attach Transform in XRGrabInteractable is not null adjust orientation accordingly
+        XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
         if (grabInteractable != null && grabInteractable.attachTransform != null)
         {
+            //Adjusting vectors to the correct position relative to the camera
             Quaternion grabRotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
 
+            //Set AttachTransform object's parent to the camera
             grabInteractable.attachTransform.SetParent(Camera.main.transform, true);
+            //Set Object's parent to the Attach Transform object
             transform.SetParent(grabInteractable.attachTransform, true);
 
+            //Setting position to bottom right of pov and setting rotation to the correct orientation
             grabInteractable.attachTransform.position = targetPosition;
             grabInteractable.attachTransform.rotation = grabRotation;
-
-
         }
+        //using default orientation
         else
         {
-            // Debug.LogWarning("XR Grab Interactable component or Attach Transform not found. Using default rotation.");
+            //Adjusting vectors to the correct position relative to the camera
             Quaternion grabRotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
+            //Set Object's parent to camera
             transform.SetParent(Camera.main.transform, true);
-            // If XR Grab Interactable or Attach Transform is not available, use camera rotation
-            // obj.transform.localPosition = targetPosition;
-            // obj.transform.localRotation = grabRotation;
+            //Setting position to bottom right of pov and setting rotation to the correct orientation
             obj.transform.position = targetPosition;
             obj.transform.rotation = grabRotation;
 
         }
-        // Snap the grabbed object to the bottom right of the player's camera
-        // }
-    }
 
-    // ReleaseObject method
+    }//End GrabObject
+
+
+    //ReleaseObject
+    //--------------------------------------//
     void ReleaseObject()
+    //--------------------------------------//
     {
         isGrabbing = false;
+        //Get Grabbed Object
         GameObject obj = grabHandler.GetGrabbedObject();
+        //Set objects parent back to original
         obj.transform.SetParent(grabHandler.GetGrabParent(), true);
-        // Enable gravity during release
+        //If Attach Transform had an object connected revert to original parent/grabbedobject
         XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
         if (grabInteractable != null && grabInteractable.attachTransform != null)
         {
-            // Debug.Log(grabInteractable.attachTransform);
             grabInteractable.attachTransform.SetParent(obj.transform, true);
         }
 
-        // Place the grabbed object in front of the player with smooth interpolation
-        // Vector3 center = new Vector3(0.5f, 0.5f, 0.0f);
+        // Placing the grabbed object in front of the player
+
+        // Adjust the offset as needed// adjust for distance before drop
         Vector3 zero = Camera.main.ViewportToWorldPoint(Vector3.zero);
-        // obj.transform.localRotation = Quaternion.identity;
-        Vector3 offset = new Vector3(0.5f, 0.5f, 2.0f); // Adjust the offset as needed// adjust for distance before drop
+        Vector3 offset = new Vector3(0.5f, 0.5f, 2.0f);
         Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
         // Check for collisions along the path
         if (CheckCollisions(zero, targetPosition))
@@ -158,9 +295,9 @@ public class DefaultActions : MonoBehaviour
         else
         {
             // If no collision, move to the target position
-            // Debug.Log("Entered");
             obj.transform.position = targetPosition;
         }
+        //Setting RigidBody values back to original
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -169,74 +306,69 @@ public class DefaultActions : MonoBehaviour
             rb.isKinematic = grabHandler.GetKinematic();
             rb.interpolation = grabHandler.GetInterpolation();
         }
+        //Set Grabbed Object to none
         grabHandler.SetGrabbedObject(null);
-    }
+    }//End ReleaseObject
 
+
+    // CheckCollisions
+    //--------------------------------------//
     bool CheckCollisions(Vector3 start, Vector3 end)
+    //--------------------------------------//
     {
         // Check for collisions using Physics.Linecast
         // This function returns true if there is a collision along the line
         return Physics.Linecast(start, end);
-    }
+    }//End CheckCollisions
 
+
+    // FindAdjustedPosition
+    //--------------------------------------//
     Vector3 FindAdjustedPosition(Vector3 start, Vector3 end, GameObject obj)
+    //--------------------------------------//
     {
-        // RaycastHit hit;
+        //initiating value to the target position
         Vector3 adjustedPosition = end;
 
         // Perform a Raycast to find the first collision along the path
-        // int ogLayer = obj.layer;
-        // // Debug.Log("ogLayer; "+ogLayer);
-        // obj.layer = LayerMask.NameToLayer("Ignore Raycast");
-        // // Debug.Log("NamerToLayer; "+LayerMask.NameToLayer("Ignore Raycast"));
-        // int layerMask = ~LayerMask.GetMask("Ignore Raycast");
 
-        // /*
+        //Returns a list of all objects with colliders that are children to the main object
         Collider[] relaventColliders = obj.GetComponentsInChildren<Collider>();
 
-        // Move to the point just before the collision
-        // Debug.Log(relaventColliders);
+        //Returns an unordered list of objects hit by the raycast from the player to the target position
         RaycastHit[] hits = Physics.RaycastAll(start, (end - start), Vector3.Distance(start, end));
+        //Sort the Raycast List by distance from player
         System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
-        // Debug.Log(hits);
+
+        //for each object hit by the raycast check if it is one of the children colliders of the main object
         foreach (RaycastHit hitC in hits)
         {
-            // Debug.Log(hitC);
+            //initializing value to false each iteration
             bool isIn = false;
             foreach (Collider c in relaventColliders)
             {
-                // Debug.Log("childCollider:" + c);
-                // Debug.Log("hit:" + hitC.collider);
+                //if the raycast object collider is one of the children colliders break loop no need to check anymore
                 if (hitC.collider == c)
                 {
-                    // adjustedPosition = hitC.point - (end - start).normalized * 0.1f;
                     isIn = true;
                     break;
                 }
             }
+            //if raycast object is not in collider array of the main object children then set position to that objects position
             if (isIn == false)
             {
                 adjustedPosition = hitC.point - (end - start).normalized * 0.1f;
             }
+            //At any point of the loop if adjustedPosition is not at the targetposition that means we have first contact
             if (adjustedPosition != end)
             {
                 break;
             }
         }
-        // */
-
-        // Move to the point just before the collision
-        // if (Physics.Raycast(start, (end - start), out hit, Vector3.Distance(start, end), layerMask))
-        // {
-
-        //     // Adjust the offset as needed
-        //     adjustedPosition = adjustedPosition = hit.point - (end - start).normalized * 0.1f;
-        // }
-        // obj.layer = ogLayer;
-
         return adjustedPosition;
-    }
+    }//End FindAdjustedPosition
+
     #endregion
 
 
-} // END ExampleInteractions.cs
+} // END DefaultActions.cs

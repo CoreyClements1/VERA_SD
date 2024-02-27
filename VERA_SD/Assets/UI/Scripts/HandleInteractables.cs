@@ -17,12 +17,14 @@ public class HandleInteractables: MonoBehaviour
 
     // For Instantiating UI 
     public GameObject original;
+    public GameObject original2;
+    public GameObject original1;
     public GameObject parent;
     private Button selectBttn;
 
     void Awake()
     {
-        interactables = selectionController.grabInteractables();
+        interactables = selectionController.grabAllSelectables();
         foreach (GameObject interactable in interactables)
         {
             List<GameObject> levels = SetupLevels(interactable);
@@ -36,16 +38,49 @@ public class HandleInteractables: MonoBehaviour
     {
         VERA_Interactable Interact = Interactable.GetComponent<VERA_Interactable>();
         List<string> PossibleInteractions = Interactable.GetComponent<VERA_Interactable>().GetInteractions();
-        int Size = PossibleInteractions.Count;
-        int NumLevels = Size / 2;
+        //number of all interactions on the interactable
+        int size = PossibleInteractions.Count;
+        //number of levels
+        int NumLevels = size / 2;
         List<GameObject> Levels = new List<GameObject>();
+        Debug.Log(size.ToString() +" "+NumLevels.ToString()+ " " + Interactable.name);
         for (int i = 0; i < NumLevels; i++)
         {
-            GameObject obj = Instantiate(original, parent.GetComponent<Transform>());
-            obj.name = Interactable.name + (i + 1).ToString();
-            Levels.Add(obj);
+            if (i < NumLevels - 1)
+            {
+                GameObject obj = Instantiate(original, parent.GetComponent<Transform>());
+                obj.name = Interactable.name + (i + 1).ToString();
+                Levels.Add(obj);
+            }
+            else if (((NumLevels - 1) * 2) + 3 == size)
+            {
+                GameObject obj = Instantiate(original, parent.GetComponent<Transform>());
+                obj.name = Interactable.name + (i + 1).ToString();
+                Levels.Add(obj);
+                Debug.Log("Check 3");
+
+            }
+            else if (((NumLevels - 1) * 2) + 2 == size)
+            {
+                GameObject obj = Instantiate(original2, parent.GetComponent<Transform>());
+                obj.name = Interactable.name + (i + 1).ToString();
+                obj.transform.localScale = new Vector3(1f, 1f, 1f);
+                Levels.Add(obj);
+                Debug.Log("Check 2");
+
+            }
+            else if (((NumLevels - 1) * 2) + 1 == size)
+            {
+                GameObject obj = Instantiate(original1, parent.GetComponent<Transform>());
+                obj.name = Interactable.name + (i + 1).ToString();
+                obj.transform.localScale = new Vector3(1f, 1f, 1f);
+                Levels.Add(obj);
+                Debug.Log("Check 1");
+            }
 
         }
+        Debug.Log(Levels.Count);
+        
         return Levels;
     }
 
@@ -72,12 +107,13 @@ public class HandleInteractables: MonoBehaviour
             // setup all 3 buttons on that level 
             for (int j = 0; j < 3; j++)
             {
-                GameObject obj = levels[i].transform.Find((j + 1).ToString()).gameObject;
-                Button btn = obj.GetComponent<Button>();
-                TextMeshProUGUI txt = obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+                
                 // Levels that need a more options button
                 if (i < (numLevels - 1))
                 {
+                    GameObject obj = levels[i].transform.Find((j + 1).ToString()).gameObject;
+                    Button btn = obj.GetComponent<Button>();
+                    TextMeshProUGUI txt = obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
                     // interaction buttons
                     GameObject next = levels[i + 1];
                     if (j < 2)
@@ -96,9 +132,15 @@ public class HandleInteractables: MonoBehaviour
                 // Final Level
                 else
                 {
-                    txt.text = InteractInfo[counter];
-                    btn.onClick.AddListener(() => accessInteraction.TriggerInteraction(txt.text));
-                    counter++;
+                    if(counter < Size)
+                    {
+                        GameObject obj = levels[i].transform.Find((j + 1).ToString()).gameObject;
+                        Button btn = obj.GetComponent<Button>();
+                        TextMeshProUGUI txt = obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+                        txt.text = InteractInfo[counter];
+                        btn.onClick.AddListener(() => accessInteraction.TriggerInteraction(txt.text));
+                        counter++;
+                    }
                 }
 
             }

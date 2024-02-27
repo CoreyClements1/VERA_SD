@@ -43,4 +43,5 @@ public class ButtonController : MonoBehaviour
             Graphic graphic = btn.GetComponent<Graphic>();
             graphic.CrossFadeColor(color, btn.colors.fadeDuration, true, true);
         }
+    
 }
