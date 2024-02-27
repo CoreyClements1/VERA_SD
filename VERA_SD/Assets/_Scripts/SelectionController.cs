@@ -64,18 +64,23 @@ public class SelectionController : MonoBehaviour
     #region SELECTION
     public void SelectedInRange()
     {
-        UpdateSelectables();
-        if (previousObj != null && !interactables.Contains(previousObj))
+        // UpdateSelectables();
+        if (previousObj != null)
         {
-            // Previous current object is out of range, deselect it
-            previousObj.GetComponent<Outline>().enabled = false;
-            previousObj = null;
-            lookTarget = null;
-            treeBase.RemoveListeners();
-            treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
-            currentObj = null;
+            float outside = Vector3.Distance(playerCam.transform.position, previousObj.transform.position);
+            if (outside > selectRadius)
+            {
+                // Previous current object is out of range, deselect it
+                // Debug.Log("Entered Deselect");
+                // Debug.Log("preob: " + previousObj);
+                previousObj.GetComponent<Outline>().enabled = false;
+                previousObj = null;
+                lookTarget = null;
+                treeBase.RemoveListeners();
+                treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
+                currentObj = null;
+            }
         }
-
     }
 
     // SelectionCycle
@@ -140,7 +145,18 @@ public class SelectionController : MonoBehaviour
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject.GetComponent<IInteractable>() != null)
-                interactables.Add(collider.gameObject);
+            {
+                RaycastHit hit;
+                Vector3 directionToInteractable = collider.gameObject.transform.position - playerCam.transform.position;
+                if (Physics.Raycast(playerCam.transform.position, directionToInteractable, out hit, Vector3.Distance(playerCam.transform.position, collider.gameObject.transform.position)))
+                {
+                    if (hit.collider == collider)
+                    {
+                        interactables.Add(collider.gameObject);
+                    }
+                }
+                //if is child of camera or child of object
+            }
         }
 
         // Return whether there are interactables nearby or not
