@@ -6,6 +6,8 @@ using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Linq;
+
 
 public class SelectionController : MonoBehaviour
 {
@@ -54,7 +56,7 @@ public class SelectionController : MonoBehaviour
         {
             Arrow.transform.LookAt(lookTarget.transform);
         }
-        SelectedInRange();
+        SelectedOutOfRange();
     } // END Update
 
 
@@ -62,7 +64,7 @@ public class SelectionController : MonoBehaviour
 
 
     #region SELECTION
-    public void SelectedInRange()
+    public void SelectedOutOfRange()
     {
         // UpdateSelectables();
         if (previousObj != null)
@@ -148,11 +150,45 @@ public class SelectionController : MonoBehaviour
             {
                 RaycastHit hit;
                 Vector3 directionToInteractable = collider.gameObject.transform.position - playerCam.transform.position;
-                if (Physics.Raycast(playerCam.transform.position, directionToInteractable, out hit, Vector3.Distance(playerCam.transform.position, collider.gameObject.transform.position)))
+                Collider[] cameraColliders = playerCam.GetComponentsInChildren<Collider>();
+                Collider[] objChildColliders = collider.gameObject.GetComponentsInChildren<Collider>();
+                Collider[] combinedColliders = cameraColliders.Concat(objChildColliders).ToArray();
+                RaycastHit[] hits = Physics.RaycastAll(playerCam.transform.position, directionToInteractable, Vector3.Distance(playerCam.transform.position, collider.gameObject.transform.position));
+                if (hits.Length == 1)
                 {
-                    if (hit.collider == collider)
+                    if (hits[0].collider == collider)
                     {
                         interactables.Add(collider.gameObject);
+                    }
+                }
+                else
+                {
+                    System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+                    foreach (RaycastHit hitCollider in hits)
+                    {
+                        //initializing value to false each iteration
+                        bool isIn = false;
+                        foreach (Collider c in combinedColliders)
+                        {
+                            //if the raycast object collider is one of the children colliders break loop no need to check anymore
+                            if (hitCollider.collider == c)
+                            {
+                                isIn = true;
+                                break;
+                            }
+                        }
+                        if (isIn == false)
+                        {
+                            break;
+                        }
+                        else if (hitCollider.collider != collider)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            interactables.Add(collider.gameObject);
+                        }
                     }
                 }
                 //if is child of camera or child of object
