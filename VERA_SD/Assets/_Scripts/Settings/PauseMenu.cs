@@ -29,6 +29,8 @@ public class PauseMenu : MonoBehaviour
     private float prevSpeed;
     private int prevIndex;
     private int prevTypeIndex;
+    private int currentLvl;
+    private int prevLvl;
     private List<bool> typeArray;
     private List<bool> optionsArray;
     public TextMeshProUGUI sliderText;
@@ -49,7 +51,8 @@ public class PauseMenu : MonoBehaviour
         prevTypeIndex = typeIndex;
         prevSnap = player.GetComponent<MovementController>().rotationValue;
         prevSpeed = player.GetComponent<MovementController>().speed;
-
+        currentLvl = player.GetComponent<MovementController>().currentLvl;
+        prevLvl = currentLvl;
         typeArray = new List<bool>();
         optionsArray = new List<bool>();
         for(int i = 0; i < typeOptions.transform.childCount; i++)
@@ -166,8 +169,10 @@ public class PauseMenu : MonoBehaviour
     {
         prevSnap = player.GetComponent<MovementController>().rotationValue;
         prevSpeed = player.GetComponent<MovementController>().speed;
+
         prevIndex = index;
         prevTypeIndex = typeIndex;
+        prevLvl = currentLvl;
         for (int i = 0; i < settings.transform.childCount; i++)
         {
             Transform child = transform.GetChild(i);
@@ -184,6 +189,7 @@ public class PauseMenu : MonoBehaviour
         
         player.GetComponent<MovementController>().rotationValue = prevSnap;
         player.GetComponent<MovementController>().speed = prevSpeed;
+        player.GetComponent<MovementController>().currentLvl = prevLvl;
         index = prevIndex;
         typeIndex = prevTypeIndex;
         slider.value = prevSpeed;
@@ -259,6 +265,7 @@ public class PauseMenu : MonoBehaviour
         if(name != typeCurrentName)
         {
             typeCurrentName = name;
+            //temporary measure so that errors arent thrown for level that doesnt exist yet
             for (int i = 0; i < typeOptions.transform.childCount - 1; i++)
             {
 
@@ -266,6 +273,10 @@ public class PauseMenu : MonoBehaviour
                 {
                     typeImages.transform.GetChild(i).gameObject.SetActive(true);
                     typeImages.transform.GetChild(typeIndex).gameObject.SetActive(false);
+                    
+                    prevLvl = currentLvl;
+                    currentLvl = i + 1;
+                    player.GetComponent<MovementController>().currentLvl = currentLvl;
 
                     typeArray[i] = true;
                     typeArray[typeIndex] = false;

@@ -2016,7 +2016,7 @@ GameObject:
   - component: {fileID: 6095250144150553419}
   - component: {fileID: 2108413772876146558}
   m_Layer: 5
-  m_Name: Type Options
+  m_Name: Options
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

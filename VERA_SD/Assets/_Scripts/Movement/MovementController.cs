@@ -32,7 +32,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] public float turnCooldown = 1.0f;
     float lastPressTime = 0f;
     // determines which level of accessibity the user is on
-    [SerializeField] int currentLvl = 1;
+    [SerializeField] public int currentLvl = 1;
     #endregion
 
     #region START
