@@ -6963,6 +6963,7 @@ MonoBehaviour:
   highlightDuration: 3
   Arrow: {fileID: 2842787105805475243}
   Text: {fileID: 3053133118654532745}
+  useCameraSelect: 0
 --- !u!114 &2946151539690263978
 MonoBehaviour:
   m_ObjectHideFlags: 0
