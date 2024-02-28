@@ -13660,6 +13660,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 7.375, z: 0}
+--- !u!1 &1572992133 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2946151539690263981, guid: 471afe30082787841983b6078690b650,
+    type: 3}
+  m_PrefabInstance: {fileID: 434926279502129702}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1582273217 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1595082824661717577, guid: d3f9bf2c465a5294d914f663b36d62eb,
@@ -19419,17 +19425,17 @@ PrefabInstance:
     - target: {fileID: 2946151540228841560, guid: 471afe30082787841983b6078690b650,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 52.85
+      value: 86.53
       objectReference: {fileID: 0}
     - target: {fileID: 2946151540228841560, guid: 471afe30082787841983b6078690b650,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23.53
+      value: 22.91
       objectReference: {fileID: 0}
     - target: {fileID: 2946151540228841560, guid: 471afe30082787841983b6078690b650,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 21.04
+      value: 68.21
       objectReference: {fileID: 0}
     - target: {fileID: 2946151540228841560, guid: 471afe30082787841983b6078690b650,
         type: 3}
@@ -19654,12 +19660,61 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 434926279502129702}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1572992133}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f32149c5c37f1ef4aa9001af626bce51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3381075302032719757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572992133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6985d534c711734497faae115fd1f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 32
+  speedScale: 1
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
+  Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -2.121909
+      outSlope: -2.121909
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.47126386
+      value: 0.000021014363
+      inSlope: 0.011225625
+      outSlope: 0.011225625
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.32467428
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.00003974452
+      outSlope: -0.00003974452
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  startFadedOut: 0
 --- !u!1 &3828392447253619445 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3686202343363430611, guid: 471afe30082787841983b6078690b650,
