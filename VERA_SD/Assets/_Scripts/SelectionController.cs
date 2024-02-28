@@ -19,6 +19,7 @@ public class SelectionController : MonoBehaviour
     public string currentObj;
     private bool manualHighlightCancel = false;
     private GrabTracker grabTracker;
+    private CameraFade cameraFade;
 
     [SerializeField] float selectRadius;
     [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
@@ -48,6 +49,15 @@ public class SelectionController : MonoBehaviour
         else
         {
             // Debug.Log("GrabTracker found.");
+        }
+        cameraFade = FindObjectOfType<CameraFade>();
+        if (cameraFade == null)
+        {
+            // Debug.LogError("CameraFade is not assigned or not found.");
+        }
+        else
+        {
+            // Debug.Log("CameraFade found.");
         }
     } // END Start
 
@@ -211,8 +221,7 @@ public class SelectionController : MonoBehaviour
 
     void CameraSnap(GameObject target)
     {
-        
-        playerCam.transform.parent.LookAt(target.transform);
+        StartCoroutine(cameraFade.RunFade(playerCam, target));
     }
 
 
