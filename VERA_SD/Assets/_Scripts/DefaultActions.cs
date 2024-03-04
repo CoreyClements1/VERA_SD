@@ -10,10 +10,12 @@ public class DefaultActions : MonoBehaviour
 
 
     [SerializeField] private GrabTracker grabHandler;
+    [SerializeField] private bool swapDoorDirection;
     private bool isGrabbing = false;
     private Renderer rend;
-    private HingeJoint joint;//<----------------------------------------------------------------------
-    private bool reverse;//<----------------------------------------------------------------------
+    private HingeJoint joint;
+    private int doorState = 0;
+    private Quaternion doorStartAngle;
 
 
     #endregion
@@ -27,9 +29,9 @@ public class DefaultActions : MonoBehaviour
     private void Awake()
     //--------------------------------------//
     {
-        joint = GetComponent<HingeJoint>();//<----------------------------------------------------------------------
-        reverse = false;//<----------------------------------------------------------------------
+        joint = GetComponent<HingeJoint>();
         grabHandler = FindObjectOfType<GrabTracker>();
+        doorStartAngle = transform.rotation;
         if (grabHandler == null)
         {
             // Debug.LogError("GrabTracker is not assigned or not found.");
@@ -155,6 +157,113 @@ public class DefaultActions : MonoBehaviour
      public void OpenAndClose()//<----------------------------------------------------------------------
     //--------------------------------------//
     {
+        // If the door has 3 positions (open, close, neutral; has a max and min which are not 0)...
+        if (joint.limits.max > 45 && joint.limits.min < -45)
+        {
+            // If the door's direction is swapped, do in reverse
+            if (swapDoorDirection)
+            {
+                // Swap state between 0, 1, 2, 3; 0 is default closed, 1 is open max, 2 is back to neutral closed, 3 is open min, and then reset to 0.
+                if (doorState == 0)
+                {
+                    // State is 0, next state is 1; transfer from neutral to open min.
+                    transform.rotation = doorStartAngle;
+                    transform.LeanRotateAround(joint.axis, joint.limits.min, .5f).setEaseOutExpo();
+                    doorState++;
+                }
+                else if (doorState == 1)
+                {
+                    // State is 1, next state is 2; transfer from open min to neutral.
+                    transform.LeanRotateAround(joint.axis, -joint.limits.min, .5f).setEaseOutExpo();
+                    doorState++;
+                }
+                else if (doorState == 2)
+                {
+                    // State is 2, next state is 3; transfer from neutral to open max.
+                    transform.rotation = doorStartAngle;
+                    transform.LeanRotateAround(joint.axis, joint.limits.max, .5f).setEaseOutExpo();
+                    doorState++;
+                }
+                else if (doorState == 3)
+                {
+                    // State is 3, next state is 0; transfer from open max to neutral.
+                    transform.LeanRotateAround(joint.axis, -joint.limits.max, .5f).setEaseOutExpo();
+                    doorState = 0;
+                }
+            }
+            else
+            {
+                // Swap state between 0, 1, 2, 3; 0 is default closed, 1 is open max, 2 is back to neutral closed, 3 is open min, and then reset to 0.
+                if (doorState == 0)
+                {
+                    // State is 0, next state is 1; transfer from neutral to open max.
+                    transform.rotation = doorStartAngle;
+                    transform.LeanRotateAround(joint.axis, joint.limits.max, .5f).setEaseOutExpo();
+                    doorState++;
+                }
+                else if (doorState == 1)
+                {
+                    // State is 1, next state is 2; transfer from open max to neutral.
+                    transform.LeanRotateAround(joint.axis, -joint.limits.max, .5f).setEaseOutExpo();
+                    doorState++;
+                }
+                else if (doorState == 2)
+                {
+                    // State is 2, next state is 3; transfer from neutral to open min.
+                    transform.rotation = doorStartAngle;
+                    transform.LeanRotateAround(joint.axis, joint.limits.min, .5f).setEaseOutExpo();
+                    doorState++;
+                }
+                else if (doorState == 3)
+                {
+                    // State is 3, next state is 0; transfer from open min to neutral.
+                    transform.LeanRotateAround(joint.axis, -joint.limits.min, .5f).setEaseOutExpo();
+                    doorState = 0;
+                }
+            }
+        }
+        // Else, the door has 2 positions (open, close)
+        else
+        {
+            // Swap between states 0 and 1; 0 is neutral, 1 is open min or max.
+
+            // If the door's open state is at the min position (e.g., min is nonzero)...
+            if (joint.limits.min < -45)
+            {
+                if (doorState == 0)
+                {
+                    // State is 0, next state is 1; transfer from neutral to open min.
+                    transform.rotation = doorStartAngle;
+                    transform.LeanRotateAround(joint.axis, joint.limits.min, .5f).setEaseOutExpo();
+                    doorState++;
+                }
+                else if (doorState == 1)
+                {
+                    // State is 1, next state is 0; transfer from open min to neutral.
+                    transform.LeanRotateAround(joint.axis, -joint.limits.min, .5f).setEaseOutExpo();
+                    doorState = 0;
+                }
+            }
+            // Else, the door's open state is at the max position
+            else
+            {
+                if (doorState == 0)
+                {
+                    // State is 0, next state is 1; transfer from neutral to open max.
+                    transform.rotation = doorStartAngle;
+                    transform.LeanRotateAround(joint.axis, joint.limits.max, .5f).setEaseOutExpo();
+                    doorState++;
+                }
+                else if (doorState == 1)
+                {
+                    // State is 1, next state is 0; transfer from open max to neutral.
+                    transform.LeanRotateAround(joint.axis, -joint.limits.max, .5f).setEaseOutExpo();
+                    doorState = 0;
+                }
+            }
+        }
+
+        /* OLD OLD OLD
         // Debug.Log("joint.angle:" + joint.angle);
         //collision makes joint angle be offsetted from 0 so if its close to 0 then its closed so open
         if (Mathf.Floor(Mathf.Abs(joint.angle)) == 0)
@@ -166,22 +275,22 @@ public class DefaultActions : MonoBehaviour
                 //depending on reverse state flop between directions
                 if (reverse == false)
                 {
-                    this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.max);
+                    transform.LeanRotateAround(joint.axis, joint.limits.max, .5f).setEaseOutExpo();
                 }
                 else
                 {
-                    this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.min);
+                    transform.LeanRotateAround(joint.axis, joint.limits.min, .5f).setEaseOutExpo();
                 }
             }
             //if has positive opening
             else if (joint.limits.max > 45)
             {
-                this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.max);
+                transform.LeanRotateAround(joint.axis, joint.limits.max, .5f).setEaseOutExpo();
             }
             //if has negative opening
             else if (joint.limits.min < -45)
             {
-                this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, joint.limits.min);
+                transform.LeanRotateAround(joint.axis, joint.limits.min, .5f).setEaseOutExpo();
             }
         }
         //is open so close
@@ -190,12 +299,13 @@ public class DefaultActions : MonoBehaviour
             // Debug.Log("entered Close");
             //reverse reverse
             reverse = !reverse;
-            this.transform.RotateAround(transform.TransformPoint(joint.anchor), joint.axis, -joint.angle);
+            transform.LeanRotateAround(joint.axis, -joint.angle, .5f).setEaseOutExpo();
         }
         //has problems when collisions if kinetatic is disables
         //for better accessability, if it has the option to move outwards from player do that
         //but will require to know which direction the player is opening door from and has to decide based on that to open with min or max
         //might also want to have a smooth animation for opening
+        */
     }//End OpenAndClose
 
 
