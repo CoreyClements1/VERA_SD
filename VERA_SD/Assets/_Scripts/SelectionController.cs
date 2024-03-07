@@ -4,6 +4,10 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 using TMPro;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using System.Linq;
+
 
 public class SelectionController : MonoBehaviour
 {
@@ -13,6 +17,7 @@ public class SelectionController : MonoBehaviour
 
     private List<GameObject> interactables = new List<GameObject>();
     private int counter = 0;
+    [SerializeField] HandleInteractables treeBase;
     private GameObject previousObj;
     private Outline outline;
     private GameObject lookTarget;
@@ -29,11 +34,19 @@ public class SelectionController : MonoBehaviour
     [SerializeField] TextMeshPro Text;
     [SerializeField] bool useCameraSelect = false;
 
+    private GameObject interactSub;
+
 
     #endregion
 
 
     #region MONOBEHAVIOUR
+    void Awake()
+    {
+        interactSub = GameObject.Find("Interact Sub");
+        Debug.Log(interactSub);
+
+    }
 
     // Start
     //--------------------------------------//
@@ -60,7 +73,7 @@ public class SelectionController : MonoBehaviour
         {
             Arrow.transform.LookAt(lookTarget.transform);
         }
-
+        SelectedOutOfRange();
     } // END Update
 
 
@@ -68,7 +81,26 @@ public class SelectionController : MonoBehaviour
 
 
     #region SELECTION
-
+    public void SelectedOutOfRange()
+    {
+        // UpdateSelectables();
+        if (previousObj != null)
+        {
+            float outside = Vector3.Distance(playerCam.transform.position, previousObj.transform.position);
+            if (outside > selectRadius)
+            {
+                // Previous current object is out of range, deselect it
+                // Debug.Log("Entered Deselect");
+                // Debug.Log("preob: " + previousObj);
+                previousObj.GetComponent<Outline>().enabled = false;
+                previousObj = null;
+                lookTarget = null;
+                treeBase.RemoveListeners();
+                treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
+                currentObj = null;
+            }
+        }
+    }
 
     // SelectionCycle
     //--------------------------------------//
@@ -79,6 +111,8 @@ public class SelectionController : MonoBehaviour
         PulseCancelHighlights();
 
         if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
+
+        if (counter >= interactables.Count) counter = 0;
         currentObj = interactables[counter].name;
 
         // De-highlight previous object
@@ -140,11 +174,56 @@ public class SelectionController : MonoBehaviour
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject.GetComponent<IInteractable>() != null)
-                interactables.Add(collider.gameObject);
+            {
+                RaycastHit hit;
+                Vector3 directionToInteractable = collider.gameObject.transform.position - playerCam.transform.position;
+                Collider[] cameraColliders = playerCam.GetComponentsInChildren<Collider>();
+                Collider[] objChildColliders = collider.gameObject.GetComponentsInChildren<Collider>();
+                Collider[] combinedColliders = cameraColliders.Concat(objChildColliders).ToArray();
+                RaycastHit[] hits = Physics.RaycastAll(playerCam.transform.position, directionToInteractable, Vector3.Distance(playerCam.transform.position, collider.gameObject.transform.position));
+                if (hits.Length == 1)
+                {
+                    if (hits[0].collider == collider)
+                    {
+                        interactables.Add(collider.gameObject);
+                    }
+                }
+                else
+                {
+                    System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+                    foreach (RaycastHit hitCollider in hits)
+                    {
+                        //initializing value to false each iteration
+                        bool isIn = false;
+                        foreach (Collider c in combinedColliders)
+                        {
+                            //if the raycast object collider is one of the children colliders break loop no need to check anymore
+                            if (hitCollider.collider == c)
+                            {
+                                isIn = true;
+                                break;
+                            }
+                        }
+                        if (isIn == false)
+                        {
+                            break;
+                        }
+                        else if (hitCollider.collider != collider)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            interactables.Add(collider.gameObject);
+                        }
+                    }
+                }
+                //if is child of camera or child of object
+            }
         }
 
         // Return whether there are interactables nearby or not
-        Debug.Log("I see " + interactables.Count);
+        // Debug.Log("I see " + interactables.Count);
         return (interactables.Count > 0) ? true : false;
 
     } // END UpdateSelectables
@@ -181,7 +260,7 @@ public class SelectionController : MonoBehaviour
     {
         lookTarget = interactables[counter];
         Vector3 target = lookTarget.transform.position;
-       
+
         // Normally this would have the player's position relative to camera but not yet!
         Vector3 playerScreenPos = playerCam.WorldToScreenPoint(playerCam.transform.position);
         Vector3 targetScreenPos = playerCam.WorldToScreenPoint(target);
@@ -306,7 +385,7 @@ public class SelectionController : MonoBehaviour
         // This assumes that the radius is drawn from player's camera, may not be true later!
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(playerCam.transform.position, selectRadius);
-    
+
     } // END OnDrawGizmosSelected
 
     #endregion

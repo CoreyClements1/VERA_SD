@@ -6955,6 +6955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7439cb1a51611d84ba7877ebd1203edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treeBase: {fileID: 0}
   currentObj: 
   selectRadius: 2.92
   playerCam: {fileID: 2665958434347651465}
