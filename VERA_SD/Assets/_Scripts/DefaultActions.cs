@@ -14,8 +14,11 @@ public class DefaultActions : MonoBehaviour
     private bool isGrabbing = false;
     private Renderer rend;
     private HingeJoint joint;
+    private ConfigurableJoint gJoint;
     private int doorState = 0;
     private Quaternion doorStartAngle;
+    private bool startP;
+    private bool gReverse;
 
 
     #endregion
@@ -32,6 +35,9 @@ public class DefaultActions : MonoBehaviour
         joint = GetComponent<HingeJoint>();
         grabHandler = FindObjectOfType<GrabTracker>();
         doorStartAngle = transform.rotation;
+        startP = true;
+        gReverse = false;
+        gJoint = GetComponent<ConfigurableJoint>();
         if (grabHandler == null)
         {
             // Debug.LogError("GrabTracker is not assigned or not found.");
@@ -154,7 +160,7 @@ public class DefaultActions : MonoBehaviour
 
     //OpenAndClose
     //--------------------------------------//
-     public void OpenAndClose()//<----------------------------------------------------------------------
+    public void OpenAndClose()//<----------------------------------------------------------------------
     //--------------------------------------//
     {
         // If the door has 3 positions (open, close, neutral; has a max and min which are not 0)...
@@ -308,13 +314,168 @@ public class DefaultActions : MonoBehaviour
         */
     }//End OpenAndClose
 
+    public void Drawer()
+    {
+        Vector3 movementDirection = Vector3.zero;
 
+        if (gJoint.xMotion != ConfigurableJointMotion.Locked)
+        {
+            movementDirection += this.transform.TransformDirection(gJoint.axis);
+        }
+        if (gJoint.yMotion != ConfigurableJointMotion.Locked)
+        {
+            movementDirection += this.transform.TransformDirection(gJoint.secondaryAxis);
+        }
+        if (gJoint.zMotion != ConfigurableJointMotion.Locked)
+        {
+            Vector3 crossAxis = Vector3.Cross(gJoint.axis, gJoint.secondaryAxis);
+            movementDirection += this.transform.TransformDirection(crossAxis);
+        }
+
+        // Debug.Log(CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit));
+        // Debug.Log(CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit));
+
+        // if (startP == true)
+        // {
+        //     if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true && CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit) == true)
+        //     {
+        //         if (gReverse == false)
+        //         {
+        //             this.transform.position += movementDirection * gJoint.linearLimit.limit;
+        //         }
+        //         else
+        //         {
+        //             this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+        //         }
+        //         startP = false;
+        //     }
+        //     else
+        //     {
+        //         if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true)
+        //         {
+        //             gReverse = false;
+        //             this.transform.position += movementDirection * gJoint.linearLimit.limit;
+        //             startP = false;
+        //         }
+        //         else
+        //         {
+        //             gReverse = true;
+        //             this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+        //             startP = false;
+        //         }
+        //     }
+        // }
+        // else
+        // {
+        //     if (gReverse == false)
+        //     {
+        //         this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+        //     }
+        //     else
+        //     {
+        //         this.transform.position += movementDirection * gJoint.linearLimit.limit;
+        //     }
+        //     startP = true;
+        //     gReverse = !gReverse;
+        // }
+
+        // Debug.Log("positive: " + testFunction(movementDirection, transform.position, gJoint.linearLimit.limit));
+        // Debug.Log("negative: " + testFunction(-movementDirection, transform.position, gJoint.linearLimit.limit));
+        if (startP == true)
+        {
+            if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true && testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+            {
+                if (gReverse == false)
+                {
+                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                }
+                else
+                {
+                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                }
+                startP = false;
+            }
+            else
+            {
+                if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+                {
+                    gReverse = false;
+                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                    startP = false;
+                }
+                else if (testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+                {
+                    gReverse = true;
+                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                    startP = false;
+                }
+                else
+                {
+                    Debug.Log("OOPS");
+                }
+            }
+        }
+        else
+        {
+            if (gReverse == false)
+            {
+                this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+            }
+            else
+            {
+                this.transform.position += movementDirection * gJoint.linearLimit.limit;
+            }
+            startP = true;
+            gReverse = !gReverse;
+        }
+
+    }
     #endregion
 
 
     #region HELPER FUNCTIONS
-
-
+    bool testFunction(Vector3 direction, Vector3 pos, float limit)
+    {
+        Physics.queriesHitBackfaces = true;
+        Collider[] relaventColliders = this.GetComponentsInChildren<Collider>();
+        Ray ray = new Ray(pos, direction);
+        RaycastHit hit;
+        if (Physics.Raycast(pos, direction, out hit, Mathf.Infinity))
+        {
+            // Physics.queriesHitBackfaces = false;
+            Debug.Log("hitcollider: " + hit.collider);
+            Debug.Log("hitpoint: " + hit.point);
+            Debug.Log("hitdistnce: " + hit.distance);
+            foreach (Collider c in relaventColliders)
+            {
+                Debug.Log("childCollider: " + c);
+                if (hit.collider == c)
+                {
+                    return testFunction(direction, hit.point, limit);
+                }
+            }
+            RaycastHit reverseHit;
+            if (Physics.Raycast(hit.point, -direction, out reverseHit, Mathf.Infinity))
+            {
+                if (reverseHit.distance >= limit)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
     // GrabObject
     //--------------------------------------//
     void GrabObject(GameObject obj)
