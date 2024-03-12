@@ -19,6 +19,9 @@ public class DefaultActions : MonoBehaviour
     private Quaternion doorStartAngle;
     private bool startP;
     private bool gReverse;
+    private bool cantMove;
+    private float newDistance = 0;
+
 
 
     #endregion
@@ -411,7 +414,18 @@ public class DefaultActions : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("OOPS");
+                    if (gReverse == false)
+                    {
+                        testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit);
+                        this.transform.position += movementDirection * newDistance;
+                    }
+                    else
+                    {
+                        testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit);
+                        this.transform.position -= movementDirection * newDistance;
+                    }
+                    cantMove = true;
+                    startP = false;
                 }
             }
         }
@@ -419,12 +433,27 @@ public class DefaultActions : MonoBehaviour
         {
             if (gReverse == false)
             {
-                this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                if (cantMove == true)
+                {
+                    this.transform.position -= movementDirection * newDistance;
+                }
+                else
+                {
+                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                }
             }
             else
             {
-                this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                if (cantMove == true)
+                {
+                    this.transform.position += movementDirection * newDistance;
+                }
+                else
+                {
+                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                }
             }
+            cantMove = false;
             startP = true;
             gReverse = !gReverse;
         }
@@ -443,12 +472,12 @@ public class DefaultActions : MonoBehaviour
         if (Physics.Raycast(pos, direction, out hit, Mathf.Infinity))
         {
             // Physics.queriesHitBackfaces = false;
-            Debug.Log("hitcollider: " + hit.collider);
-            Debug.Log("hitpoint: " + hit.point);
-            Debug.Log("hitdistnce: " + hit.distance);
+            // Debug.Log("hitcollider: " + hit.collider);
+            // Debug.Log("hitpoint: " + hit.point);
+            // Debug.Log("hitdistnce: " + hit.distance);
             foreach (Collider c in relaventColliders)
             {
-                Debug.Log("childCollider: " + c);
+                // Debug.Log("childCollider: " + c);
                 if (hit.collider == c)
                 {
                     return testFunction(direction, hit.point, limit);
@@ -463,11 +492,13 @@ public class DefaultActions : MonoBehaviour
                 }
                 else
                 {
+                    newDistance = reverseHit.distance;
                     return false;
                 }
             }
             else
             {
+                //i dont think ever enters here// idk cant remember
                 return false;
             }
         }

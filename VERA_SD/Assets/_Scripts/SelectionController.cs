@@ -175,7 +175,7 @@ public class SelectionController : MonoBehaviour
         {
             if (collider.gameObject.GetComponent<IInteractable>() != null)
             {
-                RaycastHit hit;
+                // RaycastHit hit;
                 Vector3 directionToInteractable = collider.gameObject.transform.position - playerCam.transform.position;
                 Collider[] cameraColliders = playerCam.GetComponentsInChildren<Collider>();
                 Collider[] objChildColliders = collider.gameObject.GetComponentsInChildren<Collider>();
@@ -290,7 +290,7 @@ public class SelectionController : MonoBehaviour
 
     void CameraSnap(GameObject target)
     {
-        
+
         playerCam.transform.parent.LookAt(target.transform);
     }
 
