@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7010846437045316054
 CanvasRenderer:
@@ -184,7 +184,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8117467413267236091
 CanvasRenderer:
@@ -550,9 +550,9 @@ GameObject:
   - component: {fileID: 1304536385389617295}
   - component: {fileID: 1107014938837790405}
   - component: {fileID: 482539476784829256}
-  - component: {fileID: 6925264690992798042}
   - component: {fileID: 2971224189432911870}
   - component: {fileID: 5248383359402725954}
+  - component: {fileID: 4129175378802449602}
   m_Layer: 0
   m_Name: Empty Sub-1
   m_TagString: Untagged
@@ -625,7 +625,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &482539476784829256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -643,30 +643,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6925264690992798042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5199123713393430165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 7
-  m_StartCorner: 1
-  m_StartAxis: 0
-  m_CellSize: {x: 100, y: 25}
-  m_Spacing: {x: 10, y: 10}
-  m_Constraint: 1
-  m_ConstraintCount: 3
 --- !u!114 &2971224189432911870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -679,11 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e1b25c702490e84589ab0034fabf2f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons:
-  - {fileID: 2655823887665959622}
-  - {fileID: 773599006288728025}
-  keys: 3100000032000000
-  group: {fileID: 5199123713393430165}
+  options: {fileID: 0}
 --- !u!114 &5248383359402725954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,3 +668,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c5819acf0ed2f241850a5a2cc19c43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4129175378802449602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5199123713393430165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 7
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0

@@ -67,6 +67,17 @@
                 },
                 {
                     "name": "",
+                    "id": "7c4d4096-1f16-474e-8d5f-f2f32eaa0bab",
+                    "path": "<HID::Arduino LLC Arduino Micro>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "5b301a25-858d-4e22-82ec-ff0ddd457127",
                     "path": "<Keyboard>/2",
                     "interactions": "",
@@ -80,6 +91,17 @@
                     "name": "",
                     "id": "7eb37b28-9db7-4bf1-a355-5b8a1fbdb984",
                     "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1010467e-8318-4a51-8f90-2e4e1fb2b68a",
+                    "path": "<HID::Arduino LLC Arduino Micro>/button2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -111,6 +133,17 @@
                 },
                 {
                     "name": "",
+                    "id": "cc0fa007-4de1-47e0-ae8f-8b180257745d",
+                    "path": "<HID::Arduino LLC Arduino Micro>/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "760e9cae-9c49-4fec-9db6-d9c196900ad1",
                     "path": "<Keyboard>/4",
                     "interactions": "",
@@ -124,6 +157,17 @@
                     "name": "",
                     "id": "bb33780a-7653-4a5e-9806-c58598bc14f9",
                     "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "db1a619a-5b2c-40c5-bb4d-fb0fa408ab77",
+                    "path": "<HID::Arduino LLC Arduino Micro>/button4",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

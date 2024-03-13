@@ -43,7 +43,7 @@ public class HandleInteractables : MonoBehaviour
         //number of levels
         int NumLevels = size / 2;
         List<GameObject> Levels = new List<GameObject>();
-        Debug.Log(size.ToString() + " " + NumLevels.ToString() + " " + Interactable.name);
+        // Debug.Log(size.ToString() + " " + NumLevels.ToString() + " " + Interactable.name);
         for (int i = 0; i < NumLevels; i++)
         {
             if (i < NumLevels - 1)
