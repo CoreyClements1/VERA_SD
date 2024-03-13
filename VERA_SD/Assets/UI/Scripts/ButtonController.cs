@@ -65,45 +65,47 @@ public class ButtonController : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy)
         {return;}
-        if(context.performed){
+        // if(context.performed){
         resetColors();
         buttons[0].onClick.Invoke();
         FadeToColor(buttons[0].colors.pressedColor, buttons[0]);
-        }
+        // }
     }
     private void two(InputAction.CallbackContext context)
     {
         if (!gameObject.activeInHierarchy)
         {return;}
-        if(context.performed){
+        // if(context.performed){
         resetColors();
         buttons[1].onClick.Invoke();
         FadeToColor(buttons[1].colors.pressedColor, buttons[1]);
-        }
+        // }
     }
     private void three(InputAction.CallbackContext context)
     {
         if (!gameObject.activeInHierarchy)
         {return;}
-        if(context.performed){
+        // if(context.performed){
         resetColors();
         buttons[2].onClick.Invoke();
         FadeToColor(buttons[2].colors.pressedColor, buttons[2]);
-        }
+        // }
     }
     private void four(InputAction.CallbackContext context)
     {
         if (!gameObject.activeInHierarchy)
         {return;}
-        if(context.performed){
+        // if(context.performed){
         resetColors();
         buttons[3].onClick.Invoke();
         FadeToColor(buttons[3].colors.pressedColor, buttons[3]);
-        }
+        // }
     }
 
     // 2 input system
     private void down(InputAction.CallbackContext context){
+        if (!gameObject.activeInHierarchy)
+        {return;}
         resetHighlight();
         active++;
         if(active == buttons.Count){
