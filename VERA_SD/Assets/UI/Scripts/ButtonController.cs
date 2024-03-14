@@ -9,10 +9,12 @@ using System.Linq;
 public class ButtonController : MonoBehaviour
 {
     private List<Button> buttons;
-    public List<InputActionReference> keyActions; // Array of InputActionReferences
+     List<InputActionReference> keyActions; // Array of InputActionReferences
+     List<InputActionReference> keyActionsAlt; 
     public GameObject options;
     private UIOptions settings;
     bool twoInputs;
+    bool tree;
     int active;
     Color twoInputHighlight;
 
@@ -21,7 +23,7 @@ public class ButtonController : MonoBehaviour
         if(twoInputs){
             twoInputsEnable();
         }else{
-            fourInputEnable();
+           fourInputEnable();
         }
         
     }
@@ -39,15 +41,22 @@ public class ButtonController : MonoBehaviour
     {
         active = 0;
         settings = options.GetComponent<UIOptions>();
-        keyActions = new List<InputActionReference>(); // Assuming max of 4 buttons
+        keyActions = new List<InputActionReference>(); 
+        keyActionsAlt = new List<InputActionReference>(); 
         twoInputs = settings.twoInputs;
+        tree = settings.tree;
         twoInputHighlight = settings.twoInputHighlight;
-        // Assign actions from UIOptions (modify as needed)
         keyActions.Add(settings.key1);
         keyActions.Add(settings.key2);
+
+        keyActionsAlt.Add(settings.key1Alt);
+        keyActionsAlt.Add(settings.key2Alt);
         if(!twoInputs){
                 keyActions.Add(settings.key3);
                 keyActions.Add(settings.key4);
+
+                keyActionsAlt.Add(settings.key3Alt);
+                keyActionsAlt.Add(settings.key4Alt);
         }
 
         buttons = new List<Button>();
@@ -63,39 +72,107 @@ public class ButtonController : MonoBehaviour
     // 4 inputs setup
     private void one(InputAction.CallbackContext context)
     {
+        
         if (!gameObject.activeInHierarchy)
         {return;}
+        Debug.Log("1" + buttons[0].transform.name);
+        // if(tree){
+        //     stall(buttons[0].transform.parent.gameObject);
+        // }
         // if(context.performed){
         resetColors();
         buttons[0].onClick.Invoke();
         FadeToColor(buttons[0].colors.pressedColor, buttons[0]);
         // }
     }
+    private void oneAlt(InputAction.CallbackContext context)
+    {
+        
+        if (!gameObject.activeInHierarchy)
+        {return;}
+        Debug.Log("1 Alt " + buttons[0].transform.name);
+        // if(tree){
+        //     stall(buttons[0].transform.parent.gameObject);
+        // }
+        // if(context.performed){
+        resetColors();
+        buttons[0].onClick.Invoke();
+        FadeToColor(buttons[0].colors.pressedColor, buttons[0]);
+        // }
+    }
+
     private void two(InputAction.CallbackContext context)
     {
         if (!gameObject.activeInHierarchy)
         {return;}
         // if(context.performed){
         resetColors();
+        Debug.Log("2" + buttons[1].transform.name);
         buttons[1].onClick.Invoke();
         FadeToColor(buttons[1].colors.pressedColor, buttons[1]);
         // }
     }
+    private void twoAlt(InputAction.CallbackContext context)
+    {
+        if (!gameObject.activeInHierarchy)
+        {return;}
+        // if(context.performed){
+        resetColors();
+        Debug.Log("2 Alt" + buttons[1].transform.name);
+        buttons[1].onClick.Invoke();
+        FadeToColor(buttons[1].colors.pressedColor, buttons[1]);
+        // }
+    }
+
     private void three(InputAction.CallbackContext context)
     {
         if (!gameObject.activeInHierarchy)
         {return;}
+        Debug.Log("3 "+ buttons[2].transform.name);
+         Debug.Log(buttons[2].transform.gameObject.GetComponent<ButtonData>().levelSwitch + buttons[2].transform.parent.name);
+        // if(context.performed){
+            if(tree){
+                stall(buttons[2].transform.parent.gameObject);
+            }
+        resetColors();
+        buttons[2].onClick.Invoke();
+        FadeToColor(buttons[2].colors.pressedColor, buttons[2]);
+        // }
+    }
+     private void threeAlt(InputAction.CallbackContext context)
+    {
+        if (!gameObject.activeInHierarchy)
+        {return;}
+        Debug.Log("3 Alt "+ buttons[2].transform.name);
+       if(tree){
+                stall(buttons[2].transform.parent.gameObject);
+            }
         // if(context.performed){
         resetColors();
         buttons[2].onClick.Invoke();
         FadeToColor(buttons[2].colors.pressedColor, buttons[2]);
         // }
     }
+
     private void four(InputAction.CallbackContext context)
     {
+        
         if (!gameObject.activeInHierarchy)
         {return;}
         // if(context.performed){
+        Debug.Log("4 Alt "+ buttons[3].transform.name);
+        resetColors();
+        buttons[3].onClick.Invoke();
+        FadeToColor(buttons[3].colors.pressedColor, buttons[3]);
+        // }
+    }
+    private void fourAlt(InputAction.CallbackContext context)
+    {
+        
+        if (!gameObject.activeInHierarchy)
+        {return;}
+        // if(context.performed){
+        Debug.Log("4 Alt "+ buttons[3].transform.name);
         resetColors();
         buttons[3].onClick.Invoke();
         FadeToColor(buttons[3].colors.pressedColor, buttons[3]);
@@ -115,12 +192,13 @@ public class ButtonController : MonoBehaviour
     }
     private void enter(InputAction.CallbackContext context)
     {
+        
         if (!gameObject.activeInHierarchy)
         {return;}
+        Debug.Log("Enter"+ buttons[active].transform.name+ active);
         buttons[active].onClick.Invoke();
         FadeToColor(buttons[active].colors.normalColor, buttons[active]);
     }
-    
     // color stuff
     void FadeToColor(Color color, Button btn)
     {
@@ -143,46 +221,91 @@ public class ButtonController : MonoBehaviour
     }
     
     void fourInputEnable(){
+        Debug.Log(gameObject.transform.name+" enabled");
         keyActions =keyActions.Take(buttons.Count).ToList();
+        keyActionsAlt =keyActionsAlt.Take(buttons.Count).ToList();
         // Enable all actions
         for (int i = 0; i < keyActions.Count; i++)
         {
             keyActions[i].action.Enable();
+            keyActionsAlt[i].action.Enable();
         }
 
         // Subscribe to each action event
         for (int i = 0; i < keyActions.Count; i++)
         {
             if(i == 0){
-                keyActions[i].action.performed += context => one(context);
+                if(buttons[i].gameObject.GetComponent<ButtonData>().levelSwitch){
+                    keyActionsAlt[i].action.performed += context => oneAlt(context);
+                }
+                else{
+                    keyActions[i].action.performed += context => one(context);
+                }
             }
             else if(i == 1){
-                 keyActions[i].action.performed += context => two(context);
+                 if(buttons[i].gameObject.GetComponent<ButtonData>().levelSwitch){
+                    keyActionsAlt[i].action.performed += context => twoAlt(context);
+                }
+                else{
+                    keyActions[i].action.performed += context => two(context);
+                }
             }
             else if(i == 2){
-                 keyActions[i].action.performed += context => three(context);
+                 if(buttons[i].gameObject.GetComponent<ButtonData>().levelSwitch){
+                    keyActionsAlt[i].action.performed += context => threeAlt(context);
+                }
+                else{
+                    keyActions[i].action.performed += context => three(context);
+                }
             }
             else  if(i == 3){
-                keyActions[i].action.performed += context => four(context);
+                if(buttons[i].gameObject.GetComponent<ButtonData>().levelSwitch){
+                    keyActionsAlt[i].action.performed += context => fourAlt(context);
+                }
+                else{
+                    keyActions[i].action.performed += context => four(context);
+                }
             }
             
         }
     }
     void fourInputDisable(){
-         for (int i = 0; i < keyActions.Count; i++)
+        // Debug.Log(gameObject.transform.name+" disabled");
+        for (int i = 0; i < keyActions.Count; i++)
         {
-                if(i == 0){
+            if(i == 0){
+                if(buttons[i].gameObject.GetComponent<ButtonData>().levelSwitch){
+                    keyActionsAlt[i].action.performed -= oneAlt;
+                }
+                else{
                     keyActions[i].action.performed -= one;
                 }
-                else if(i == 1){
-                        keyActions[i].action.performed -=two;
+            }
+            else if(i == 1){
+                 if(buttons[i].gameObject.GetComponent<ButtonData>().levelSwitch){
+                    keyActionsAlt[i].action.performed -= twoAlt;
                 }
-                else if(i == 2){
-                        keyActions[i].action.performed -= three;
+                else{
+                    keyActions[i].action.performed -= two;
                 }
-                else  if(i == 3){
-                    keyActions[i].action.performed -=four;
+            }
+            else if(i == 2){
+                 if(buttons[i].gameObject.GetComponent<ButtonData>().levelSwitch){
+                    keyActionsAlt[i].action.performed -= threeAlt;
                 }
+                else{
+                    keyActions[i].action.performed -= three;
+                }
+            }
+            else  if(i == 3){
+                if(buttons[i].gameObject.GetComponent<ButtonData>().levelSwitch){
+                    keyActionsAlt[i].action.performed -= fourAlt;
+                }
+                else{
+                    keyActions[i].action.performed -= four;
+                }
+            }
+            
         }
     }
 
@@ -215,6 +338,42 @@ public class ButtonController : MonoBehaviour
                 
         }
     }
+    public static void stall(GameObject go)
+    {
+        // Debug.Log(go.transform.name+" Stall");
+        // Check if the GameObject has a parent
+        if (go.transform.parent == null)
+        {
+            Debug.LogWarning("GameObject has no parent, cannot check sibling count.");
+            return;
+        }
+
+        // Loop until the GameObject is the only active child
+        int activeSiblings = 0;
+        foreach (Transform child in go.transform.parent)
+        {
+            if (child.gameObject != go && child.gameObject.activeInHierarchy)
+            {
+                activeSiblings++;
+                break; // Exit loop if another active sibling is found
+            }
+        }
+
+        if (activeSiblings > 0)
+        {
+            // Recheck active sibling count in each loop iteration
+            activeSiblings = 0;
+            foreach (Transform child in go.transform.parent)
+            {
+                if (child.gameObject != go && child.gameObject.activeInHierarchy)
+                {
+                    activeSiblings++;
+                    break; // Exit loop if another active sibling is found
+                }
+            }
+        }
+    }
+
 
     
 }

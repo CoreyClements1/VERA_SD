@@ -12,12 +12,16 @@ public class UIOptions : MonoBehaviour
    public Color secondaryColor;
    public Color twoInputHighlight;
    public GameObject tree;
-//    public GameObject tree4;
    public GameObject tab;
    public  InputActionReference key1;
    public InputActionReference key2;
    public InputActionReference key3;
    public InputActionReference key4;
+
+   public  InputActionReference key1Alt;
+   public InputActionReference key2Alt;
+   public InputActionReference key3Alt;
+   public InputActionReference key4Alt;
 
 
     void Awake()
