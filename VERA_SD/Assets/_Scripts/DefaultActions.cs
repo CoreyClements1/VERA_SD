@@ -163,7 +163,7 @@ public class DefaultActions : MonoBehaviour
 
     //OpenAndClose
     //--------------------------------------//
-    public void OpenAndClose()//<----------------------------------------------------------------------
+    public void OpenAndClose()
     //--------------------------------------//
     {
         // If the door has 3 positions (open, close, neutral; has a max and min which are not 0)...

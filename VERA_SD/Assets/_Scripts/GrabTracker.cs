@@ -28,7 +28,7 @@ public class GrabTracker : MonoBehaviour
     void Start()
     //--------------------------------------//
     {
-        arrow = GameObject.Find("ArrowUIPoint");
+        arrow = GameObject.Find("Arrow");
         if (arrow == null)
             Debug.LogError("Arrow UI object not found!");
         else

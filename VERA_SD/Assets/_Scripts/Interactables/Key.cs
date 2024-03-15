@@ -78,7 +78,7 @@ public class Key : MonoBehaviour
 
     // Unlocks door by allowing joint movement
     //--------------------------------------//
-    private void Unlock()
+    public void Unlock()
     //--------------------------------------//
     {
         doorGrabInteractable1.enabled = true;
