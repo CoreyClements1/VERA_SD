@@ -22,11 +22,10 @@ public class CannonFireHandler : MonoBehaviour
 
     // OnTriggerEnter, fire a cannonball
     //--------------------------------------//
-    private void OnTriggerEnter(Collider other)
+    public void OnSelect()
     //--------------------------------------//
     {
-        if (other.CompareTag("Player"))
-            cannonInteractable.FireCannonball();
+        cannonInteractable.FireCannonball();
 
     } // END OnTriggerEnter
 
