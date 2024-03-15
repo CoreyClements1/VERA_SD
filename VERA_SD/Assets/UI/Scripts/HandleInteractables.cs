@@ -17,6 +17,7 @@ public class HandleInteractables : MonoBehaviour
 
     // For Instantiating UI 
     public GameObject original;
+    public GameObject originalNotLast;
     public GameObject original2;
     public GameObject original1;
     public GameObject parent;
@@ -43,12 +44,12 @@ public class HandleInteractables : MonoBehaviour
         //number of levels
         int NumLevels = size / 2;
         List<GameObject> Levels = new List<GameObject>();
-        Debug.Log(size.ToString() + " " + NumLevels.ToString() + " " + Interactable.name);
+        // Debug.Log(size.ToString() + " " + NumLevels.ToString() + " " + Interactable.name);
         for (int i = 0; i < NumLevels; i++)
         {
             if (i < NumLevels - 1)
             {
-                GameObject obj = Instantiate(original, parent.GetComponent<Transform>());
+                GameObject obj = Instantiate(originalNotLast, parent.GetComponent<Transform>());
                 obj.name = Interactable.name + (i + 1).ToString();
                 Levels.Add(obj);
             }
@@ -57,7 +58,7 @@ public class HandleInteractables : MonoBehaviour
                 GameObject obj = Instantiate(original, parent.GetComponent<Transform>());
                 obj.name = Interactable.name + (i + 1).ToString();
                 Levels.Add(obj);
-                Debug.Log("Check 3");
+                // Debug.Log("Check 3");
 
             }
             else if (((NumLevels - 1) * 2) + 2 == size)
@@ -66,7 +67,7 @@ public class HandleInteractables : MonoBehaviour
                 obj.name = Interactable.name + (i + 1).ToString();
                 obj.transform.localScale = new Vector3(1f, 1f, 1f);
                 Levels.Add(obj);
-                Debug.Log("Check 2");
+                // Debug.Log("Check 2");
 
             }
             else if (((NumLevels - 1) * 2) + 1 == size)
@@ -75,11 +76,11 @@ public class HandleInteractables : MonoBehaviour
                 obj.name = Interactable.name + (i + 1).ToString();
                 obj.transform.localScale = new Vector3(1f, 1f, 1f);
                 Levels.Add(obj);
-                Debug.Log("Check 1");
+                // Debug.Log("Check 1");
             }
 
         }
-        Debug.Log(Levels.Count);
+        // Debug.Log(Levels.Count);
 
         return Levels;
     }
@@ -125,8 +126,10 @@ public class HandleInteractables : MonoBehaviour
                     // More options button
                     else
                     {
+                        btn.gameObject.GetComponent<ButtonData>().levelSwitch=true;
                         txt.text = "More Actions";
-                        btn.onClick.AddListener(() => nextLevel(current, next));
+                        // btn.onClick.AddListener(() => nextLevel(current, next));
+                        nextLevel(current, next, btn);
                     }
                 }
                 // Final Level
@@ -173,10 +176,10 @@ public class HandleInteractables : MonoBehaviour
         previous.SetActive(true);
     }
 
-    void nextLevel(GameObject current, GameObject next)
+    void nextLevel(GameObject current, GameObject next, Button b)
     {
-        current.SetActive(false);
-        next.SetActive(true);
+        b.onClick.AddListener(()=>current.SetActive(false));
+        b.onClick.AddListener(()=>next.SetActive(true));
 
     }
 
@@ -184,7 +187,10 @@ public class HandleInteractables : MonoBehaviour
     {
         string tmp = "" + selectionController.currentObj + "1";
         selectBttn.onClick.RemoveAllListeners();
-        selectBttn.onClick.AddListener(() => nextLevel(InteractionMainMenu, parent.transform.Find(tmp).gameObject));
+        nextLevel(InteractionMainMenu, parent.transform.Find(tmp).gameObject, selectBttn);
+        // selectBttn.onClick.AddListener(() => nextLevel(InteractionMainMenu, parent.transform.Find(tmp).gameObject));
+        // selectBttn.onClick.AddListener(() =>  InteractionMainMenu.SetActive(true));
+        // selectBttn.onClick.AddListener(() =>  parent.transform.Find(tmp).gameObject.SetActive(true));
     }
     public void RemoveListeners()
     {
