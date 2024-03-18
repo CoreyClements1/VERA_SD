@@ -13,25 +13,32 @@ public class SelectionController : MonoBehaviour
 {
 
     #region VARIABLES
-
-
     private List<GameObject> interactables = new List<GameObject>();
     private int counter = 0;
-    [SerializeField] HandleInteractables treeBase;
+    private HandleInteractables treeBase;
     private GameObject previousObj;
     private Outline outline;
     private GameObject lookTarget;
-    public string currentObj;
     private bool manualHighlightCancel = false;
     private GrabTracker grabTracker;
 
+    [Header("Object Selection")]
+    [Tooltip("The main camera as well as the point where all distance calculations are made")]
+    [SerializeField] Camera playerCam; // The point where all distance calculations are made
+    [Tooltip("Holds the name of the currently selected object")]
+    public string currentObj;
+    [Tooltip("The distance from the main camera for which the player is able to select objects")]
     [SerializeField] float selectRadius;
-    [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
+    [Header("Object Outlining")]
     [SerializeField] Color outlineColor;
     [SerializeField] float outlineWidth = 5f;
     [SerializeField] float highlightDuration = 3f;
+    [Header("Visual Aid")]
+    [Tooltip("Reference to game object that would point towards a selected object")]
     [SerializeField] GameObject Arrow;
+    [Tooltip("Reference to a TMPro text object that would communicate whether or not the selected object is currently in frame")]
     [SerializeField] TextMeshPro Text;
+    [Tooltip("Enables the use of the fading camera select feature")]
     [SerializeField] bool useCameraSelect = false;
 
     private GameObject interactSub;
@@ -41,18 +48,31 @@ public class SelectionController : MonoBehaviour
 
 
     #region MONOBEHAVIOUR
-    void Awake()
-    {
-        interactSub = GameObject.Find("Interact Sub");
-        Debug.Log(interactSub);
-
-    }
-
     // Start
     //--------------------------------------//
     private void Start()
     //--------------------------------------//
     {
+        interactSub = GameObject.Find("Interact Sub");
+        if (playerCam == null)
+        {
+            Debug.LogError("(SelectionController) interactSub is not assigned or not found.");
+        }
+        else
+        {
+            Debug.Log("(SelectionController) interactSub found.");
+        }
+
+        playerCam = Camera.main;
+        if (playerCam == null)
+        {
+            Debug.LogError("(SelectionController) playerCam is not assigned or not found.");
+        }
+        else
+        {
+            Debug.Log("(SelectionController) playerCam found.");
+        }
+
         grabTracker = FindObjectOfType<GrabTracker>();
         if (grabTracker == null)
         {
@@ -61,6 +81,16 @@ public class SelectionController : MonoBehaviour
         else
         {
             // Debug.Log("GrabTracker found.");
+        }
+
+        treeBase = FindObjectOfType<HandleInteractables>();
+        if (treeBase == null)
+        {
+            Debug.LogError("(SelectionController) treeBase is not assigned or not found.");
+        }
+        else
+        {
+            Debug.Log("(SelectionController) treeBase found.");
         }
     } // END Start
 
