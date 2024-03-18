@@ -15,14 +15,19 @@ public class MovementController : MonoBehaviour
 
 
     #region VARIABLES
+
     CharacterController _characterController = null;
+    [Header("XR Rig")]
+    [Tooltip("Reference to the XR Rig's Transform")]
     [SerializeField] Transform Rig;
+    [Tooltip("Reference to the Camera's Transform")]
     [SerializeField] Transform Camera;
     
     Vector3 _userMoveInput = Vector3.zero;
     Vector3 _userLookInput = Vector3.zero;
 
     [Header("Movement")]
+    [Tooltip("Reference to the GameObject where the Input Action Manager and/or Inputs are defined")]
     [SerializeField] MovementInput _input;
 
     [SerializeField] public float speed = 1f;
@@ -32,12 +37,20 @@ public class MovementController : MonoBehaviour
     [SerializeField] public float turnCooldown = 1.0f;
     float lastPressTime = 0f;
     // determines which level of accessibity the user is on
+    [Tooltip("Determines which level of accessibility the user is on")]
     [SerializeField] public int currentLvl = 1;
     #endregion
 
     #region START
     void Start()
     {
+        if (!Rig)
+            Debug.LogError("MovementController does not have reference for Rig <XR Origin Hands (XR Rig)>");
+        if (!Camera)
+            Debug.LogError("MovementController does not have reference for Camera");
+        if (!_input)
+            Debug.LogError("MovementController does not have reference for the Input Actions");
+        
         _characterController = GetComponent<CharacterController>();
     }
     #endregion
