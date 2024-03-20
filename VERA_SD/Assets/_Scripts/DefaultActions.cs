@@ -18,6 +18,12 @@ public class DefaultActions : MonoBehaviour
     private bool startP;
     private bool gReverse;
     private Vector3 currentThrowDirection;
+    [SerializeField][Range(0, 90)] private float throwAngleChange = 10;
+    [SerializeField][Range(0, 90)] private float throwForce = 10;
+    private float radians;
+
+
+
 
 
     #endregion
@@ -35,6 +41,7 @@ public class DefaultActions : MonoBehaviour
         reverse = false;//<----------------------------------------------------------------------
         startP = true;
         gReverse = false;
+        radians = throwAngleChange * Mathf.PI / 180;
         grabHandler = FindObjectOfType<GrabTracker>();
         gJoint = GetComponent<ConfigurableJoint>();
         currentThrowDirection = Camera.main.transform.forward;
@@ -153,7 +160,7 @@ public class DefaultActions : MonoBehaviour
                 rb.interpolation = grabHandler.GetInterpolation();
                 //Force acted in the direction the user is looking
                 // Vector3 throwDirection = Camera.main.transform.forward;
-                rb.AddForce(currentThrowDirection * 10f, ForceMode.Impulse);
+                rb.AddForce(currentThrowDirection * throwForce, ForceMode.Impulse);
                 // DisplayTrajectory.Instance.hideLine();
             }
             grabHandler.SetGrabbedObject(null);
@@ -166,7 +173,7 @@ public class DefaultActions : MonoBehaviour
         //show tragectory line with regular force
         currentThrowDirection = Camera.main.transform.forward;
 
-        Vector3 forceDirection = currentThrowDirection * 10f;
+        Vector3 forceDirection = currentThrowDirection * throwForce;
         Debug.Log(currentThrowDirection);
         Debug.Log(currentThrowDirection.normalized);
         GameObject obj = grabHandler.GetGrabbedObject();
@@ -179,14 +186,14 @@ public class DefaultActions : MonoBehaviour
         //move tragectory line up n units
         if (currentThrowDirection == -Camera.main.transform.up)
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, -0.349066f, 0.0f);
+            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, -radians, 0.0f);
         }
         else
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, 0.349066f, 0.0f);
+            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, radians, 0.0f);
         }
         currentThrowDirection.Normalize();
-        Vector3 forceDirection = currentThrowDirection * 10f;
+        Vector3 forceDirection = currentThrowDirection * throwForce;
         GameObject obj = grabHandler.GetGrabbedObject();
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
@@ -197,14 +204,14 @@ public class DefaultActions : MonoBehaviour
         //move tragectory line down n units
         if (currentThrowDirection == Camera.main.transform.up)
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, -0.349066f, 0.0f);
+            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, -radians, 0.0f);
         }
         else
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, 0.349066f, 0.0f);
+            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, radians, 0.0f);
         }
         currentThrowDirection.Normalize();
-        Vector3 forceDirection = currentThrowDirection * 10f;
+        Vector3 forceDirection = currentThrowDirection * throwForce;
         GameObject obj = grabHandler.GetGrabbedObject();
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
@@ -215,14 +222,14 @@ public class DefaultActions : MonoBehaviour
         //move tragectory line left n units
         if (currentThrowDirection == Camera.main.transform.right)
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, -0.349066f, 0.0f);
+            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, -radians, 0.0f);
         }
         else
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, 0.349066f, 0.0f);
+            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, radians, 0.0f);
         }
         currentThrowDirection.Normalize();
-        Vector3 forceDirection = currentThrowDirection * 10f;
+        Vector3 forceDirection = currentThrowDirection * throwForce;
         GameObject obj = grabHandler.GetGrabbedObject();
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
@@ -233,14 +240,14 @@ public class DefaultActions : MonoBehaviour
         //move tragectory line right n units
         if (currentThrowDirection == -Camera.main.transform.right)
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, -0.349066f, 0.0f);
+            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, -radians, 0.0f);
         }
         else
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, 0.349066f, 0.0f);
+            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, radians, 0.0f);
         }
         currentThrowDirection.Normalize();
-        Vector3 forceDirection = currentThrowDirection * 10f;
+        Vector3 forceDirection = currentThrowDirection * throwForce;
         GameObject obj = grabHandler.GetGrabbedObject();
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);

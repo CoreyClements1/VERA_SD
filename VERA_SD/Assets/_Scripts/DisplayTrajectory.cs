@@ -6,7 +6,7 @@ public class DisplayTrajectory : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private LineRenderer _lineRenderer;
-    [SerializeField][Range(3, 30)] private int _lineSegmentCount = 30;
+    [SerializeField][Range(20, 100)] private int _lineSegmentCount = 100;
     private List<Vector3> _linePoints = new List<Vector3>();
     public static DisplayTrajectory Instance;
     private void Awake()
@@ -23,14 +23,7 @@ public class DisplayTrajectory : MonoBehaviour
     public void calculateLine(Vector3 forceVector, Rigidbody rigidBody, Vector3 startingPoint)
     {
         //Transform force to velocity vector
-        Vector3 velocity = (forceVector / rigidBody.mass) * Time.fixedDeltaTime;
-
-        // Debug.Log(forceVector);
-        // Debug.Log(rigidBody.mass);
-        // Debug.Log(Time.fixedDeltaTime);
-        // Debug.Log(startingPoint);
-        // Debug.Log(velocity);
-
+        // Vector3 velocity = (forceVector / rigidBody.mass) * Time.fixedDeltaTime;
 
         // Calculate flight duration
         float flightDuration = (2 * forceVector.magnitude) / Physics.gravity.y;
@@ -38,11 +31,10 @@ public class DisplayTrajectory : MonoBehaviour
         // Divide flight duration to step times
         float stepTime = flightDuration / _lineSegmentCount;
         // For each step time passed calculate the position of the object
-        // Debug.Log(flightDuration);
-        // Debug.Log(stepTime);
 
         _linePoints.Clear();
-        for (int i = 0; i < _lineSegmentCount; i++)
+        _linePoints.Add(startingPoint);
+        for (int i = 1; i < _lineSegmentCount; i++)
         {
             float stepTimePassed = stepTime * i;
             Vector3 movementVector = new Vector3(
@@ -51,8 +43,14 @@ public class DisplayTrajectory : MonoBehaviour
                 forceVector.z * stepTimePassed
             );
             // Debug.Log(movementVector);
-
-            _linePoints.Add(-movementVector + startingPoint);
+            Vector3 newPoint = -movementVector + startingPoint;
+            RaycastHit hit;
+            if (Physics.Raycast(_linePoints[i - 1], newPoint - _linePoints[i - 1], out hit, (newPoint - _linePoints[i - 1]).magnitude))
+            {
+                _linePoints.Add(hit.point);
+                break;
+            }
+            _linePoints.Add(newPoint);
         }
         // Compose the line renderer using the positions
         _lineRenderer.positionCount = _linePoints.Count;
