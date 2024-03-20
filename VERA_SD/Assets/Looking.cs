@@ -51,23 +51,27 @@ public class Looking : MonoBehaviour
     }
     public void LookDown()
     {
+        //Comments below are for logic of the throwing rotation stuff
+        //CURRENT>-90
         if ((transform.rotation.eulerAngles.x % 360) < downAngle || (transform.rotation.eulerAngles.x % 360) >= upAngle)
         {
-            if (transform.rotation.eulerAngles.x == upAngle)
+            if (transform.rotation.eulerAngles.x == upAngle)//IF CURRENT == 90;
             {
-                transform.Rotate(adjustedSpeed, 0f, 0f, Space.Self);
+                transform.Rotate(adjustedSpeed, 0f, 0f, Space.Self);//ROTATE DOWN FROM ADJUSTED WITH -RADIANS
             }
-            else
+            else//IF CURRENT DOES NOT == 90
             {
-                if ((transform.rotation.eulerAngles.x % 360 + speed) > downAngle && (transform.rotation.eulerAngles.x % 360 + speed) < upAngle)
+                if ((transform.rotation.eulerAngles.x % 360 + speed) > downAngle && (transform.rotation.eulerAngles.x % 360 + speed) < upAngle)//IF CURRENT-20 <-90
                 {
-                    adjustedSpeed = downAngle - (transform.rotation.eulerAngles.x);
+                    adjustedSpeed = downAngle - (transform.rotation.eulerAngles.x);//90+CURRENT(NEGATIVE);
+                    //ANGLE = -90;
                 }
-                else
+                else//IF CURRENT-20!<-90
                 {
-                    adjustedSpeed = speed;
+                    adjustedSpeed = speed;//CURRENT = THROWANGLECHANGE
+                    //ANGLE-=THROWCHANGE;
                 }
-                transform.Rotate(adjustedSpeed, 0f, 0f, Space.Self);
+                transform.Rotate(adjustedSpeed, 0f, 0f, Space.Self);//ROTATE REGULAR
             }
         }
     }

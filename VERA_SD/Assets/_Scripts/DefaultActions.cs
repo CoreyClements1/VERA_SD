@@ -21,6 +21,13 @@ public class DefaultActions : MonoBehaviour
     [SerializeField][Range(0, 90)] private float throwAngleChange = 10;
     [SerializeField][Range(0, 90)] private float throwForce = 10;
     private float radians;
+    private float newVertChange;
+    private float vertRadians;
+    private float verticleAngle;
+    private float newHorzChange;
+    private float horzRadians;
+    private float horizontalAngle;
+
 
 
 
@@ -44,6 +51,12 @@ public class DefaultActions : MonoBehaviour
         radians = throwAngleChange * Mathf.PI / 180;
         grabHandler = FindObjectOfType<GrabTracker>();
         gJoint = GetComponent<ConfigurableJoint>();
+        vertRadians = radians;
+        verticleAngle = 0;
+        newVertChange = throwAngleChange;
+        horzRadians = radians;
+        horizontalAngle = 0;
+        newHorzChange = throwAngleChange;
         currentThrowDirection = Camera.main.transform.forward;
         if (grabHandler == null)
         {
@@ -172,7 +185,12 @@ public class DefaultActions : MonoBehaviour
     {
         //show tragectory line with regular force
         currentThrowDirection = Camera.main.transform.forward;
-
+        vertRadians = radians;
+        verticleAngle = 0;
+        newVertChange = throwAngleChange;
+        horzRadians = radians;
+        horizontalAngle = 0;
+        newHorzChange = throwAngleChange;
         Vector3 forceDirection = currentThrowDirection * throwForce;
         Debug.Log(currentThrowDirection);
         Debug.Log(currentThrowDirection.normalized);
@@ -184,13 +202,37 @@ public class DefaultActions : MonoBehaviour
     public void aimUp()
     {
         //move tragectory line up n units
-        if (currentThrowDirection == -Camera.main.transform.up)
+        if (verticleAngle < 90)
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, -radians, 0.0f);
-        }
-        else
-        {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, radians, 0.0f);
+            if (verticleAngle == -90)
+            {
+                if (currentThrowDirection == -Camera.main.transform.up)
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, -vertRadians, 0.0f);
+                }
+                else
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, vertRadians, 0.0f);
+                }
+                verticleAngle += newVertChange;
+            }
+            else
+            {
+                if (verticleAngle + throwAngleChange > 90)
+                {
+                    newVertChange = 90 - verticleAngle;
+                    vertRadians = newVertChange * Mathf.PI / 180;
+                    verticleAngle = 90;
+                }
+                else
+                {
+                    vertRadians = throwAngleChange * Mathf.PI / 180;
+                    verticleAngle += throwAngleChange;
+                    newVertChange = throwAngleChange;
+                }
+                Debug.Log(vertRadians);
+                currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, vertRadians, 0.0f);
+            }
         }
         currentThrowDirection.Normalize();
         Vector3 forceDirection = currentThrowDirection * throwForce;
@@ -202,31 +244,38 @@ public class DefaultActions : MonoBehaviour
     public void aimDown()
     {
         //move tragectory line down n units
-        if (currentThrowDirection == Camera.main.transform.up)
+        //IF CURRENTDIRECTION == UP DIRECTION ROTATE NEGATIVE FROM RADIANS
+        if (verticleAngle > -90)
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, -radians, 0.0f);
-        }
-        else
-        {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, radians, 0.0f);
-        }
-        currentThrowDirection.Normalize();
-        Vector3 forceDirection = currentThrowDirection * throwForce;
-        GameObject obj = grabHandler.GetGrabbedObject();
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
-        //update Trajectory line
-    }
-    public void aimLeft()
-    {
-        //move tragectory line left n units
-        if (currentThrowDirection == Camera.main.transform.right)
-        {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, -radians, 0.0f);
-        }
-        else
-        {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, radians, 0.0f);
+            if (verticleAngle == 90)
+            {
+                if (currentThrowDirection == Camera.main.transform.up)
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, -vertRadians, 0.0f);
+                }
+                else
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, vertRadians, 0.0f);
+                }
+                verticleAngle -= newVertChange;
+            }
+            else
+            {
+                if (verticleAngle - throwAngleChange < -90)
+                {
+                    newVertChange = 90 + verticleAngle;
+                    vertRadians = newVertChange * Mathf.PI / 180;
+                    verticleAngle = -90;
+                }
+                else
+                {
+                    vertRadians = throwAngleChange * Mathf.PI / 180;
+                    verticleAngle -= throwAngleChange;
+                    newVertChange = throwAngleChange;
+                }
+                currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, vertRadians, 0.0f);
+            }
+
         }
         currentThrowDirection.Normalize();
         Vector3 forceDirection = currentThrowDirection * throwForce;
@@ -238,13 +287,36 @@ public class DefaultActions : MonoBehaviour
     public void aimRight()
     {
         //move tragectory line right n units
-        if (currentThrowDirection == -Camera.main.transform.right)
+        if (horizontalAngle < 90)
         {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, -radians, 0.0f);
-        }
-        else
-        {
-            currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, radians, 0.0f);
+            if (horizontalAngle == -90)
+            {
+                if (currentThrowDirection == -Camera.main.transform.right)
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, -horzRadians, 0.0f);
+                }
+                else
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, horzRadians, 0.0f);
+                }
+                horizontalAngle += newHorzChange;
+            }
+            else
+            {
+                if (horizontalAngle + throwAngleChange > 90)
+                {
+                    newHorzChange = 90 - horizontalAngle;
+                    horzRadians = newHorzChange * Mathf.PI / 180;
+                    horizontalAngle = 90;
+                }
+                else
+                {
+                    horzRadians = throwAngleChange * Mathf.PI / 180;
+                    horizontalAngle += throwAngleChange;
+                    newHorzChange = throwAngleChange;
+                }
+                currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, horzRadians, 0.0f);
+            }
         }
         currentThrowDirection.Normalize();
         Vector3 forceDirection = currentThrowDirection * throwForce;
@@ -253,6 +325,49 @@ public class DefaultActions : MonoBehaviour
         DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
         //update Trajectory line
     }
+    public void aimLeft()
+    {
+        //move tragectory line left n units
+        if (horizontalAngle > -90)
+        {
+            if (horizontalAngle == 90)
+            {
+                if (currentThrowDirection == Camera.main.transform.right)
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, -horzRadians, 0.0f);
+                }
+                else
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, horzRadians, 0.0f);
+                }
+                horizontalAngle -= newHorzChange;
+            }
+            else
+            {
+                if (horizontalAngle - throwAngleChange < -90)
+                {
+                    newHorzChange = 90 + horizontalAngle;
+                    horzRadians = newHorzChange * Mathf.PI / 180;
+                    horizontalAngle = -90;
+                }
+                else
+                {
+                    horzRadians = throwAngleChange * Mathf.PI / 180;
+                    horizontalAngle -= throwAngleChange;
+                    newHorzChange = throwAngleChange;
+                }
+                currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, horzRadians, 0.0f);
+            }
+
+        }
+        currentThrowDirection.Normalize();
+        Vector3 forceDirection = currentThrowDirection * throwForce;
+        GameObject obj = grabHandler.GetGrabbedObject();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
+        //update Trajectory line
+    }
+
 
     //back and throw will unshow tragectory line
 
