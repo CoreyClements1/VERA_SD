@@ -6,29 +6,13 @@ public class Looking : MonoBehaviour
 {
     // Start is called before the first frame update
     public float speed;
-    public float upAngle = 90;
-    public float downAngle = 90;
+    [SerializeField][Range(0, 90)] private float upAngle = 90;
+    [SerializeField][Range(0, 90)] private float downAngle = 90;
     private float adjustedSpeed;
     void Start()
     {
         adjustedSpeed = speed;
         upAngle = 360 - upAngle;
-        if (downAngle > 90)
-        {
-            downAngle = 90;
-        }
-        else if (downAngle < 0)
-        {
-            downAngle = 0;
-        }
-        if (upAngle < 270)
-        {
-            upAngle = 270;
-        }
-        else if (upAngle > 360)
-        {
-            upAngle = 360;
-        }
     }
     //if max or min is set greater than 90 then i believe it will break
     public void LookUp()
