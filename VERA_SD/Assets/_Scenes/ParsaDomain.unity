@@ -185,7 +185,6 @@ GameObject:
   - component: {fileID: 41326368}
   - component: {fileID: 41326367}
   - component: {fileID: 41326366}
-  - component: {fileID: 41326374}
   - component: {fileID: 41326373}
   - component: {fileID: 41326375}
   m_Layer: 0
@@ -470,6 +469,86 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - interactionName: AimUp
+    onTriggerInteraction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 41326375}
+          m_TargetAssemblyTypeName: DefaultActions, Assembly-CSharp
+          m_MethodName: aimUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Red
+            m_BoolArgument: 0
+          m_CallState: 2
+  - interactionName: AimDown
+    onTriggerInteraction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 41326375}
+          m_TargetAssemblyTypeName: DefaultActions, Assembly-CSharp
+          m_MethodName: aimDown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Blue
+            m_BoolArgument: 0
+          m_CallState: 2
+  - interactionName: AimLeft
+    onTriggerInteraction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 41326375}
+          m_TargetAssemblyTypeName: DefaultActions, Assembly-CSharp
+          m_MethodName: aimLeft
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Blue
+            m_BoolArgument: 0
+          m_CallState: 2
+  - interactionName: AimRight
+    onTriggerInteraction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 41326375}
+          m_TargetAssemblyTypeName: DefaultActions, Assembly-CSharp
+          m_MethodName: aimRight
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Blue
+            m_BoolArgument: 0
+          m_CallState: 2
+  - interactionName: AimThrow
+    onTriggerInteraction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 41326375}
+          m_TargetAssemblyTypeName: DefaultActions, Assembly-CSharp
+          m_MethodName: aimThrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Blue
+            m_BoolArgument: 0
+          m_CallState: 2
   - interactionName: Throw
     onTriggerInteraction:
       m_PersistentCalls:
@@ -483,69 +562,9 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Red
-            m_BoolArgument: 0
-          m_CallState: 2
-  - interactionName: Blue
-    onTriggerInteraction:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 41326374}
-          m_TargetAssemblyTypeName: ExampleInteractions, Assembly-CSharp
-          m_MethodName: ChangeColor
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
             m_StringArgument: Blue
             m_BoolArgument: 0
           m_CallState: 2
-  - interactionName: Grow
-    onTriggerInteraction:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 41326374}
-          m_TargetAssemblyTypeName: ExampleInteractions, Assembly-CSharp
-          m_MethodName: Grow
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - interactionName: Shrink
-    onTriggerInteraction:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 41326374}
-          m_TargetAssemblyTypeName: ExampleInteractions, Assembly-CSharp
-          m_MethodName: Shrink
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
---- !u!114 &41326374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 41326365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f042b5dbc2993d248a2011d61d325907, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &41326375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,10 +1473,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed5dca1788fdb7e49ae159e5647065b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 45
-  smooth: 0.2
-  minAngle: 90
-  maxAngle: -90
+  speed: 20
+  upAngle: 90
+  downAngle: 90
 --- !u!4 &717608676
 Transform:
   m_ObjectHideFlags: 0
@@ -2433,6 +2451,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1484173732}
   - component: {fileID: 1484173733}
+  - component: {fileID: 1484173734}
   m_Layer: 0
   m_Name: Interactables
   m_TagString: Untagged
@@ -2471,6 +2490,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabbedObject: {fileID: 0}
+--- !u!114 &1484173734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484173731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4aeca779d3dcc148a45d9c8b9cbb65a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lineRenderer: {fileID: 1838791119}
+  _lineSegmentCount: 30
 --- !u!1 &1654992724
 GameObject:
   m_ObjectHideFlags: 0
@@ -2545,6 +2578,144 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 9207063594578746536}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1838791118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1838791120}
+  - component: {fileID: 1838791119}
+  m_Layer: 0
+  m_Name: Line
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!120 &1838791119
+LineRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838791118}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Positions: []
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 0.12334536
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.99453735
+        value: 0.3619671
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: -Infinity
+        outSlope: -Infinity
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 0.17568529, g: 0.7924528, b: 0.21275616, a: 1}
+      key1: {r: 0.12332641, g: 0.8584906, b: 0.09313814, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_UseWorldSpace: 1
+  m_Loop: 0
+--- !u!4 &1838791120
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838791118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 38.676136, y: -20.332174, z: -11.499708}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2007385515 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5210274879282000926, guid: 73846f3ee3588234fac9c451e6fec7a8,
