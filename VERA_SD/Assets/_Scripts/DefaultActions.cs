@@ -9,7 +9,7 @@ public class DefaultActions : MonoBehaviour
     #region VARIABLES
 
 
-    [SerializeField] private GrabTracker grabHandler;
+    private GrabTracker grabHandler;
     [SerializeField] private bool swapDoorDirection;
     private bool isGrabbing = false;
     private Renderer rend;

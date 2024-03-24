@@ -15,15 +15,15 @@ public class MovementController : MonoBehaviour
 
 
     #region VARIABLES
-    CharacterController _characterController = null;
-    [SerializeField] Transform Rig;
-    [SerializeField] Transform Camera;
+    CharacterController _characterController;
+    private Transform xrRig;
+    private Transform mainCam;
     
     Vector3 _userMoveInput = Vector3.zero;
     Vector3 _userLookInput = Vector3.zero;
 
     [Header("Movement")]
-    [SerializeField] MovementInput _input;
+    MovementInput _input;
 
     [SerializeField] public float speed = 1f;
     [SerializeField] public float rotationValue = 15f;
@@ -32,13 +32,16 @@ public class MovementController : MonoBehaviour
     [SerializeField] public float turnCooldown = 1.0f;
     float lastPressTime = 0f;
     // determines which level of accessibity the user is on
-    [SerializeField] public int currentLvl = 1;
+    [System.NonSerialized] public int currentLvl = 1;
     #endregion
 
     #region START
     void Start()
     {
-        _characterController = GetComponent<CharacterController>();
+        _characterController = FindObjectOfType<CharacterController>();
+        _input = GetComponent<MovementInput>();
+        mainCam = Camera.main.transform;
+        xrRig = FindObjectOfType<XROrigin>().transform;
     }
     #endregion
 
@@ -140,7 +143,7 @@ public class MovementController : MonoBehaviour
 
     // Returns a value to be used to calculate the distance traveled for level 1 movement
     private Vector3 GetMoveInput(){
-        return Rig.transform.forward * speed;
+        return xrRig.transform.forward * speed;
     }
     // Returns a value to be used to turn the rig a set amount of degrees
     private Vector3 GetTurnLInput(){
@@ -157,13 +160,13 @@ public class MovementController : MonoBehaviour
     }
     // Rotates the rig based on if the rotation is left or right.
     private void UserLook(){
-        Rig.transform.eulerAngles = Rig.transform.eulerAngles + _userLookInput;
+        xrRig.transform.eulerAngles = xrRig.transform.eulerAngles + _userLookInput;
     }   
     // References the camera instead of the rig itself since vertical adjustsments caused the rig to 
     //      rotate instead of just the camera.
     private void UserLookVertical()
     {
-        Camera.transform.eulerAngles = Camera.transform.eulerAngles + _userLookInput;
+        mainCam.eulerAngles = mainCam.eulerAngles + _userLookInput;
     }
 
     // Translates user stick input into a vector value for movement

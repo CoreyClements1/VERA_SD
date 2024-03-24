@@ -10,26 +10,31 @@ public class Looking : MonoBehaviour
     public float smooth;
     public float minAngle = 90f;
     public float maxAngle = 90f;
+    private Transform mainCam;
+
     void Start()
     {
-
+        mainCam = Camera.main.transform;
     }
+
     public void LookUp()
     {
-        if (transform.rotation.eulerAngles.x % 360 <= 90 || transform.rotation.eulerAngles.x % 360 > 270)
+        if (Camera.main.transform.parent.rotation.eulerAngles.x % 360 <= 90 || Camera.main.transform.parent.rotation.eulerAngles.x % 360 > 270)
         {
-            transform.Rotate(-speed, 0f, 0f, Space.Self);
+            Camera.main.transform.parent.Rotate(-speed, 0f, 0f, Space.Self);
         }
     }
+
     public void LookDown()
     {
-        if (transform.rotation.eulerAngles.x % 360 < 90 || transform.rotation.eulerAngles.x % 360 >= 270)
+        if (Camera.main.transform.parent.rotation.eulerAngles.x % 360 < 90 || Camera.main.transform.parent.rotation.eulerAngles.x % 360 >= 270)
         {
-            transform.Rotate(speed, 0f, 0f, Space.Self);
+            Camera.main.transform.parent.Rotate(speed, 0f, 0f, Space.Self);
         }
     }
+
     public void ResetAngle()
     {
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+        Camera.main.transform.parent.rotation = Quaternion.Euler(0, 0, 0);
     }
 }
