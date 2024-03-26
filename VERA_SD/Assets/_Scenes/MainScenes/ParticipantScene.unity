@@ -39735,6 +39735,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 868989127178209411, guid: ea67bb6d855a8f04ab81b28545d58333,
+        type: 3}
+      propertyPath: options
+      value: 
+      objectReference: {fileID: 868989127203088255}
     - target: {fileID: 868989127186275500, guid: ea67bb6d855a8f04ab81b28545d58333,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -39853,6 +39858,11 @@ PrefabInstance:
     - target: {fileID: 868989127288483142, guid: ea67bb6d855a8f04ab81b28545d58333,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 868989127315525638, guid: ea67bb6d855a8f04ab81b28545d58333,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 868989127320519094, guid: ea67bb6d855a8f04ab81b28545d58333,
@@ -40407,6 +40417,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea67bb6d855a8f04ab81b28545d58333, type: 3}
+--- !u!1 &868989127203088255 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 868989126059754548, guid: ea67bb6d855a8f04ab81b28545d58333,
+    type: 3}
+  m_PrefabInstance: {fileID: 868989127203088254}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1111349627921290572
 MonoBehaviour:
   m_ObjectHideFlags: 0
