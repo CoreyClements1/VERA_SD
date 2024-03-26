@@ -168,12 +168,12 @@ RectTransform:
   m_Children:
   - {fileID: 4160790021680583340}
   m_Father: {fileID: 2059218551247808739}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5964432543189412824
 CanvasRenderer:
@@ -430,7 +430,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4839511316775945973
 CanvasRenderer:
@@ -571,12 +571,12 @@ RectTransform:
   m_Children:
   - {fileID: 9154779219573869652}
   m_Father: {fileID: 2059218551247808739}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7898103981092494883
 CanvasRenderer:
@@ -807,9 +807,9 @@ GameObject:
   - component: {fileID: 3492619270934204332}
   - component: {fileID: 3260054648269423078}
   - component: {fileID: 2652815130493140075}
-  - component: {fileID: 4790028856878806649}
   - component: {fileID: 817696896926464221}
   - component: {fileID: 7689019559353433441}
+  - component: {fileID: 2746553412974072870}
   m_Layer: 0
   m_Name: Empty Sub-2
   m_TagString: Untagged
@@ -829,8 +829,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 2560258387812350273}
   - {fileID: 2558988737387222846}
+  - {fileID: 2560258387812350273}
   - {fileID: 4172910191620303004}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -883,7 +883,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &2652815130493140075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,30 +901,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4790028856878806649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7657277349912633782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 7
-  m_StartCorner: 1
-  m_StartAxis: 0
-  m_CellSize: {x: 100, y: 25}
-  m_Spacing: {x: 10, y: 10}
-  m_Constraint: 1
-  m_ConstraintCount: 3
 --- !u!114 &817696896926464221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -937,12 +913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e1b25c702490e84589ab0034fabf2f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons:
-  - {fileID: 484563122004983269}
-  - {fileID: 5064226585629682140}
-  - {fileID: 2944934573233971450}
-  keys: 310000003200000033000000
-  group: {fileID: 7657277349912633782}
+  options: {fileID: 0}
 --- !u!114 &7689019559353433441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -955,3 +926,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c5819acf0ed2f241850a5a2cc19c43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2746553412974072870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7657277349912633782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 7
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0

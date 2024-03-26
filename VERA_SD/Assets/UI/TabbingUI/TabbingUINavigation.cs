@@ -17,7 +17,7 @@ public class TabbingUINavigation : MonoBehaviour
     int activePanel;
     int active;
     List<GameObject> buttons;
-    bool inSub;
+    // bool inSub;
 
     // Interacatables stuff 
     [SerializeField] SelectionController selectionController;
@@ -29,8 +29,11 @@ public class TabbingUINavigation : MonoBehaviour
     public GameObject select;
     Button selectBttn;
     public  GameObject buttonPrefab;
+    public GameObject options;
+    private UIOptions settings;
 
     void Awake(){
+        settings = options.GetComponent<UIOptions>();
         panelGroup = gameObject.transform.Find("Panels").gameObject;
         interactionPanel = panelGroup.transform.Find("Interactables").gameObject;
         InteractableList= interactionPanel.transform.Find("InteractableList").gameObject;
@@ -50,7 +53,7 @@ public class TabbingUINavigation : MonoBehaviour
     void Start()
     {
         activePanel = 0;
-        inSub = false;
+        // inSub = false;
         panels = new List<GameObject>();
         buttons = new List<GameObject>();
         for (int i = 0; i < panelGroup.transform.childCount; i++)
@@ -67,7 +70,7 @@ public class TabbingUINavigation : MonoBehaviour
     {
         for(int i = 0; i < panels.Count; i++){
             if(i == activePanel){
-                colorSwitch(Color.red, panels[i]);
+                colorSwitch(settings.primaryColor, panels[i]);
                 // Debug.Log(UIElements[i].transform.name);
             }
             if(i != activePanel){
@@ -76,7 +79,7 @@ public class TabbingUINavigation : MonoBehaviour
         }
         for(int i = 0; i < buttons.Count; i++){
             if(i == active){
-                colorSwitch(Color.cyan, buttons[i]);
+                colorSwitch(settings.secondaryColor, buttons[i]);
                 // Debug.Log(UIElements[i].transform.name);
             }
             if(i != active){
