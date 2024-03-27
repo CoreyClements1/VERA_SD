@@ -43,6 +43,7 @@ public class TabbingUINavigation : MonoBehaviour
         {
             GameObject emptyMenu = new GameObject(interactable.name);
             setupMenu(emptyMenu);
+            emptyMenu.transform.position = new Vector3(0f,0f,0f);
             interactableMenus.Add(emptyMenu);
             SetupButtons(interactable,  emptyMenu);
         }
