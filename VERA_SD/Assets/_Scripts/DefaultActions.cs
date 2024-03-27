@@ -23,6 +23,21 @@ public class DefaultActions : MonoBehaviour
     private float newDistance = 0;
 
 
+    private Vector3 currentThrowDirection;
+    [SerializeField][Range(0, 90)] private float throwAngleChange = 10;
+    [SerializeField][Range(0, 90)] private float throwForce = 10;
+    private float radians;
+    private float newVertChange;
+    private float vertRadians;
+    private float verticleAngle;
+    private float newHorzChange;
+    private float horzRadians;
+    private float horizontalAngle;
+
+
+
+
+
 
     #endregion
 
@@ -40,7 +55,15 @@ public class DefaultActions : MonoBehaviour
         doorStartAngle = transform.rotation;
         startP = true;
         gReverse = false;
+        radians = throwAngleChange * Mathf.PI / 180;
         gJoint = GetComponent<ConfigurableJoint>();
+        vertRadians = radians;
+        verticleAngle = 0;
+        newVertChange = throwAngleChange;
+        horzRadians = radians;
+        horizontalAngle = 0;
+        newHorzChange = throwAngleChange;
+        currentThrowDirection = Camera.main.transform.forward;
         if (grabHandler == null)
         {
             // Debug.LogError("GrabTracker is not assigned or not found.");
@@ -125,7 +148,7 @@ public class DefaultActions : MonoBehaviour
             }
 
             // Adjust the offset as needed//
-            Vector3 offset = new Vector3(0.5f, 0.5f, 0.5f);
+            Vector3 offset = new Vector3(0.75f, 0.25f, 0.5f);
             Vector3 zero = Camera.main.ViewportToWorldPoint(Vector3.zero);
             Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
             //Checks if there is a collision between player and held object //to account for teleporting past a wall or something
@@ -153,13 +176,204 @@ public class DefaultActions : MonoBehaviour
                 rb.isKinematic = false;
                 rb.interpolation = grabHandler.GetInterpolation();
                 //Force acted in the direction the user is looking
-                Vector3 throwDirection = Camera.main.transform.forward;
-                rb.AddForce(throwDirection * 10f, ForceMode.Impulse);
+                // Vector3 throwDirection = Camera.main.transform.forward;
+                rb.AddForce(currentThrowDirection * throwForce, ForceMode.Impulse);
+                // DisplayTrajectory.Instance.hideLine();
             }
             grabHandler.SetGrabbedObject(null);
 
         }
     }//End Throw
+
+    public void aimThrow()
+    {
+        //show tragectory line with regular force
+        currentThrowDirection = Camera.main.transform.forward;
+        vertRadians = radians;
+        verticleAngle = 0;
+        newVertChange = throwAngleChange;
+        horzRadians = radians;
+        horizontalAngle = 0;
+        newHorzChange = throwAngleChange;
+        Vector3 forceDirection = currentThrowDirection * throwForce;
+        Debug.Log(currentThrowDirection);
+        Debug.Log(currentThrowDirection.normalized);
+        GameObject obj = grabHandler.GetGrabbedObject();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
+    }
+
+    public void aimUp()
+    {
+        //move tragectory line up n units
+        if (verticleAngle < 90)
+        {
+            if (verticleAngle == -90)
+            {
+                if (currentThrowDirection == -Camera.main.transform.up)
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, -vertRadians, 0.0f);
+                }
+                else
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, vertRadians, 0.0f);
+                }
+                verticleAngle += newVertChange;
+            }
+            else
+            {
+                if (verticleAngle + throwAngleChange > 90)
+                {
+                    newVertChange = 90 - verticleAngle;
+                    vertRadians = newVertChange * Mathf.PI / 180;
+                    verticleAngle = 90;
+                }
+                else
+                {
+                    vertRadians = throwAngleChange * Mathf.PI / 180;
+                    verticleAngle += throwAngleChange;
+                    newVertChange = throwAngleChange;
+                }
+                Debug.Log(vertRadians);
+                currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.up, vertRadians, 0.0f);
+            }
+        }
+        currentThrowDirection.Normalize();
+        Vector3 forceDirection = currentThrowDirection * throwForce;
+        GameObject obj = grabHandler.GetGrabbedObject();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
+        //update Trajectory line
+    }
+    public void aimDown()
+    {
+        //move tragectory line down n units
+        //IF CURRENTDIRECTION == UP DIRECTION ROTATE NEGATIVE FROM RADIANS
+        if (verticleAngle > -90)
+        {
+            if (verticleAngle == 90)
+            {
+                if (currentThrowDirection == Camera.main.transform.up)
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, -vertRadians, 0.0f);
+                }
+                else
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, vertRadians, 0.0f);
+                }
+                verticleAngle -= newVertChange;
+            }
+            else
+            {
+                if (verticleAngle - throwAngleChange < -90)
+                {
+                    newVertChange = 90 + verticleAngle;
+                    vertRadians = newVertChange * Mathf.PI / 180;
+                    verticleAngle = -90;
+                }
+                else
+                {
+                    vertRadians = throwAngleChange * Mathf.PI / 180;
+                    verticleAngle -= throwAngleChange;
+                    newVertChange = throwAngleChange;
+                }
+                currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.up, vertRadians, 0.0f);
+            }
+
+        }
+        currentThrowDirection.Normalize();
+        Vector3 forceDirection = currentThrowDirection * throwForce;
+        GameObject obj = grabHandler.GetGrabbedObject();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
+        //update Trajectory line
+    }
+    public void aimRight()
+    {
+        //move tragectory line right n units
+        if (horizontalAngle < 90)
+        {
+            if (horizontalAngle == -90)
+            {
+                if (currentThrowDirection == -Camera.main.transform.right)
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, -horzRadians, 0.0f);
+                }
+                else
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, horzRadians, 0.0f);
+                }
+                horizontalAngle += newHorzChange;
+            }
+            else
+            {
+                if (horizontalAngle + throwAngleChange > 90)
+                {
+                    newHorzChange = 90 - horizontalAngle;
+                    horzRadians = newHorzChange * Mathf.PI / 180;
+                    horizontalAngle = 90;
+                }
+                else
+                {
+                    horzRadians = throwAngleChange * Mathf.PI / 180;
+                    horizontalAngle += throwAngleChange;
+                    newHorzChange = throwAngleChange;
+                }
+                currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, Camera.main.transform.right, horzRadians, 0.0f);
+            }
+        }
+        currentThrowDirection.Normalize();
+        Vector3 forceDirection = currentThrowDirection * throwForce;
+        GameObject obj = grabHandler.GetGrabbedObject();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
+        //update Trajectory line
+    }
+    public void aimLeft()
+    {
+        //move tragectory line left n units
+        if (horizontalAngle > -90)
+        {
+            if (horizontalAngle == 90)
+            {
+                if (currentThrowDirection == Camera.main.transform.right)
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, -horzRadians, 0.0f);
+                }
+                else
+                {
+                    currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, horzRadians, 0.0f);
+                }
+                horizontalAngle -= newHorzChange;
+            }
+            else
+            {
+                if (horizontalAngle - throwAngleChange < -90)
+                {
+                    newHorzChange = 90 + horizontalAngle;
+                    horzRadians = newHorzChange * Mathf.PI / 180;
+                    horizontalAngle = -90;
+                }
+                else
+                {
+                    horzRadians = throwAngleChange * Mathf.PI / 180;
+                    horizontalAngle -= throwAngleChange;
+                    newHorzChange = throwAngleChange;
+                }
+                currentThrowDirection = Vector3.RotateTowards(currentThrowDirection, -Camera.main.transform.right, horzRadians, 0.0f);
+            }
+
+        }
+        currentThrowDirection.Normalize();
+        Vector3 forceDirection = currentThrowDirection * throwForce;
+        GameObject obj = grabHandler.GetGrabbedObject();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
+        //update Trajectory line
+    }
+
+
+    //back and throw will unshow tragectory line
 
     //OpenAndClose
     //--------------------------------------//
