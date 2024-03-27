@@ -34,7 +34,7 @@ public class Looking : MonoBehaviour
         {
             if (currentAngle == downAngle)
             {
-                transform.Rotate(-adjustedSpeed, 0f, 0f, Space.Self);
+                mainCam.Rotate(-adjustedSpeed, 0f, 0f, Space.Self);
             }
             else
             {
@@ -46,7 +46,7 @@ public class Looking : MonoBehaviour
                 {
                     adjustedSpeed = speed;
                 }
-                transform.Rotate(-adjustedSpeed, 0f, 0f, Space.Self);
+                mainCam.Rotate(-adjustedSpeed, 0f, 0f, Space.Self);
             }
             Debug.Log(mainCam.rotation.eulerAngles.x);
         }
@@ -59,7 +59,7 @@ public class Looking : MonoBehaviour
         {
             if (mainCam.rotation.eulerAngles.x == upAngle)//IF CURRENT == 90;
             {
-                transform.Rotate(adjustedSpeed, 0f, 0f, Space.Self);//ROTATE DOWN FROM ADJUSTED WITH -RADIANS
+                mainCam.Rotate(adjustedSpeed, 0f, 0f, Space.Self);//ROTATE DOWN FROM ADJUSTED WITH -RADIANS
             }
             else//IF CURRENT DOES NOT == 90
             {
@@ -73,7 +73,7 @@ public class Looking : MonoBehaviour
                     adjustedSpeed = speed;//CURRENT = THROWANGLECHANGE
                     //ANGLE-=THROWCHANGE;
                 }
-                transform.Rotate(adjustedSpeed, 0f, 0f, Space.Self);//ROTATE REGULAR
+                mainCam.Rotate(adjustedSpeed, 0f, 0f, Space.Self);//ROTATE REGULAR
             }
         }
     }

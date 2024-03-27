@@ -176,8 +176,8 @@ public class DefaultActions : MonoBehaviour
                 rb.isKinematic = false;
                 rb.interpolation = grabHandler.GetInterpolation();
                 //Force acted in the direction the user is looking
-                // Vector3 throwDirection = Camera.main.transform.forward;
-                rb.AddForce(currentThrowDirection * throwForce, ForceMode.Impulse);
+                Vector3 throwDirection = Camera.main.transform.forward;
+                rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
                 // DisplayTrajectory.Instance.hideLine();
             }
             grabHandler.SetGrabbedObject(null);
@@ -185,6 +185,8 @@ public class DefaultActions : MonoBehaviour
         }
     }//End Throw
 
+    #region TRAJECTORY
+    /*
     public void aimThrow()
     {
         //show tragectory line with regular force
@@ -371,9 +373,10 @@ public class DefaultActions : MonoBehaviour
         DisplayTrajectory.Instance.calculateLine(forceDirection, rb, obj.transform.position);
         //update Trajectory line
     }
-
-
+*/
     //back and throw will unshow tragectory line
+    #endregion
+    //end of Trajectory
 
     //OpenAndClose
     //--------------------------------------//
