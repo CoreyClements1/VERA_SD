@@ -43,7 +43,6 @@ public class TabbingUINavigation : MonoBehaviour
         {
             GameObject emptyMenu = new GameObject(interactable.name);
             setupMenu(emptyMenu);
-            emptyMenu.transform.position = new Vector3(0f,0f,0f);
             interactableMenus.Add(emptyMenu);
             SetupButtons(interactable,  emptyMenu);
         }
@@ -166,6 +165,8 @@ public class TabbingUINavigation : MonoBehaviour
         Transform newTransform = menu.transform;
         // setting up visuals
         newTransform.localScale = new Vector3(1f, 1f, 1f);
+        newTransform.localPosition = new Vector3(0f,0f,0f);
+        newTransform.localRotation = Quaternion.Euler(0, 0, 0);
         menu.SetActive(false);
         // Making the buttons fit the available panel
         GridLayoutGroup grid = newTransform.gameObject.AddComponent<GridLayoutGroup>();
@@ -184,6 +185,7 @@ public class TabbingUINavigation : MonoBehaviour
         // Assets/UI/Tabbing UI/Button.prefab
         for(int i = 0; i < size; i++){
             GameObject button = Instantiate(buttonPrefab, parent.transform) as GameObject;
+            button.transform.localPosition = new Vector3(0f,0f,0f);
             Transform textTransform = button.transform.GetChild(0);
             TextMeshProUGUI buttonText = textTransform.GetComponent<TextMeshProUGUI>();
             buttonText.text = InteractInfo[i];
