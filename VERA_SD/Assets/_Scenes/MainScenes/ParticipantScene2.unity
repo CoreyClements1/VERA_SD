@@ -2326,8 +2326,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139176625}
-  m_LocalRotation: {x: -0, y: -0.42547894, z: -0, w: 0.9049683}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.455, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5934,7 +5934,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310128219}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -7884,14 +7884,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - interactionName: ' '
-    onTriggerInteraction:
-      m_PersistentCalls:
-        m_Calls: []
-  - interactionName: ' '
-    onTriggerInteraction:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!114 &384807198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9679,7 +9671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &533735154
 Transform:
   m_ObjectHideFlags: 0
@@ -16883,7 +16875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &817467515
 Transform:
   m_ObjectHideFlags: 0
@@ -46396,7 +46388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c0f9525838d5d49990ba70c0d557b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSwitch: 0
+  levelSwitch: 1
 --- !u!114 &998685213609737171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55307,6 +55299,7 @@ MonoBehaviour:
   buttonPrefab: {fileID: 7139160222484306025, guid: dc78cd81c23a1db46b642aef72115f7a,
     type: 3}
   options: {fileID: 998685213606312392}
+  forMenus: 0
 --- !u!114 &998685214632124748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60454,7 +60447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treeBase: {fileID: 0}
   currentObj: Key
-  selectRadius: 2.92
+  selectRadius: 5
   playerCam: {fileID: 0}
   outlineColor: {r: 1, g: 0, b: 0.76454115, a: 1}
   outlineWidth: 5
@@ -60579,7 +60572,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1165617149775548355}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.13618568, y: 0.96315414, z: -0.3347026}
+  m_LocalPosition: {x: 0, y: 0.96315414, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -64035,7 +64028,7 @@ GameObject:
   - component: {fileID: 2157523796342473418}
   - component: {fileID: 2157523796342473461}
   m_Layer: 5
-  m_Name: Down
+  m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64096,6 +64089,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 4576037966013760586}
+  controller: {fileID: 2157523796880538858}
+  mainUI: {fileID: 998685214625117561}
+  mainMenu: {fileID: 4576037966013760586}
 --- !u!222 &2157523796347715611
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -64660,7 +64656,7 @@ GameObject:
   - component: {fileID: 2157523796476728542}
   - component: {fileID: 2157523796476728537}
   m_Layer: 5
-  m_Name: Up
+  m_Name: Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65416,7 +65412,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Up
+  m_text: Down
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -65617,6 +65613,7 @@ MonoBehaviour:
   buttonPrefab: {fileID: 7139160222484306025, guid: dc78cd81c23a1db46b642aef72115f7a,
     type: 3}
   options: {fileID: 998685213606312392}
+  forMenus: 0
 --- !u!114 &2157523796880538857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65871,7 +65868,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Down
+  m_text: Up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -67268,7 +67265,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.218}
+  m_AnchoredPosition: {x: 0, y: 0.2343}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2157523797579150506
@@ -67717,7 +67714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  rotationValue: 45
+  rotationValue: 15
   rotationValueVertical: 10
   turnCooldown: 1
 --- !u!114 &2365874034418829593
