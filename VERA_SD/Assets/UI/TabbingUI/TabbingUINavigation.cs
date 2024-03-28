@@ -31,6 +31,7 @@ public class TabbingUINavigation : MonoBehaviour
     public  GameObject buttonPrefab;
     public GameObject options;
     private UIOptions settings;
+    public bool forMenus;
 
     void Awake(){
         settings = options.GetComponent<UIOptions>();
@@ -39,12 +40,22 @@ public class TabbingUINavigation : MonoBehaviour
         InteractableList= interactionPanel.transform.Find("InteractableList").gameObject;
         interactableMenus = new List<GameObject>();
         interactables = selectionController.grabAllSelectables();
-         foreach (GameObject interactable in interactables)
+        if (!forMenus){
+            foreach (GameObject interactable in interactables)
+            {
+                GameObject emptyMenu = new GameObject(interactable.name);
+                setupMenu(emptyMenu);
+                interactableMenus.Add(emptyMenu);
+                SetupButtons(interactable, emptyMenu);
+            }
+        }
+        else
         {
-            GameObject emptyMenu = new GameObject(interactable.name);
-            setupMenu(emptyMenu);
-            interactableMenus.Add(emptyMenu);
-            SetupButtons(interactable,  emptyMenu);
+            for (int i = 0; i < InteractableList.transform.childCount; i++)
+            {
+               interactableMenus.Add(InteractableList.transform.GetChild(i).gameObject);
+            }
+
         }
         selectBttn = select.GetComponent<Button>();
 
@@ -56,12 +67,21 @@ public class TabbingUINavigation : MonoBehaviour
         // inSub = false;
         panels = new List<GameObject>();
         buttons = new List<GameObject>();
-        for (int i = 0; i < panelGroup.transform.childCount; i++)
-        {
-            panels.Add(panelGroup.transform.GetChild(i).gameObject);
+        if(! forMenus){
+            for (int i = 0; i < panelGroup.transform.childCount; i++)
+            {
+                panels.Add(panelGroup.transform.GetChild(i).gameObject);
+            }
+            panels = panels.OrderBy(go => go.GetComponent<Transform>().position.y).ToList();
         }
+        else
+        {
+            panels.Add(interactionPanel);
+        }
+       
+     
 
-        panels = panels.OrderBy(go => go.GetComponent<Transform>().position.y).ToList();
+       
         
     }
 
@@ -71,7 +91,7 @@ public class TabbingUINavigation : MonoBehaviour
         for(int i = 0; i < panels.Count; i++){
             if(i == activePanel){
                 colorSwitch(settings.primaryColor, panels[i]);
-                // Debug.Log(UIElements[i].transform.name);
+
             }
             if(i != activePanel){
                 colorSwitch(new Color(1f, 1f, 1f, 0.39f), panels[i]);
@@ -80,7 +100,7 @@ public class TabbingUINavigation : MonoBehaviour
         for(int i = 0; i < buttons.Count; i++){
             if(i == active){
                 colorSwitch(settings.secondaryColor, buttons[i]);
-                // Debug.Log(UIElements[i].transform.name);
+
             }
             if(i != active){
                 colorSwitch(Color.white, buttons[i]);
@@ -88,17 +108,22 @@ public class TabbingUINavigation : MonoBehaviour
         }
         
     }
+
+
     void colorSwitch(Color c, GameObject g){
        Image panel =g.GetComponent<Image>();
         panel.color =  c;
 
     }
+    
+    
     public void left(){
         activePanel--;
         if(activePanel < (0)){
             activePanel = ( panels.Count-1);
         }
     }
+
     public void right(){
         activePanel++;
         if(activePanel == panels.Count){
@@ -112,6 +137,8 @@ public class TabbingUINavigation : MonoBehaviour
             active = ( buttons.Count-1);
         }
     }
+
+
     public void down(){
         active++;
         if(active == buttons.Count){
@@ -122,21 +149,37 @@ public class TabbingUINavigation : MonoBehaviour
     public void selectPanel(){
         buttons = new List<GameObject>();
         active = 0;
-        if( panels[activePanel].transform.name != "Interactables"){
+        if(!forMenus){
+            if (panels[activePanel].transform.name != "Interactables")
+            {
                 for (int i = 0; i < panels[activePanel].transform.childCount; i++)
                 {
                     buttons.Add(panels[activePanel].transform.GetChild(i).gameObject);
                 }
-        }
-        else{
-            for (int i = 0; i < panels[activePanel].transform.Find("Menu").childCount; i++)
+            }
+            else
+            {
+                for (int i = 0; i < panels[activePanel].transform.Find("Menu").childCount; i++)
                 {
                     buttons.Add(panels[activePanel].transform.transform.Find("Menu").GetChild(i).gameObject);
                 }
 
+            }
+        }
+        else
+        {
+
+            for (int i = 0; i < interactionPanel.transform.Find("Menu").childCount; i++)
+            {
+                buttons.Add(interactionPanel.transform.Find("Menu").GetChild(i).gameObject);
+            }
+
+
         }
 
     }
+
+
     public void deselectPanel(){
         active = -1;
         for(int i = 0; i< buttons.Count; i++){
@@ -150,6 +193,10 @@ public class TabbingUINavigation : MonoBehaviour
     }
 
     public void handleButton(){
+        if(buttons[active] == null)
+        {
+            return;
+        }
        buttons[active].GetComponent<Button>().onClick.Invoke();
     }
 
@@ -205,7 +252,7 @@ public class TabbingUINavigation : MonoBehaviour
     }
 
     public void selectObject(){
-        string name = selectionController.currentObj;
+       string name = selectionController.currentObj;
        foreach(GameObject menu in interactableMenus ){
             if(menu.transform.name == name)
             {
@@ -230,8 +277,40 @@ public class TabbingUINavigation : MonoBehaviour
         }
        
     }
-    
-    
+
+    public void selectUI()
+    {
+        
+        string name = InteractableList.GetComponent<MenuTabbing>().getActiveName();
+        foreach (GameObject menu in interactableMenus)
+        {
+            if (menu.transform.name == name)
+            {
+                menu.SetActive(true);
+            }
+        }
+        colorSwitch(Color.white, buttons[active]);
+        active = 0;
+        buttons = new List<GameObject>();
+        for (int i = 0; i < InteractableList.transform.Find(name).childCount; i++)
+        {
+            buttons.Add(InteractableList.transform.Find(name).GetChild(i).gameObject);
+        }
+    }
+
+    public void deselectUI()
+    {
+        string name = InteractableList.GetComponent<MenuTabbing>().getActiveName(); ;
+        colorSwitch(Color.white, buttons[active]);
+        selectPanel();
+        foreach (GameObject menu in interactableMenus)
+        {
+            menu.SetActive(false);
+        }
+
+    }
+
+
 
 
 

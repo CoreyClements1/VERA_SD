@@ -75,7 +75,7 @@ public class ButtonController : MonoBehaviour
         
         if (!gameObject.activeInHierarchy)
         {return;}
-        Debug.Log("1" + buttons[0].transform.name);
+        //Debug.Log("1" + buttons[0].transform.name);
         // if(tree){
         //     stall(buttons[0].transform.parent.gameObject);
         // }
@@ -90,7 +90,7 @@ public class ButtonController : MonoBehaviour
         
         if (!gameObject.activeInHierarchy)
         {return;}
-        Debug.Log("1 Alt " + buttons[0].transform.name);
+        //Debug.Log("1 Alt " + buttons[0].transform.name);
         // if(tree){
         //     stall(buttons[0].transform.parent.gameObject);
         // }
@@ -107,7 +107,7 @@ public class ButtonController : MonoBehaviour
         {return;}
         // if(context.performed){
         resetColors();
-        Debug.Log("2" + buttons[1].transform.name);
+        //Debug.Log("2" + buttons[1].transform.name);
         buttons[1].onClick.Invoke();
         FadeToColor(buttons[1].colors.pressedColor, buttons[1]);
         // }
@@ -118,7 +118,7 @@ public class ButtonController : MonoBehaviour
         {return;}
         // if(context.performed){
         resetColors();
-        Debug.Log("2 Alt" + buttons[1].transform.name);
+        //Debug.Log("2 Alt" + buttons[1].transform.name);
         buttons[1].onClick.Invoke();
         FadeToColor(buttons[1].colors.pressedColor, buttons[1]);
         // }
@@ -128,8 +128,8 @@ public class ButtonController : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy)
         {return;}
-        Debug.Log("3 "+ buttons[2].transform.name);
-         Debug.Log(buttons[2].transform.gameObject.GetComponent<ButtonData>().levelSwitch + buttons[2].transform.parent.name);
+        //Debug.Log("3 "+ buttons[2].transform.name);
+         //Debug.Log(buttons[2].transform.gameObject.GetComponent<ButtonData>().levelSwitch + buttons[2].transform.parent.name);
         // if(context.performed){
             if(tree){
                 stall(buttons[2].transform.parent.gameObject);
@@ -143,7 +143,7 @@ public class ButtonController : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy)
         {return;}
-        Debug.Log("3 Alt "+ buttons[2].transform.name);
+        //Debug.Log("3 Alt "+ buttons[2].transform.name);
        if(tree){
                 stall(buttons[2].transform.parent.gameObject);
             }
@@ -160,7 +160,7 @@ public class ButtonController : MonoBehaviour
         if (!gameObject.activeInHierarchy)
         {return;}
         // if(context.performed){
-        Debug.Log("4 Alt "+ buttons[3].transform.name);
+        //Debug.Log("4 Alt "+ buttons[3].transform.name);
         resetColors();
         buttons[3].onClick.Invoke();
         FadeToColor(buttons[3].colors.pressedColor, buttons[3]);
@@ -172,7 +172,7 @@ public class ButtonController : MonoBehaviour
         if (!gameObject.activeInHierarchy)
         {return;}
         // if(context.performed){
-        Debug.Log("4 Alt "+ buttons[3].transform.name);
+        //Debug.Log("4 Alt "+ buttons[3].transform.name);
         resetColors();
         buttons[3].onClick.Invoke();
         FadeToColor(buttons[3].colors.pressedColor, buttons[3]);
@@ -195,7 +195,7 @@ public class ButtonController : MonoBehaviour
         
         if (!gameObject.activeInHierarchy)
         {return;}
-        Debug.Log("Enter"+ buttons[active].transform.name+ active);
+        //Debug.Log("Enter"+ buttons[active].transform.name+ active);
         buttons[active].onClick.Invoke();
         FadeToColor(buttons[active].colors.normalColor, buttons[active]);
     }
@@ -221,7 +221,7 @@ public class ButtonController : MonoBehaviour
     }
     
     void fourInputEnable(){
-        Debug.Log(gameObject.transform.name+" enabled");
+        //Debug.Log(gameObject.transform.name+" enabled");
         keyActions =keyActions.Take(buttons.Count).ToList();
         keyActionsAlt =keyActionsAlt.Take(buttons.Count).ToList();
         // Enable all actions
@@ -344,7 +344,7 @@ public class ButtonController : MonoBehaviour
         // Check if the GameObject has a parent
         if (go.transform.parent == null)
         {
-            Debug.LogWarning("GameObject has no parent, cannot check sibling count.");
+            //Debug.LogWarning("GameObject has no parent, cannot check sibling count.");
             return;
         }
 

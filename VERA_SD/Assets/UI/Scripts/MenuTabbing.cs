@@ -6,6 +6,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Linq;
 using TMPro;
+using UnityEngine.EventSystems;
+
 
 public class MenuTabbing : MonoBehaviour
 {
@@ -16,28 +18,18 @@ public class MenuTabbing : MonoBehaviour
     int active;
     List<Transform> menuOptions;
     int activeMenuItem;
-    
+    EventSystem eventSystem;
+    public GameObject controller;
+    public GameObject mainUI;
+    public GameObject mainMenu;
+    GameObject homeMenu;
+
     void Start()
     {
-        active = 0;
-        UIElements = new List<GameObject>();
-        for (int i = 0; i < menu.transform.childCount; i++)
-        {
-            UIElements.Add(menu.transform.GetChild(i).gameObject);
-        }
+        eventSystem = FindObjectOfType<EventSystem>();
+        setupMenu();
+        homeMenu = menu;
 
-        UIElements = UIElements.OrderBy(go => go.GetComponent<Transform>().position.y).ToList();
-
-        Submenus = new List<GameObject>();
-        for(int i = 0; i < gameObject.transform.childCount; i++){
-            if(gameObject.transform.GetChild(i).name != "Navigation"){
-                Submenus.Add(gameObject.transform.GetChild(i).gameObject);
-            }
-            if(gameObject.transform.GetChild(i).name == "Navigation"){
-                treeLevel1 =gameObject.transform.GetChild(i).gameObject;
-            }
-        }
-        
     }
 
     // Update is called once per frame
@@ -108,18 +100,13 @@ public class MenuTabbing : MonoBehaviour
     }
 
 
-    // void colorSwitchDropDown(Color c, TMP_Dropdown.OptionData g){
-    //     SpriteRenderer dropdown =g.GetComponent<SpriteRenderer>();
-    //     dropdown.color =  c;
-    //     g.image =(dropdown);
-
-    // }
     public void up(){
         active--;
         if(active < (0)){
             active = ( UIElements.Count-1);
         }
     }
+
     public void down(){
         active++;
         if(active == UIElements.Count){
@@ -163,11 +150,22 @@ public class MenuTabbing : MonoBehaviour
     }
 
     public void handleToggle(){
-        if(UIElements[active].GetComponent<Toggle>().isOn){
-            UIElements[active].GetComponent<Toggle>().isOn = false;
+        if (menu.GetComponent<ToggleGroup>() == null){
+            if (UIElements[active].GetComponent<Toggle>().isOn)
+            {
+                UIElements[active].GetComponent<Toggle>().isOn = false;
+            }
+            else
+            {
+                UIElements[active].GetComponent<Toggle>().isOn = true;
+            }
         }
-        else{
+        else
+        {
+            ToggleGroup t = menu.GetComponent<ToggleGroup>();
+            t.NotifyToggleOn(UIElements[active].GetComponent<Toggle>());
             UIElements[active].GetComponent<Toggle>().isOn = true;
+
         }
     }
 
@@ -181,6 +179,7 @@ public class MenuTabbing : MonoBehaviour
             UIElements[active].GetComponent<Slider>().value ++;
         }
     }
+
     public void decreaseSlider(){
         if(UIElements[active].GetComponent<Slider>().value > UIElements[active].GetComponent<Slider>().minValue){
             UIElements[active].GetComponent<Slider>().value --;
@@ -197,6 +196,7 @@ public class MenuTabbing : MonoBehaviour
             activeMenuItem = ( menuOptions.Count-1);
         }
     }
+
     public void downDropdown(){
         activeMenuItem++;
         if(activeMenuItem == menuOptions.Count){
@@ -204,16 +204,118 @@ public class MenuTabbing : MonoBehaviour
         }
     
     }
+
     public void selectDropdown(){
         UIElements[active].GetComponent<TMP_Dropdown>().value = activeMenuItem;
     }
+
     public void buttonCheck(){
         Debug.Log("Pressed");
     }
-    
+
+    public string getActiveName()
+    {
+
+            if ((UIElements[active].GetComponent<Toggle>() != null))
+            {
+                return ("Toggle");
+
+            }
+            if ((UIElements[active].GetComponent<Slider>() != null))
+            {
+                return ("Slider");
+            }
+            if ((UIElements[active].GetComponent<TMP_Dropdown>() != null))
+            {
+                return ("Dropdown");
+            }
+            else
+            {
+                return ("Button");
+            }
+
+        
+    }
+
+    public void setupMenu()
+    {
+        active = 0;
+        UIElements = new List<GameObject>();
+        for (int i = 0; i < menu.transform.childCount; i++)
+        {
+            UIElements.Add(menu.transform.GetChild(i).gameObject);
+        }
+
+        UIElements = UIElements.OrderBy(go => go.GetComponent<Transform>().position.y).ToList();
+
+        Submenus = new List<GameObject>();
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            if (gameObject.transform.GetChild(i).name != "Navigation")
+            {
+                Submenus.Add(gameObject.transform.GetChild(i).gameObject);
+            }
+            if (gameObject.transform.GetChild(i).name == "Navigation")
+            {
+                treeLevel1 = gameObject.transform.GetChild(i).gameObject;
+            }
+        }
+
+    }
 
 
+    public void changeMenu(GameObject newMenu)
+    {
+        for (int i = 0; i < UIElements.Count; i++)
+        {
+            colorSwitch(Color.white, UIElements[i]);
+        }
+        controller.GetComponent<TabbingUINavigation>().deselectUI();
+        menu = newMenu;
+        setupMenu();
+    }
 
+    public void bacckAMenu() {
+        for (int i = 0; i < UIElements.Count; i++)
+        {
+            colorSwitch(Color.white, UIElements[i]);
+        }
+        menu = menu.GetComponent<MenuData>().backMenu;
+        menu.SetActive(true);
+        setupMenu();
+        
+    }
+    public void resetMenus()
+    {
+        for (int i = 0; i < UIElements.Count; i++)
+        {
+            colorSwitch(Color.white, UIElements[i]);
+        }
+        menu.SetActive(false);
+        menu = homeMenu;
+        menu.SetActive(true);
+        setupMenu();
+
+    }
+
+    public GameObject getActiveGameObject()
+    {
+        return UIElements[active];
+    }
+
+    public void leaveMenu()
+    {
+        resetMenus();
+        mainMenu.SetActive(false);
+        controller.SetActive(false);
+        mainUI.SetActive(true);   
+    }
+    public void openMenu() {
+        Debug.Log("opening Menu "+ menu.transform.name);
+
+        mainMenu.SetActive(true);
+        menu.SetActive(true);  
+    }
 
 
 

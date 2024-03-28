@@ -31,21 +31,12 @@ public class UIOptions : MonoBehaviour
         tab.SetActive(false);
         if(isTree){
             tree.SetActive(true);
-            // if(twoInputs){
-            //     tree2.SetActive(true);
-            // }else{
-            //     tree4.SetActive(true);
-            // }
+
         }
         else{
             
             tab.SetActive(true);
-            Debug.Log("Tabbing is on");
-            // if(twoInputs){
-            //     tab2.SetActive(true);
-            // }else{
-            //     tab4.SetActive(true);
-            // }
+
         }
         
     }
