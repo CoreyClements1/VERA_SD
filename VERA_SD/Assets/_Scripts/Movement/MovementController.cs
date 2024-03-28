@@ -156,6 +156,14 @@ public class MovementController : MonoBehaviour
     private void UserMove(){
         _userMoveInput = new Vector3(_userMoveInput.x, _userMoveInput.y, _userMoveInput.z);
         // Moves the rig
+        Vector3 camRotY = new Vector3(0f, mainCam.localRotation.eulerAngles.y, 0f);
+        Quaternion rotVal = Quaternion.Euler(camRotY);
+
+
+        Vector3 moveDir = rotVal * _userMoveInput;
+        moveDir.y = 0f;
+        moveDir = Vector3.Normalize(moveDir);
+
         _characterController.Move(_userMoveInput * speed * Time.deltaTime  * 1.5f);
     }
     // Rotates the rig based on if the rotation is left or right.

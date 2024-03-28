@@ -14,7 +14,7 @@ public class CannonLeverHandler : MonoBehaviour
 
     [SerializeField] private CannonInteractable cannonInteractable;
     private bool grabActive = false;
-    [SerializeField] private XRRayInteractor rayInteractorRight, rayInteractorLeft;
+    [SerializeField] private XRDirectInteractor rayInteractorRight, rayInteractorLeft;
     private Transform targetTransform;
 
 
