@@ -210,7 +210,11 @@ public class MenuTabbing : MonoBehaviour
     public void buttonCheck(){
         Debug.Log("Pressed");
     }
-    
+
+    public GameObject getActiveGameObject()
+    {
+        return UIElements[active];
+    }
 
 
 
