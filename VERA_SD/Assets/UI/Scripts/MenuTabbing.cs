@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Linq;
 using TMPro;
-using UnityEngine.EventSystems;
+
 
 
 public class MenuTabbing : MonoBehaviour
@@ -20,15 +20,19 @@ public class MenuTabbing : MonoBehaviour
     int activeMenuItem;
     EventSystem eventSystem;
     public GameObject controller;
-    public GameObject mainUI;
+    //public GameObject mainUI;
     public GameObject mainMenu;
     GameObject homeMenu;
+    public UIOptions settings;
+    public Button selectButton;
+    
 
     void Start()
     {
-        eventSystem = FindObjectOfType<EventSystem>();
+        
         setupMenu();
         homeMenu = menu;
+
 
     }
 
@@ -39,7 +43,7 @@ public class MenuTabbing : MonoBehaviour
         {
             if (i == active)
             {
-                colorSwitch(Color.red, UIElements[i]);
+                colorSwitch(settings.secondaryColor, UIElements[i]);
                 // Debug.Log(UIElements[i].transform.name);
             }
             if (i != active)
@@ -57,7 +61,7 @@ public class MenuTabbing : MonoBehaviour
             {
                 if (i == activeMenuItem)
                 {
-                    colorSwitchDropDown(Color.red, menuOptions[i]);
+                    colorSwitchDropDown(settings.secondaryColor, menuOptions[i]);
                     // Debug.Log(UIElements[i].transform.name);
                 }
                 if (i != activeMenuItem)
@@ -123,6 +127,7 @@ public class MenuTabbing : MonoBehaviour
         {
             active = (UIElements.Count - 1);
         }
+        buttonCheck();
     }
 
     public void down()
@@ -132,9 +137,8 @@ public class MenuTabbing : MonoBehaviour
         {
             active = 0;
         }
+        buttonCheck();
     }
-
-
 
 
     public void menuSelector()
@@ -287,20 +291,16 @@ public class MenuTabbing : MonoBehaviour
             UIElements.Add(menu.transform.GetChild(i).gameObject);
         }
 
+
         UIElements = UIElements.OrderBy(go => go.GetComponent<Transform>().position.y).ToList();
 
         Submenus = new List<GameObject>();
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
-            if (gameObject.transform.GetChild(i).name != "Navigation")
-            {
-                Submenus.Add(gameObject.transform.GetChild(i).gameObject);
-            }
-            if (gameObject.transform.GetChild(i).name == "Navigation")
-            {
-                treeLevel1 = gameObject.transform.GetChild(i).gameObject;
-            }
+            Submenus.Add(gameObject.transform.GetChild(i).gameObject);
         }
+
+
 
     }
 
@@ -349,15 +349,15 @@ public class MenuTabbing : MonoBehaviour
     {
         resetMenus();
         mainMenu.SetActive(false);
-        controller.SetActive(false);
-        mainUI.SetActive(true);
+        //controller.SetActive(false);
+        //mainUI.SetActive(true);
     }
     public void openMenu()
     {
-        Debug.Log("opening Menu " + menu.transform.name);
+        //Debug.Log("opening Menu " + menu.transform.name);
 
         mainMenu.SetActive(true);
-        menu.SetActive(true);
+        //menu.SetActive(true);
     }
 
 
