@@ -6395,9 +6395,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: {fileID: 8682099814178882248}
   controller: {fileID: 5341360865650652155}
+  mainUI: {fileID: 5341360865650652155}
   mainMenu: {fileID: 8682099814178882248}
-  settings: {fileID: 5341360864557399885}
-  selectButton: {fileID: 1798526399}
 --- !u!1 &1752709317
 GameObject:
   m_ObjectHideFlags: 0
