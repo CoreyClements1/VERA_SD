@@ -142,8 +142,7 @@ public class MovementControllerT2 : MonoBehaviour
     {
         return new Vector3 (rotationValueVertical, 0, 0);
     }
-    // References the camera instead of the rig itself since vertical adjustsments caused the rig to 
-    //      rotate instead of just the camera.
+    
     private void UserLook()
     {
         Camera.transform.eulerAngles = Camera.transform.eulerAngles + _userLookInput;
