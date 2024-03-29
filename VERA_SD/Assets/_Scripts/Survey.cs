@@ -23,6 +23,18 @@ public class Survey : MonoBehaviour
     {
         public SurveyQuestions[] questions;
     }
+    // public Slider slider;
+    // public float surveyValue;
+
+    // {
+    //     surveyValue = 1;
+
+   
+    // public void GetSurveyValue()
+    // {
+    //     surveyValue = slider.value;
+    //     Debug.Log(surveyValue);
+    // }
     // Start is called before the first frame update
     void Start()
     {
@@ -55,11 +67,6 @@ public class Survey : MonoBehaviour
         SaveResponse(questionResponse);
     }
 
-    // // Update is called once per frame
-    // void Update()
-    // {
-        
-    // }
     public void SaveResponse(SurveyQuestionList responseList){
         string response = JsonUtility.ToJson(responseList);
         // File.WriteAllText(Application.dataPath + "/SurveyResponse.json", response);

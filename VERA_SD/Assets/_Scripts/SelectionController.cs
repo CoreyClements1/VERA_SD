@@ -45,6 +45,8 @@ public class SelectionController : MonoBehaviour
     {
         interactSub = GameObject.Find("Interact Sub");
         Debug.Log(interactSub);
+        playerCam = Camera.main;
+        Arrow = FindObjectOfType<Arrow>().gameObject;
 
     }
 
@@ -96,7 +98,7 @@ public class SelectionController : MonoBehaviour
                 previousObj = null;
                 lookTarget = null;
                 treeBase.RemoveListeners();
-                treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
+                //treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
                 currentObj = null;
             }
         }
@@ -276,14 +278,14 @@ public class SelectionController : MonoBehaviour
         {
             if (isOffScreen)
             {
-                Text.text = "OFF SCREEN";
-                Text.color = Color.red;
+                //Text.text = "OFF SCREEN";
+                //Text.color = Color.red;
 
             }
             else
             {
-                Text.text = "ON SCREEN";
-                Text.color = Color.green;
+                //Text.text = "ON SCREEN";
+                //Text.color = Color.green;
             }
         }
     }

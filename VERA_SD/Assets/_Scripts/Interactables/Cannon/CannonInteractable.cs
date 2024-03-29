@@ -56,7 +56,7 @@ public class CannonInteractable : MonoBehaviour
 
     // Aims left
     //--------------------------------------//
-    public void AimLeft()
+    public void AimRight()
     //--------------------------------------//
     {
         Vector3 lookRot = cannonBase.rotation.eulerAngles;
@@ -69,7 +69,7 @@ public class CannonInteractable : MonoBehaviour
 
     // Aims right
     //--------------------------------------//
-    public void AimRight()
+    public void AimLeft()
     //--------------------------------------//
     {
         Vector3 lookRot = cannonBase.rotation.eulerAngles;
@@ -82,7 +82,7 @@ public class CannonInteractable : MonoBehaviour
 
     // Aims up
     //--------------------------------------//
-    public void AimUp()
+    public void AimDown()
     //--------------------------------------//
     {
         Vector3 lookRot = cannonBody.rotation.eulerAngles;
@@ -94,7 +94,7 @@ public class CannonInteractable : MonoBehaviour
 
     // Aims down
     //--------------------------------------//
-    public void AimDown()
+    public void AimUp()
     //--------------------------------------//
     {
         Vector3 lookRot = cannonBody.rotation.eulerAngles;

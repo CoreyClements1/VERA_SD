@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cannonball : MonoBehaviour
@@ -30,6 +31,12 @@ public class Cannonball : MonoBehaviour
 
 
     #endregion
+
+
+    public void DestroyCannonball()
+    {
+
+    }
 
 
 } // END Cannonball.cs
