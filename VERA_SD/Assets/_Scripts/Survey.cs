@@ -8,11 +8,11 @@ using TMPro;
 public class Survey : MonoBehaviour
 {
     public Slider slider;
-
+    public float surveyValue;
     // Start is called before the first frame update
     void Start()
     {
-        
+        surveyValue = 1;
     }
 
     void Update()
@@ -21,7 +21,10 @@ public class Survey : MonoBehaviour
     }
     public void GetSurveyValue()
     {
-        Debug.Log(slider.value);
+        surveyValue = slider.value;
+        Debug.Log(surveyValue);
     }
+
+    
    
 }
