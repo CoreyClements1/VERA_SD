@@ -45,6 +45,8 @@ public class SelectionController : MonoBehaviour
     {
         interactSub = GameObject.Find("Interact Sub");
         Debug.Log(interactSub);
+        playerCam = Camera.main;
+        Arrow = FindObjectOfType<Arrow>().gameObject;
 
     }
 

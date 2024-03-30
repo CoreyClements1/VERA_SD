@@ -34,6 +34,7 @@ public class PauseMenu : MonoBehaviour
     private List<bool> typeArray;
     private List<bool> optionsArray;
     public TextMeshProUGUI sliderText;
+    public GameObject MenuTab;
 
     #endregion
     // Start is called before the first frame update
@@ -88,7 +89,7 @@ public class PauseMenu : MonoBehaviour
         for(int i = 0; i < settings.transform.childCount; i++)
         {
             Transform child = transform.GetChild(i);
-            if (child.name != "Snap Turning")
+            if ((child.name != "Snap Turning") && (child.name != "Panel"))
                 child.gameObject.SetActive(false);
             else
                 child.gameObject.SetActive(true);
@@ -99,7 +100,7 @@ public class PauseMenu : MonoBehaviour
     //this function changes the degree in which a user turns. Yes this is very ugly and I will fix it in the future when it bugs me too much
     public void changeTurning()
     {
-        string name = EventSystem.current.currentSelectedGameObject.name;
+        string name = MenuTab.GetComponent<MenuTabbing>().getActiveGameObject().transform.name;
         if(name != currentName)
         {
             currentName = name;
@@ -141,7 +142,7 @@ public class PauseMenu : MonoBehaviour
         for (int i = 0; i < settings.transform.childCount; i++)
         {
             Transform child = transform.GetChild(i);
-            if (child.name != "Movement Speed")
+            if ((child.name != "Movement Speed") && (child.name != "Panel"))
                 child.gameObject.SetActive(false);
             else
                 child.gameObject.SetActive(true);
@@ -250,7 +251,7 @@ public class PauseMenu : MonoBehaviour
         for (int i = 0; i < settings.transform.childCount; i++)
         {
             Transform child = transform.GetChild(i);
-            if (child.name != "Type Selection")
+            if ((child.name != "Type Selection") && (child.name != "Panel"))
                 child.gameObject.SetActive(false);
             else
                 child.gameObject.SetActive(true);
@@ -261,8 +262,8 @@ public class PauseMenu : MonoBehaviour
     //changes type selection and changes image
     public void ChangeTypeSelection()
     {
-        string name = EventSystem.current.currentSelectedGameObject.name;
-        if(name != typeCurrentName)
+        string name = MenuTab.GetComponent<MenuTabbing>().getActiveGameObject().transform.name;
+        if (name != typeCurrentName)
         {
             typeCurrentName = name;
             //temporary measure so that errors arent thrown for level that doesnt exist yet
@@ -288,6 +289,10 @@ public class PauseMenu : MonoBehaviour
             }
         }
        
+    }
+    public void openMenu()
+    {
+        pauseEnabled = true;
     }
     #endregion
 }
