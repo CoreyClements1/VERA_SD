@@ -22,31 +22,42 @@ public class MenuTabbing : MonoBehaviour
     public GameObject controller;
     public GameObject mainUI;
     public GameObject mainMenu;
+    public UIOptions settings;
+    public GameObject flag;
     GameObject homeMenu;
+    public GameObject outside;
+
+    //public SelectionController selectionController;
+    public Button selectButton;
+    public GameObject insideInteractable;
+    public GameObject inside;
 
     void Start()
     {
-        eventSystem = FindObjectOfType<EventSystem>();
         setupMenu();
         homeMenu = menu;
-
+        //outlineColor = selectionController.outlineColor;
+        //outlineWidth = selectionController.outlineWidth;
     }
 
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < UIElements.Count; i++)
-        {
-            if (i == active)
-            {
-                colorSwitch(Color.red, UIElements[i]);
-                // Debug.Log(UIElements[i].transform.name);
-            }
-            if (i != active)
-            {
-                colorSwitch(Color.white, UIElements[i]);
-            }
-        }
+        //Debug.Log(getActiveName());
+        //for (int i = 0; i < UIElements.Count; i++)
+        //{
+        //    if (i == active)
+        //    {
+        //        //Debug.Log("something is active");
+        //        //colorSwitch(settings.secondaryColor, UIElements[i]);
+        //        // Debug.Log(UIElements[i].transform.name);
+        //    }
+        //    if (i != active)
+        //    {
+        //        //Debug.Log("nothing is active");
+        //        colorSwitch(Color.white, UIElements[i]);
+        //    }
+        //}
         if (UIElements[active].GetComponent<TMP_Dropdown>() == null)
         {
             menuOptions = new List<Transform>();
@@ -57,7 +68,7 @@ public class MenuTabbing : MonoBehaviour
             {
                 if (i == activeMenuItem)
                 {
-                    colorSwitchDropDown(Color.red, menuOptions[i]);
+                    colorSwitchDropDown(settings.secondaryColor, menuOptions[i]);
                     // Debug.Log(UIElements[i].transform.name);
                 }
                 if (i != activeMenuItem)
@@ -118,20 +129,48 @@ public class MenuTabbing : MonoBehaviour
 
     public void up()
     {
+        
         active--;
         if (active < (0))
         {
             active = (UIElements.Count - 1);
         }
+        moveFlag();
+        handleSelectButton();
     }
 
     public void down()
     {
+        
         active++;
         if (active == UIElements.Count)
         {
             active = 0;
         }
+        moveFlag();
+       
+        handleSelectButton();
+    }
+
+    public void moveFlag()
+    {
+        
+        Vector3[] v = new Vector3[4];
+        UIElements[active].GetComponent<RectTransform>().GetWorldCorners(v);
+        float flagY = (v[0].y + v[2].y) / 2;
+        RectTransform sourceRect = UIElements[active].GetComponent<RectTransform>();
+        RectTransform targetRect = flag.GetComponent<RectTransform>();
+
+
+        targetRect.anchoredPosition = sourceRect.anchoredPosition;
+        targetRect.sizeDelta = sourceRect.sizeDelta;
+        targetRect.localScale = sourceRect.localScale;
+        targetRect.pivot = sourceRect.pivot;
+
+        targetRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, sourceRect.rect.height);
+        targetRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sourceRect.rect.height);
+        targetRect.position = new Vector3(v[0].x, flagY, v[0].z);
+
     }
 
 
@@ -141,11 +180,7 @@ public class MenuTabbing : MonoBehaviour
     {
         for (int i = 0; i < Submenus.Count; i++)
         {
-            if ((UIElements[active].GetComponent<Toggle>() != null) && (Submenus[i].name == "Toggle"))
-            {
-                Submenus[i].SetActive(true);
-
-            }
+            
             if ((UIElements[active].GetComponent<Slider>() != null) && (Submenus[i].name == "Slider"))
             {
                 Submenus[i].SetActive(true);
@@ -159,18 +194,15 @@ public class MenuTabbing : MonoBehaviour
                 Transform grandchild = child.gameObject.transform.Find("Viewport");
                 Transform greatGrandchild = grandchild.gameObject.transform.Find("Content");
                 // GameObject items = greatGrandchild.gameObject;
-                Debug.Log(greatGrandchild.name);
+                //Debug.Log(greatGrandchild.name);
                 for (int j = 1; j < greatGrandchild.childCount; j++)
                 {
                     menuOptions.Add(greatGrandchild.GetChild(j));
                 }
-                Debug.Log(menuOptions.Count);
+                //Debug.Log(menuOptions.Count);
                 activeMenuItem = 0;
             }
-            if ((UIElements[active].GetComponent<Button>() != null) && (Submenus[i].name == "Button"))
-            {
-                Submenus[i].SetActive(true);
-            }
+            
 
         }
 
@@ -284,9 +316,15 @@ public class MenuTabbing : MonoBehaviour
         UIElements = new List<GameObject>();
         for (int i = 0; i < menu.transform.childCount; i++)
         {
-            UIElements.Add(menu.transform.GetChild(i).gameObject);
+            if ((menu.transform.GetChild(i).GetComponent<Button>() != null) || (menu.transform.GetChild(i).GetComponent<Toggle>() != null) || (menu.transform.GetChild(i).GetComponent<Button>() != null) || (menu.transform.GetChild(i).GetComponent<Slider>() != null ) || (menu.transform.GetChild(i).GetComponent<Dropdown>() != null)){
+                UIElements.Add(menu.transform.GetChild(i).gameObject);
+            }
+            
         }
-
+        //Debug.Log("UI elements: "+ UIElements.Count);
+        moveFlag();
+        handleSelectButton();
+        //flag.GetComponent
         UIElements = UIElements.OrderBy(go => go.GetComponent<Transform>().position.y).ToList();
 
         Submenus = new List<GameObject>();
@@ -307,13 +345,10 @@ public class MenuTabbing : MonoBehaviour
 
     public void changeMenu(GameObject newMenu)
     {
-        for (int i = 0; i < UIElements.Count; i++)
-        {
-            colorSwitch(Color.white, UIElements[i]);
-        }
         controller.GetComponent<TabbingUINavigation>().deselectUI();
         menu = newMenu;
         setupMenu();
+        menu.SetActive(true);
     }
 
     public void bacckAMenu()
@@ -322,17 +357,16 @@ public class MenuTabbing : MonoBehaviour
         {
             colorSwitch(Color.white, UIElements[i]);
         }
+        menu.SetActive(false);
         menu = menu.GetComponent<MenuData>().backMenu;
         menu.SetActive(true);
+        active = 0;
         setupMenu();
-
+        moveFlag();
+        
     }
     public void resetMenus()
     {
-        for (int i = 0; i < UIElements.Count; i++)
-        {
-            colorSwitch(Color.white, UIElements[i]);
-        }
         menu.SetActive(false);
         menu = homeMenu;
         menu.SetActive(true);
@@ -348,19 +382,98 @@ public class MenuTabbing : MonoBehaviour
     public void leaveMenu()
     {
         resetMenus();
-        mainMenu.SetActive(false);
-        controller.SetActive(false);
-        mainUI.SetActive(true);
+        flag.SetActive(false);
+       
+        inside.SetActive(false);
+        insideInteractable.SetActive(false);
+        outside.SetActive(true);
+        //mainMenu.SetActive(false ); 
+        Debug.Log("leaving");
+        active = 0;
+        mainUI.GetComponent<TabbingUINavigation>().selectSpecificPanel(0);
+        Debug.Log("leaving still");
+        menu.SetActive(false);
     }
     public void openMenu()
     {
-        Debug.Log("opening Menu " + menu.transform.name);
-
+        //Debug.Log("opening Menu " + menu.transform.name);
+        
         mainMenu.SetActive(true);
         menu.SetActive(true);
+        inside.SetActive(true);
+        moveFlag();
+        flag.SetActive(true);
     }
 
 
+    // button: n= 1 check: n=2 dropdown/slider: n = 3
+    public void handleSelectButton()
+    {
+
+        string activeItem = getActiveName();
+        if (activeItem == "Button")
+        {
+            Transform textTransform = selectButton.transform.GetChild(0);
+            TextMeshProUGUI buttonText = textTransform.GetComponent<TextMeshProUGUI>();
+            buttonText.text = "Press Button";
+        }
+        if(activeItem == "Toggle")
+        {
+            Transform textTransform = selectButton.transform.GetChild(0);
+            TextMeshProUGUI buttonText = textTransform.GetComponent<TextMeshProUGUI>();
+            
+            if (UIElements[active].GetComponent<Toggle>().isOn)
+            {
+                buttonText.text = "Uncheck";
+            }
+            else
+            {
+                buttonText.text = "Check";
+            }
+        }
+        if((activeItem == "Dropdown") || (activeItem == "Slider"))
+        {
+            Transform textTransform = selectButton.transform.GetChild(0);
+            TextMeshProUGUI buttonText = textTransform.GetComponent<TextMeshProUGUI>();
+            if (activeItem == "Dropdown")
+            {
+                buttonText.text = "Change Selection";
+            }
+            if(activeItem == "Slider")
+            {
+                buttonText.text = "Change Value";
+            }
+            
+
+        }
+
+    }
+
+    public void handleSelectEvent()
+    {
+        string activeItem = getActiveName();
+        if (activeItem == "Button")
+        {
+            handleButton();
+            Debug.Log("it's a button");
+        }
+        if (activeItem == "Toggle")
+        {
+            selectButton.onClick.AddListener(() => handleToggle());
+            Debug.Log("it's a toggle");
+        }
+        if ((activeItem == "Dropdown") || (activeItem == "Slider"))
+        {
+            menuSelector();
+
+            mainUI.GetComponent<TabbingUINavigation>().selectUI();
+            mainUI.GetComponent<TabbingUINavigation>().selectSpecificPanel(2);
+            inside.SetActive(false);
+            insideInteractable.SetActive(true);
+
+        }
+
+    }
 
 
 

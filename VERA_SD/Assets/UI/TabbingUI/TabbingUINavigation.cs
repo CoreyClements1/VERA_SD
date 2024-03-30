@@ -34,6 +34,10 @@ public class TabbingUINavigation : MonoBehaviour
     public GameObject options;
     private UIOptions settings;
     public bool forMenus;
+    public GameObject menuManager;
+    int height;
+
+
 
     void Awake()
     {
@@ -42,6 +46,7 @@ public class TabbingUINavigation : MonoBehaviour
         interactionPanel = panelGroup.transform.Find("Interactables Inside").gameObject;
         InteractableList = interactionPanel.transform.Find("InteractableList").gameObject;
         UIList = panelGroup.transform.Find("Settings Inside").gameObject;
+
         interactableMenus = new List<GameObject>();
         UIMenus = new List<GameObject>();
         interactables = selectionController.grabAllSelectables();
@@ -70,8 +75,7 @@ public class TabbingUINavigation : MonoBehaviour
         // inSub = false;
         panels = new List<GameObject>();
         buttons = new List<GameObject>();
-        if (!forMenus)
-        {
+        
             for (int i = 0; i < panelGroup.transform.childCount; i++)
             {
                 panels.Add(panelGroup.transform.GetChild(i).gameObject);
@@ -80,11 +84,6 @@ public class TabbingUINavigation : MonoBehaviour
             
             //panels = panels.OrderBy(go => go.GetComponent<Transform>().position.y).ToList();
       
-        }
-        else
-        {
-            panels.Add(interactionPanel);
-        }
         selectPanel();
 
 
@@ -96,19 +95,6 @@ public class TabbingUINavigation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < panels.Count; i++)
-        {
-            if (i == activePanel)
-            {
-                //colorSwitch(settings.primaryColor, panels[i]);
-
-            }
-            if ((i != activePanel) && (panels[i].transform.name != "Main Menu"))
-            {
-                //colorSwitch(new Color(1f, 1f, 1f, 0f), panels[i]);
-                
-            }
-        }
         for (int i = 0; i < buttons.Count; i++)
         {
             if (i == active)
@@ -120,6 +106,19 @@ public class TabbingUINavigation : MonoBehaviour
             {
                 colorSwitch(Color.white, buttons[i]);
             }
+        }
+        if((activePanel != 0)  && (activePanel != 6))
+        {
+            panelGroup.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 80);
+        }
+        else if((activePanel == 0))
+        {
+            panelGroup.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 40);
+        }
+        else
+        {
+            int size = ((height / 4) * 40) + 40;
+            panelGroup.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
         }
         
 
@@ -173,52 +172,59 @@ public class TabbingUINavigation : MonoBehaviour
 
     public void selectPanel()
     {
-        if(buttons != null)
-        {
-            for (int i = 0; i < buttons.Count; i++)
-            {
-                colorSwitch(new Color(1f, 1f, 1f, 0.39f), buttons[i]);   
-            }
-        }
+        //if(buttons != null)
+        //{
+        //    for (int i = 0; i < buttons.Count; i++)
+        //    {
+        //        colorSwitch(new Color(1f, 1f, 1f, 0.39f), buttons[i]);   
+        //    }
+        //}
         buttons = new List<GameObject>();
         active = 0;
-        if (!forMenus)
+      
+        panels[activePanel].SetActive(true);
+        if ((panels[activePanel].transform.name != "Interactables Inside") && (panels[activePanel].transform.name != "Settings Inside"))
         {
-            panels[activePanel].SetActive(true);
-            if (panels[activePanel].transform.name != "Interactables Inside")
+            for (int i = 0; i < panels[activePanel].transform.childCount; i++)
             {
-                for (int i = 0; i < panels[activePanel].transform.childCount; i++)
-                {
-                    buttons.Add(panels[activePanel].transform.GetChild(i).gameObject);
-                    colorSwitch(new Color(1f, 1f, 1f, 1f), panels[activePanel].transform.GetChild(i).gameObject);
-                }
+                buttons.Add(panels[activePanel].transform.GetChild(i).gameObject);
+                colorSwitch(new Color(1f, 1f, 1f, 1f), buttons[i]);
             }
-            else
+        }
+        else if(panels[activePanel].transform.name == "Settings Inside")
+        {
+            for (int i = 0; i < UIMenus.Count; i++)
             {
-                for (int i = 0; i < InteractableList.transform.childCount; i++)
+                if (UIMenus[i].transform.name == menuManager.GetComponent<MenuTabbing>().getActiveName() )
                 {
-                    if (InteractableList.transform.GetChild(i).gameObject.activeSelf)
+                    
+                    for (int j = 0; j < UIMenus[i].transform.childCount; j++)
                     {
-                        for(int j = 0; j < InteractableList.transform.GetChild(i).childCount; j++)
-                        {
-                            buttons.Add(InteractableList.transform.GetChild(i).GetChild(j).gameObject);
-                        }
+                        buttons.Add(UIMenus[i].transform.GetChild(j).gameObject);
                     }
+                    Debug.Log(buttons.Count);
                 }
-
             }
-            
+
         }
         else
         {
-
-            for (int i = 0; i < interactionPanel.transform.Find("Menu").childCount; i++)
+            for (int i = 0; i < InteractableList.transform.childCount; i++)
             {
-                buttons.Add(interactionPanel.transform.Find("Menu").GetChild(i).gameObject);
+                if (InteractableList.transform.GetChild(i).gameObject.activeSelf)
+                {
+                    for(int j = 0; j < InteractableList.transform.GetChild(i).childCount; j++)
+                    {
+                        buttons.Add(InteractableList.transform.GetChild(i).GetChild(j).gameObject);
+                    }
+                }
             }
-
+            height = buttons.Count;
 
         }
+            
+        
+        
         panels[activePanel].SetActive(true);
 
     }
@@ -237,25 +243,6 @@ public class TabbingUINavigation : MonoBehaviour
 
 
 
-    public void deselectPanel()
-    {
-        active = -1;
-        for (int i = 0; i < buttons.Count; i++)
-        {
-            colorSwitch(new Color(1f, 1f, 1f, 0.39f), buttons[i]);
-        }
-        buttons = new List<GameObject>();
-
-        foreach (GameObject menu in interactableMenus)
-        {
-            menu.SetActive(false);
-        }
-
-        for (int i = 0; i < panels.Count; i++)
-        {
-                panels[i].SetActive(true);
-        }
-    }
 
 
     public void handleButton()
@@ -264,7 +251,9 @@ public class TabbingUINavigation : MonoBehaviour
         {
             return;
         }
+        Debug.Log(panels[activePanel].transform.name);
         buttons[active].GetComponent<Button>().onClick.Invoke();
+        Debug.Log(panels[activePanel].transform.name);
     }
 
     void runInteration(string interaction, VERA_Interactable interactor)
@@ -356,28 +345,25 @@ public class TabbingUINavigation : MonoBehaviour
     public void selectUI()
     {
 
-        string name = UIList.GetComponent<MenuTabbing>().getActiveName();
-        foreach (GameObject menu in UIMenus)
-        {
-            if (menu.transform.name == name)
-            {
-                menu.SetActive(true);
-            }
-        }
-        colorSwitch(Color.white, buttons[active]);
+        string name = menuManager.GetComponent<MenuTabbing>().getActiveName();
+        if((name == "Slider") || (name == "Dropdown")){
+            Debug.Log("check");
+       //colorSwitch(Color.white, buttons[active]);
         active = 0;
         buttons = new List<GameObject>();
-        for (int i = 0; i < UIList.transform.Find(name).childCount; i++)
-        {
-            buttons.Add(UIList.transform.Find(name).GetChild(i).gameObject);
+            UIList.transform.Find(name).gameObject.SetActive(true);
+            for (int i = 0; i < UIList.transform.Find(name).childCount; i++)
+            {
+                buttons.Add(UIList.transform.Find(name).GetChild(i).gameObject);
+            }
         }
     }
 
     public void deselectUI()
     {
-        string name = UIList.GetComponent<MenuTabbing>().getActiveName(); ;
+        string name = menuManager.GetComponent<MenuTabbing>().getActiveName(); ;
         colorSwitch(Color.white, buttons[active]);
-        selectPanel();
+        //selectPanel();
         foreach (GameObject menu in UIMenus)
         {
             menu.SetActive(false);
@@ -431,6 +417,10 @@ public class TabbingUINavigation : MonoBehaviour
     }
 
 
+    public void outsideSelect()
+    {
+
+    }
 
 
 
