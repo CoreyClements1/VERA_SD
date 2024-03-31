@@ -40,7 +40,7 @@ public class UIOptions : MonoBehaviour
         else{
             
             tab.SetActive(true);
-            Debug.Log("Tabbing is on");
+            //Debug.Log("Tabbing is on");
             // if(twoInputs){
             //     tab2.SetActive(true);
             // }else{
