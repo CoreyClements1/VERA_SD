@@ -6,7 +6,6 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Linq;
 using TMPro;
-using UnityEngine.EventSystems;
 
 
 public class MenuTabbing : MonoBehaviour
@@ -31,33 +30,24 @@ public class MenuTabbing : MonoBehaviour
     public Button selectButton;
     public GameObject insideInteractable;
     public GameObject inside;
-
+    List<GameObject> flagChildren;
     void Start()
     {
+
+        flagChildren = new List<GameObject>();
+        foreach (Transform child in flag.transform)
+        {
+            flagChildren.Add(child.gameObject);
+        }
         setupMenu();
         homeMenu = menu;
-        //outlineColor = selectionController.outlineColor;
-        //outlineWidth = selectionController.outlineWidth;
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(getActiveName());
-        //for (int i = 0; i < UIElements.Count; i++)
-        //{
-        //    if (i == active)
-        //    {
-        //        //Debug.Log("something is active");
-        //        //colorSwitch(settings.secondaryColor, UIElements[i]);
-        //        // Debug.Log(UIElements[i].transform.name);
-        //    }
-        //    if (i != active)
-        //    {
-        //        //Debug.Log("nothing is active");
-        //        colorSwitch(Color.white, UIElements[i]);
-        //    }
-        //}
+        
         if (UIElements[active].GetComponent<TMP_Dropdown>() == null)
         {
             menuOptions = new List<Transform>();
@@ -158,8 +148,10 @@ public class MenuTabbing : MonoBehaviour
         Vector3[] v = new Vector3[4];
         UIElements[active].GetComponent<RectTransform>().GetWorldCorners(v);
         float flagY = (v[0].y + v[2].y) / 2;
+
         RectTransform sourceRect = UIElements[active].GetComponent<RectTransform>();
         RectTransform targetRect = flag.GetComponent<RectTransform>();
+
 
 
         targetRect.anchoredPosition = sourceRect.anchoredPosition;
@@ -170,6 +162,21 @@ public class MenuTabbing : MonoBehaviour
         targetRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, sourceRect.rect.height);
         targetRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sourceRect.rect.height);
         targetRect.position = new Vector3(v[0].x, flagY, v[0].z);
+
+        RectTransform top = flagChildren[0].GetComponent<RectTransform>();
+        RectTransform left = flagChildren[1].GetComponent<RectTransform>();
+        RectTransform bottom = flagChildren[2].GetComponent<RectTransform>();
+        RectTransform right = flagChildren[3].GetComponent<RectTransform>();
+
+        top.position = new Vector3(v[0].x, v[0].y, v[0].z);
+        left.position = v[3];
+        bottom.position = v[0];
+        right.position = v[2];
+
+        top.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, sourceRect.rect.width);
+        bottom.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, sourceRect.rect.width);
+        left.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sourceRect.rect.height);
+        right.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sourceRect.rect.height);
 
     }
 

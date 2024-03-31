@@ -3503,7 +3503,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Down
+  m_text: Up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3633,7 +3633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c0f9525838d5d49990ba70c0d557b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSwitch: 0
+  levelSwitch: 1
 --- !u!114 &730752421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6772,18 +6772,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 5341360865442777728}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 5341360865650652157}
         m_TargetAssemblyTypeName: TabbingUINavigation, Assembly-CSharp
         m_MethodName: selectSpecificPanel
@@ -7356,7 +7344,7 @@ GameObject:
   - component: {fileID: 1528267980}
   - component: {fileID: 1528267979}
   m_Layer: 5
-  m_Name: Down
+  m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8116,7 +8104,7 @@ GameObject:
   - component: {fileID: 1692402206}
   - component: {fileID: 1692402205}
   m_Layer: 5
-  m_Name: Up
+  m_Name: Not up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9157,7 +9145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c0f9525838d5d49990ba70c0d557b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSwitch: 1
+  levelSwitch: 0
 --- !u!114 &1857492800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9921,7 +9909,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Up
+  m_text: Down
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10719,6 +10707,54 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8682099814327285801}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5341360865650652157}
+        m_TargetAssemblyTypeName: TabbingUINavigation, Assembly-CSharp
+        m_MethodName: selectSpecificPanel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1723389235}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5341360865442777728}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!224 &2630617917853734553
 RectTransform:
@@ -26238,8 +26274,8 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5341360865963911513}
-  - {fileID: 5341360865987180959}
   - {fileID: 5341360865491522451}
+  - {fileID: 5341360865987180959}
   m_Father: {fileID: 5341360865014702677}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -26861,7 +26897,7 @@ RectTransform:
   m_Children:
   - {fileID: 5341360865550026511}
   m_Father: {fileID: 5341360865442777734}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -28268,7 +28304,6 @@ MonoBehaviour:
   buttonPrefab: {fileID: 7139160222484306025, guid: dc78cd81c23a1db46b642aef72115f7a,
     type: 3}
   options: {fileID: 5341360864557399882}
-  forMenus: 0
   menuManager: {fileID: 1282259894}
 --- !u!114 &5341360865650652158
 MonoBehaviour:
@@ -31020,7 +31055,7 @@ RectTransform:
   m_Children:
   - {fileID: 5341360865567315863}
   m_Father: {fileID: 5341360865442777734}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

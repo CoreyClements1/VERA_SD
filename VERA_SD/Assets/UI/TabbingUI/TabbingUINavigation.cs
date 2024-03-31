@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.Animations;
 using System.Linq;
 using TMPro;
+using System;
+using System.Threading;
 
 public class TabbingUINavigation : MonoBehaviour
 {
@@ -33,7 +35,6 @@ public class TabbingUINavigation : MonoBehaviour
     public GameObject buttonPrefab;
     public GameObject options;
     private UIOptions settings;
-    public bool forMenus;
     public GameObject menuManager;
     int height;
 
@@ -237,6 +238,7 @@ public class TabbingUINavigation : MonoBehaviour
         //hidePanels(newPanel);
         //showPanel(newPanel);
         activePanel = newPanel;
+        active = 0;
         selectPanel();
 
     }
@@ -247,13 +249,17 @@ public class TabbingUINavigation : MonoBehaviour
 
     public void handleButton()
     {
+        
         if (buttons[active] == null)
         {
             return;
         }
-        Debug.Log(panels[activePanel].transform.name);
-        buttons[active].GetComponent<Button>().onClick.Invoke();
-        Debug.Log(panels[activePanel].transform.name);
+        // Debug.Log(panels[activePanel].transform.name);
+        int oldActive = active;
+        Thread.Sleep(30);
+        buttons[oldActive].GetComponent<Button>().onClick.Invoke();
+        
+        //Debug.Log(panels[activePanel].transform.name);
     }
 
     void runInteration(string interaction, VERA_Interactable interactor)
@@ -416,11 +422,12 @@ public class TabbingUINavigation : MonoBehaviour
         }
     }
 
-
-    public void outsideSelect()
+    public void avoidDouble()
     {
-
+        active = -1;
     }
+
+
 
 
 
