@@ -9,18 +9,51 @@ public class DisplayTrajectory : MonoBehaviour
     [SerializeField][Range(20, 100)] private int _lineSegmentCount = 100;
     private List<Vector3> _linePoints = new List<Vector3>();
     public static DisplayTrajectory Instance;
+    private bool showLine;
+    private float vA;
+    private float hA;
+    private GrabTracker grabHandler;
+    private Vector3 throwDirection;
+    private float throwForce;
+
     private void Awake()
     //--------------------------------------//
     {
         Instance = this;
+        showLine = false;
+        grabHandler = FindObjectOfType<GrabTracker>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (showLine == true)
+        {
+            Vector3 x = Camera.main.transform.forward;
+            x = Quaternion.AngleAxis(-vA, Camera.main.transform.right) * x;
+            x = Quaternion.AngleAxis(hA, Camera.main.transform.up) * x;
+            setThrowAngle(x);
+            Vector3 forceDirection = x * throwForce;
+            GameObject obj = grabHandler.GetGrabbedObject();
+            calculateLine(forceDirection, obj.transform.position);
+        }
     }
-    public void calculateLine(Vector3 forceVector, Rigidbody rigidBody, Vector3 startingPoint)
+    private void setThrowAngle(Vector3 x)
+    {
+        throwDirection = x;
+    }
+    public Vector3 getThrowAngle()
+    {
+        return throwDirection;
+    }
+    public void setValues(float vertAng, float horAng, float tForce)
+    {
+        showLine = true;
+        vA = vertAng;
+        hA = horAng;
+        throwForce = tForce;
+    }
+    public void calculateLine(Vector3 forceVector, Vector3 startingPoint)
     {
         //Transform force to velocity vector
         // Vector3 velocity = (forceVector / rigidBody.mass) * Time.fixedDeltaTime;
@@ -59,5 +92,10 @@ public class DisplayTrajectory : MonoBehaviour
     public void hideLine()
     {
         _lineRenderer.positionCount = 0;
+        showLine = false;
+    }
+    public int lineCount()
+    {
+        return _lineRenderer.positionCount;
     }
 }
