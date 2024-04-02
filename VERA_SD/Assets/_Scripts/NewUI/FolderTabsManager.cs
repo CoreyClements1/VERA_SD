@@ -50,7 +50,7 @@ public class FolderTabsManager : MonoBehaviour
     public void EndTabbing()
     //--------------------------------------//
     {
-        LeanTween.cancel(folderTabs[currentActiveTab].gameObject);
+        LeanTween.cancel(folderTabs[currentActiveTab].highlightCanvGroup.gameObject);
         folderTabs[currentActiveTab].highlightCanvGroup.LeanAlpha(0f, tabMoveTime);
 
     } // END EndTabbing
