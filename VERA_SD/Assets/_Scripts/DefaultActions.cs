@@ -475,106 +475,57 @@ public class DefaultActions : MonoBehaviour
 
         if (gJoint.xMotion != ConfigurableJointMotion.Locked)
         {
-            movementDirection += this.transform.TransformDirection(gJoint.axis);
+            movementDirection += transform.TransformDirection(gJoint.axis);
         }
         if (gJoint.yMotion != ConfigurableJointMotion.Locked)
         {
-            movementDirection += this.transform.TransformDirection(gJoint.secondaryAxis);
+            movementDirection += transform.TransformDirection(gJoint.secondaryAxis);
         }
         if (gJoint.zMotion != ConfigurableJointMotion.Locked)
         {
             Vector3 crossAxis = Vector3.Cross(gJoint.axis, gJoint.secondaryAxis);
-            movementDirection += this.transform.TransformDirection(crossAxis);
+            movementDirection += transform.TransformDirection(crossAxis);
         }
 
-        // Debug.Log(CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit));
-        // Debug.Log(CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit));
-
-        // if (startP == true)
-        // {
-        //     if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true && CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit) == true)
-        //     {
-        //         if (gReverse == false)
-        //         {
-        //             this.transform.position += movementDirection * gJoint.linearLimit.limit;
-        //         }
-        //         else
-        //         {
-        //             this.transform.position -= movementDirection * gJoint.linearLimit.limit;
-        //         }
-        //         startP = false;
-        //     }
-        //     else
-        //     {
-        //         if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true)
-        //         {
-        //             gReverse = false;
-        //             this.transform.position += movementDirection * gJoint.linearLimit.limit;
-        //             startP = false;
-        //         }
-        //         else
-        //         {
-        //             gReverse = true;
-        //             this.transform.position -= movementDirection * gJoint.linearLimit.limit;
-        //             startP = false;
-        //         }
-        //     }
-        // }
-        // else
-        // {
-        //     if (gReverse == false)
-        //     {
-        //         this.transform.position -= movementDirection * gJoint.linearLimit.limit;
-        //     }
-        //     else
-        //     {
-        //         this.transform.position += movementDirection * gJoint.linearLimit.limit;
-        //     }
-        //     startP = true;
-        //     gReverse = !gReverse;
-        // }
-
-        // Debug.Log("positive: " + testFunction(movementDirection, transform.position, gJoint.linearLimit.limit));
-        // Debug.Log("negative: " + testFunction(-movementDirection, transform.position, gJoint.linearLimit.limit));
-        if (startP == true)
+        if (startP)
         {
-            if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true && testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+            if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) && testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit))
             {
-                if (gReverse == false)
+                if (!gReverse)
                 {
-                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position + movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
                 else
                 {
-                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position - movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
                 startP = false;
             }
             else
             {
-                if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+                if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit))
                 {
                     gReverse = false;
-                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position + movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                     startP = false;
                 }
-                else if (testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+                else if (testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit))
                 {
                     gReverse = true;
-                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position - movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                     startP = false;
                 }
                 else
                 {
-                    if (gReverse == false)
+                    if (!gReverse)
                     {
                         testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit);
-                        this.transform.position += movementDirection * newDistance;
+                        LeanTween.move(gameObject, transform.position + movementDirection * newDistance, .5f).setEase(LeanTweenType.easeInOutQuad);
                     }
                     else
                     {
                         testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit);
-                        this.transform.position -= movementDirection * newDistance;
+                        LeanTween.move(gameObject, transform.position - movementDirection * newDistance, .5f).setEase(LeanTweenType.easeInOutQuad);
                     }
                     cantMove = true;
                     startP = false;
@@ -583,26 +534,26 @@ public class DefaultActions : MonoBehaviour
         }
         else
         {
-            if (gReverse == false)
+            if (!gReverse)
             {
-                if (cantMove == true)
+                if (cantMove)
                 {
-                    this.transform.position -= movementDirection * newDistance;
+                    LeanTween.move(gameObject, transform.position - movementDirection * newDistance, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
                 else
                 {
-                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position - movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
             }
             else
             {
-                if (cantMove == true)
+                if (cantMove)
                 {
-                    this.transform.position += movementDirection * newDistance;
+                    LeanTween.move(gameObject, transform.position + movementDirection * newDistance, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
                 else
                 {
-                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position + movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
             }
             cantMove = false;
