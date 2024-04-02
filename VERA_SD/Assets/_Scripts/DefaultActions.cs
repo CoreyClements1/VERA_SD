@@ -189,11 +189,18 @@ public class DefaultActions : MonoBehaviour
     public void aimThrow()
     {
         //show tragectory line with regular force
-        verticleAngle = 0;
-        newVertChange = throwAngleChange;
-        horizontalAngle = 0;
-        newHorzChange = throwAngleChange;
-        DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
+        {
+            verticleAngle = 0;
+            newVertChange = throwAngleChange;
+            horizontalAngle = 0;
+            newHorzChange = throwAngleChange;
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
+        }
     }
     public void aimUp()
     {
