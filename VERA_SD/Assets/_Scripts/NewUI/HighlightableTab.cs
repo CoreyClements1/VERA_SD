@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HighlightableTab : MonoBehaviour
@@ -13,6 +14,7 @@ public class HighlightableTab : MonoBehaviour
 
     public RectTransform rectTrans;
     public CanvasGroup highlightCanvGroup;
+    public TMP_Text buttonText;
 
 
     #endregion

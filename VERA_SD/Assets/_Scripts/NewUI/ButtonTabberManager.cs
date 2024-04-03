@@ -11,7 +11,7 @@ public class ButtonTabberManager : MonoBehaviour
     #region VARIABLES
 
 
-    [SerializeField] private HighlightableTab[] highlightableTabs;
+    [SerializeField] private List<HighlightableTab> highlightableTabs = new List<HighlightableTab>();
     public static float tabMoveTime = .25f;
     private int currentActiveTab;
 
@@ -67,7 +67,7 @@ public class ButtonTabberManager : MonoBehaviour
         currentActiveTab--;
         if (currentActiveTab < 0)
         {
-            currentActiveTab = highlightableTabs.Length - 1;
+            currentActiveTab = highlightableTabs.Count - 1;
         }
 
         BeginTabbing();
@@ -85,7 +85,7 @@ public class ButtonTabberManager : MonoBehaviour
         EndTabbing();
 
         currentActiveTab++;
-        if (currentActiveTab > highlightableTabs.Length - 1)
+        if (currentActiveTab > highlightableTabs.Count - 1)
         {
             currentActiveTab = 0;
         }
@@ -95,6 +95,48 @@ public class ButtonTabberManager : MonoBehaviour
         return currentActiveTab;
 
     } // END TabRight
+
+
+    #endregion
+
+
+    #region CLEARING AND ADDING TABS
+
+
+    // Clears the list of tabs
+    //--------------------------------------//
+    public void ClearTabs()
+    //--------------------------------------//
+    {
+        for (int i = 0; i < highlightableTabs.Count; i++)
+        {
+            Destroy(highlightableTabs[i].gameObject);
+        }
+
+        highlightableTabs.Clear();
+        currentActiveTab = 0;
+
+    } // END ClearTabs
+
+
+    // Adds to the list of tabs
+    //--------------------------------------//
+    public void AddTab(HighlightableTab tab)
+    //--------------------------------------//
+    {
+        highlightableTabs.Add(tab);
+
+    } // END AddTab
+
+
+    // Returns tab at index
+    //--------------------------------------//
+    public HighlightableTab GetTab(int index)
+    //--------------------------------------//
+    {
+        return highlightableTabs[index];
+
+    } // END GetTab
 
 
     #endregion

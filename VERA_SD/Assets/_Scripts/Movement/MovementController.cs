@@ -152,20 +152,26 @@ public class MovementController : MonoBehaviour
     private Vector3 GetTurnRInput(){
         return new Vector3 (0, rotationValue, 0);
     }
+
+
     // Controls forward movement for level 1
     private void UserMove(){
         _userMoveInput = new Vector3(_userMoveInput.x, _userMoveInput.y, _userMoveInput.z);
-        // Moves the rig
-        Vector3 camRotY = new Vector3(0f, mainCam.localRotation.eulerAngles.y, 0f);
-        Quaternion rotVal = Quaternion.Euler(camRotY);
+        _userMoveInput = new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
+        
+        /*
+        Vector3 camFwd = Camera.main.transform.forward;
+        Debug.Log(camFwd);
+        camFwd.y = 0f;
+        camFwd.Normalize();
+        Quaternion oldRot = _characterController.transform.rotation;
+        _characterController.transform.rotation = Quaternion.LookRotation(camFwd);
+        */
 
-
-        Vector3 moveDir = rotVal * _userMoveInput;
-        moveDir.y = 0f;
-        moveDir = Vector3.Normalize(moveDir);
-
-        _characterController.Move(_userMoveInput * speed * Time.deltaTime  * 1.5f);
+        _characterController.Move(_userMoveInput * speed * Time.deltaTime * 1.5f);
     }
+
+
     // Rotates the rig based on if the rotation is left or right.
     private void UserLook(){
         xrRig.transform.eulerAngles = xrRig.transform.eulerAngles + _userLookInput;

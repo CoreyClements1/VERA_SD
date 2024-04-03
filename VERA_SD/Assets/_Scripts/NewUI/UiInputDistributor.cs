@@ -13,6 +13,7 @@ public class UiInputDistributor : MonoBehaviour
 
     private Looking looking;
     private MovementInput movementInput;
+    private SelectionController selectionController;
 
 
     #endregion
@@ -38,6 +39,7 @@ public class UiInputDistributor : MonoBehaviour
     {
         looking = FindObjectOfType<Looking>();
         movementInput = FindObjectOfType<MovementInput>();
+        selectionController = FindObjectOfType<SelectionController>();
 
     } // END Init
 
@@ -112,6 +114,32 @@ public class UiInputDistributor : MonoBehaviour
         movementInput.TreeTurnRight();
 
     } // END TurnRight
+
+
+    #endregion
+
+
+    #region DISTRIBUTIONS: INTERACT
+
+
+    // HighlightAll
+    //--------------------------------------//
+    public void HighlightAll()
+    //--------------------------------------//
+    {
+        selectionController.HighlightAll();
+
+    } // END HighlightAll
+
+
+    // SelectNext
+    //--------------------------------------//
+    public void SelectNext()
+    //--------------------------------------//
+    {
+        selectionController.SelectionCycle();
+
+    } // END SelectNext
 
 
     #endregion

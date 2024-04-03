@@ -319,7 +319,7 @@ public class TabbingUINavigation : MonoBehaviour
 
     public void selectObject()
     {
-        string name = selectionController.currentObj;
+        string name = selectionController.currentObj.name;
         foreach (GameObject menu in interactableMenus)
         {
             if (menu.transform.name == name)
@@ -338,7 +338,7 @@ public class TabbingUINavigation : MonoBehaviour
 
     public void deselectObject()
     {
-        string name = selectionController.currentObj;
+        string name = selectionController.currentObj.name;
         colorSwitch(Color.white, buttons[active]);
         selectPanel();
         foreach (GameObject menu in interactableMenus)

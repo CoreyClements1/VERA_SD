@@ -38,6 +38,8 @@ public class NewMenuNavigation : MonoBehaviour
     [SerializeField] private ButtonTabberManager settingsTabberManager;
 
     private UiInputDistributor uiInputDistributor;
+    private SelectionController selectionController;
+    private InteractionsMenuManager interactionsMenuManager;
 
 
     #endregion
@@ -66,6 +68,8 @@ public class NewMenuNavigation : MonoBehaviour
         inputActions.Movement.Switch4.performed += Button4;
 
         uiInputDistributor = FindObjectOfType<UiInputDistributor>();
+        selectionController = FindObjectOfType<SelectionController>();
+        interactionsMenuManager = FindObjectOfType<InteractionsMenuManager>();
 
     } // END Start
 
@@ -239,12 +243,33 @@ public class NewMenuNavigation : MonoBehaviour
                 }
                 break;
 
+            // Activate corresponding interact function
             case UiState.Interact:
-                // TODO
+                switch (currentButtonHighlight)
+                {
+                    case 0:
+                        uiInputDistributor.HighlightAll();
+                        interactionsMenuManager.HighlightedAll();
+                        break;
+                    case 1:
+                        uiInputDistributor.SelectNext();
+                        interactionsMenuManager.SelectedNext();
+                        break;
+                    case 2:
+                        if (interactionsMenuManager.CanViewInteractions())
+                        {
+                            currentButtonHighlight = 0;
+                            interactTabberManager.EndTabbing();
+                            interactionsMenuManager.SetupInteractableSub(interactSubTabberManager);
+                            interactSubTabberManager.BeginTabbing();
+                            currentUiState = UiState.InteractSub;
+                        }
+                        break;
+                }
                 break;
 
             case UiState.InteractSub:
-                // TODO
+                interactionsMenuManager.TriggerSubInteraction(interactSubTabberManager, currentButtonHighlight);
                 break;
 
             case UiState.Settings:
@@ -285,13 +310,16 @@ public class NewMenuNavigation : MonoBehaviour
                 break;
 
             case UiState.InteractSub:
-                // TODO
                 interactSubTabberManager.EndTabbing();
+                interactionsMenuManager.DestroyInteractableSub(interactSubTabberManager);
+                interactTabberManager.ResetTabbing();
+                currentButtonHighlight = 0;
                 interactTabberManager.BeginTabbing();
-                currentUiState = UiState.Header;
+                currentUiState = UiState.Interact;
                 break;
 
             case UiState.Settings:
+                // TODO
                 lookTabberManager.EndTabbing();
                 folderTabsManager.BeginTabbing();
                 currentUiState = UiState.Header;
@@ -299,6 +327,33 @@ public class NewMenuNavigation : MonoBehaviour
         }
 
     } // END Button4
+
+
+    #endregion
+
+
+    #region OTHER
+
+
+    // Called when interact is out of range
+    //--------------------------------------//
+    public void InteractOutOfRange()
+    //--------------------------------------//
+    {
+        if (currentUiState == UiState.InteractSub)
+        {
+            interactSubTabberManager.EndTabbing();
+            interactionsMenuManager.DestroyInteractableSub(interactSubTabberManager);
+            interactionsMenuManager.ResetText();
+            interactTabberManager.BeginTabbing();
+            currentUiState = UiState.Interact;
+        }
+        else
+        {
+            interactionsMenuManager.ResetText();
+        }
+
+    } // END InteractOutOfRange
 
 
     #endregion
