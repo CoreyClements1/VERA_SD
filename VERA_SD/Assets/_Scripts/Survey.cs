@@ -2,14 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Survey : MonoBehaviour
 {
+    public Slider slider;
     public TextAsset surveyData;
     public TextAsset surveyResponse;
+    public TextMeshProUGUI surveyQuestionDisplay;
+    public TextMeshProUGUI surveyResponseDisplay;
+    public Button submitButton;
+    private int questionCounter = 0;
     public SurveyQuestionList questionList = new SurveyQuestionList();
+    public string surveyValue;
 
     [System.Serializable]
     public class SurveyQuestions
@@ -23,48 +30,54 @@ public class Survey : MonoBehaviour
     {
         public SurveyQuestions[] questions;
     }
-    // public Slider slider;
-    // public float surveyValue;
 
-    // {
-    //     surveyValue = 1;
 
-   
-    // public void GetSurveyValue()
-    // {
-    //     surveyValue = slider.value;
-    //     Debug.Log(surveyValue);
-    // }
-    // Start is called before the first frame update
     void Start()
     {
         questionList = JsonUtility.FromJson<SurveyQuestionList>(surveyData.text);
-        
+
+        if(questionList.questions.Length != 0)
+        {
+            surveyQuestionDisplay.text = questionList.questions[questionCounter].question;
+        }
         for(int i = 0; i < questionList.questions.Length; i++)
         {
             Debug.Log(questionList.questions[i].question);
             Debug.Log(questionList.questions[i].response);
         }
 
-        string userResponse = "2";
-        questionList.questions[0].response = userResponse;
-        userResponse = "1";
-        questionList.questions[1].response = userResponse;
-        userResponse = "5";
-        questionList.questions[2].response = userResponse;
-        userResponse = "3";
-        questionList.questions[3].response = userResponse;
-        userResponse = "4";
-        questionList.questions[4].response = userResponse;
-        
-        SurveyQuestionList questionResponse = questionList;
+        slider.onValueChanged.AddListener((v) => {
+            switch(slider.value)
+            {
+                case 1f:
+                    surveyResponseDisplay.text = "Strongly Disagree";
+                    break;
+                case 2f:
+                    surveyResponseDisplay.text = "Disagree";
+                    break;
+                case 3f:
+                    surveyResponseDisplay.text = "Slightly Disagree";
+                    break;
+                case 4f:
+                    surveyResponseDisplay.text = "Neutral";
+                    break;
+                case 5f:
+                    surveyResponseDisplay.text = "Slightly Agree";
+                    break;
+                case 6f:
+                    surveyResponseDisplay.text = "Agree";
+                    break;
+                case 7f:
+                    surveyResponseDisplay.text = "Strongly Agree";
+                    break;
+            }
+            surveyValue = surveyResponseDisplay.text;
+            Debug.Log(surveyValue);
+        });
 
-        for(int i = 0; i < questionResponse.questions.Length; i++)
-        {
-            Debug.Log(questionResponse.questions[i].question);
-            Debug.Log(questionResponse.questions[i].response);
-        }
-        SaveResponse(questionResponse);
+        submitButton.onClick.AddListener(() => {
+            SubmitSurveyQuestion();
+        });
     }
 
     public void SaveResponse(SurveyQuestionList responseList){
@@ -72,5 +85,19 @@ public class Survey : MonoBehaviour
         // File.WriteAllText(Application.dataPath + "/SurveyResponse.json", response);
         File.WriteAllText(Application.dataPath + "/_Scripts/SurveyResponse.json", response);
         Debug.Log("Called");
+    }
+       
+    public void SubmitSurveyQuestion()
+    {
+        if (questionCounter != questionList.questions.Length-1)
+        {
+            questionList.questions[questionCounter].response = surveyValue;
+            questionCounter++;
+            surveyQuestionDisplay.text = questionList.questions[questionCounter].question;
+        } 
+        else {
+            surveyQuestionDisplay.text = "Your responses have been recorded";
+            SaveResponse(questionList);
+        }
     }
 }
