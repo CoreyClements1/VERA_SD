@@ -35,11 +35,22 @@ public class NewMenuNavigation : MonoBehaviour
     [SerializeField] private ButtonTabberManager moveTabberManager;
     [SerializeField] private ButtonTabberManager interactTabberManager;
     [SerializeField] private ButtonTabberManager interactSubTabberManager;
-    [SerializeField] private ButtonTabberManager settingsTabberManager;
+    [SerializeField] private VERA_MenuNavigator settingsNavigator;
+    [SerializeField] private CanvasGroup settingsCanvasGroup;
 
     private UiInputDistributor uiInputDistributor;
     private SelectionController selectionController;
     private InteractionsMenuManager interactionsMenuManager;
+
+    public HighlightableTab toggleHighlightPrefab;
+    public HighlightableTab sliderHighlightPrefab;
+    public HighlightableTab buttonHighlightPrefab;
+
+    private bool navigatingExternalMenu = false;
+    private VERA_MenuNavigator externalMenuNavigator;
+    private float settingsStartPosY;
+    private float settingsOldSize = 100f;
+    private float settingsNewSize = 300f;
 
 
     #endregion
@@ -71,6 +82,8 @@ public class NewMenuNavigation : MonoBehaviour
         selectionController = FindObjectOfType<SelectionController>();
         interactionsMenuManager = FindObjectOfType<InteractionsMenuManager>();
 
+        settingsStartPosY = transform.localPosition.y;
+
     } // END Start
 
 
@@ -85,6 +98,12 @@ public class NewMenuNavigation : MonoBehaviour
     private void Button1(InputAction.CallbackContext ctx)
     //--------------------------------------//
     {
+        if (navigatingExternalMenu)
+        {
+            externalMenuNavigator.TabPrevious();
+            return;
+        }
+
         switch(currentUiState)
         {
             // If on header, tab one folder to the left
@@ -124,7 +143,7 @@ public class NewMenuNavigation : MonoBehaviour
                 break;
 
             case UiState.Settings:
-                currentButtonHighlight = settingsTabberManager.TabLeft();
+                // N/A, handled externally
                 break;
         }
 
@@ -136,6 +155,12 @@ public class NewMenuNavigation : MonoBehaviour
     private void Button2(InputAction.CallbackContext ctx)
     //--------------------------------------//
     {
+        if (navigatingExternalMenu)
+        {
+            externalMenuNavigator.TabNext();
+            return;
+        }
+
         switch (currentUiState)
         {
             // If on header, tab one folder to the right
@@ -175,7 +200,7 @@ public class NewMenuNavigation : MonoBehaviour
                 break;
 
             case UiState.Settings:
-                currentButtonHighlight = settingsTabberManager.TabRight();
+                // N/A, handled externally
                 break;
         }
 
@@ -187,6 +212,12 @@ public class NewMenuNavigation : MonoBehaviour
     private void Button3(InputAction.CallbackContext ctx)
     //--------------------------------------//
     {
+        if (navigatingExternalMenu)
+        {
+            externalMenuNavigator.SelectItem();
+            return;
+        }
+
         switch (currentUiState)
         {
             // If on header, begin controlling main area
@@ -204,7 +235,7 @@ public class NewMenuNavigation : MonoBehaviour
                         interactTabberManager.ResetTabbing();
                         break;
                     case UiState.Settings:
-                        settingsTabberManager.ResetTabbing();
+                        OpenSettings();
                         break;
                 }
                 currentUiState = pendingStateAfterHeader;
@@ -273,7 +304,7 @@ public class NewMenuNavigation : MonoBehaviour
                 break;
 
             case UiState.Settings:
-                // TODO
+                // N/A, handled externally
                 break;
         }
 
@@ -285,6 +316,12 @@ public class NewMenuNavigation : MonoBehaviour
     private void Button4(InputAction.CallbackContext ctx)
     //--------------------------------------//
     {
+        if (navigatingExternalMenu)
+        {
+            externalMenuNavigator.BackButton();
+            return;
+        }
+
         switch (currentUiState)
         {
             case UiState.Header:
@@ -319,14 +356,93 @@ public class NewMenuNavigation : MonoBehaviour
                 break;
 
             case UiState.Settings:
-                // TODO
-                lookTabberManager.EndTabbing();
-                folderTabsManager.BeginTabbing();
-                currentUiState = UiState.Header;
+                // N/A, handled externally                
                 break;
         }
 
     } // END Button4
+
+
+    #endregion
+
+
+    #region EXTERNAL MENU
+
+
+    // Sets whether we are navigating an external menu
+    //--------------------------------------//
+    public void StartNavigateExternalMenu(VERA_MenuNavigator menuToNavigate)
+    //--------------------------------------//
+    {
+        navigatingExternalMenu = true;
+        externalMenuNavigator = menuToNavigate;
+
+    } // END SetNavigatingExternalMenu
+
+
+    // Stops navigating an external menu
+    //--------------------------------------//
+    public void StopNavigateExternalMenu()
+    //--------------------------------------//
+    {
+        navigatingExternalMenu = false;
+
+        if (currentUiState == UiState.Settings)
+        {
+            CloseSettings();
+        }
+
+    } // END StopNavigateExternalMenu
+
+
+    #endregion
+
+
+    #region SETTINGS
+
+
+    // Opens settings menu
+    //--------------------------------------//
+    private void OpenSettings()
+    //--------------------------------------//
+    {
+        settingsCanvasGroup.LeanAlpha(1f, .25f);
+
+        transform.LeanMoveLocalY(settingsStartPosY + (settingsNewSize - settingsStartPosY) / 2f, .25f).setEaseOutQuad();
+        RectTransform rectTrans = mainAreaManager.GetComponent<RectTransform>();
+        LeanTween.value(mainAreaManager.gameObject, rectTrans.sizeDelta.y, settingsNewSize, .25f).setEaseOutQuad().setOnUpdate((value) =>
+        {
+            rectTrans.sizeDelta = new Vector2(rectTrans.sizeDelta.x, value);
+        });
+
+        mainAreaManager.HideCanvGroups();
+
+        settingsNavigator.StartMenuNavigation();        
+
+    } // END OpenSettings
+
+
+    // Closes settings
+    //--------------------------------------//
+    private void CloseSettings()
+    //--------------------------------------//
+    {
+        settingsCanvasGroup.LeanAlpha(0f, .25f);
+
+        transform.LeanMoveLocalY(settingsStartPosY, .25f).setEaseOutQuad();
+        RectTransform rectTrans = mainAreaManager.GetComponent<RectTransform>();
+        LeanTween.value(mainAreaManager.gameObject, rectTrans.sizeDelta.y, settingsOldSize, .25f).setEaseOutQuad().setOnUpdate((value) =>
+        {
+            rectTrans.sizeDelta = new Vector2(rectTrans.sizeDelta.x, value);
+        });
+
+        mainAreaManager.SwapCanvasGroups(3);
+        folderTabsManager.BeginTabbing();
+        currentUiState = UiState.Header;
+
+        settingsNavigator.StopMenuNavigation();
+
+    } // END CloseSettings
 
 
     #endregion

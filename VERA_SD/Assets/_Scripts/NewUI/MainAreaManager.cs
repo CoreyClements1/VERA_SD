@@ -70,6 +70,19 @@ public class MainAreaManager : MonoBehaviour
     } // END SwapCanvasGroups
 
 
+    // Hides canvas groups
+    //--------------------------------------//
+    public void HideCanvGroups()
+    //--------------------------------------//
+    {
+        for (int i = 0; i < areaCanvasGroups.Length; i++)
+        {
+            areaCanvasGroups[i].LeanAlpha(0f, FolderTabsManager.tabMoveTime);
+        }
+
+    } // END HideCanvGroups
+
+
     #endregion
 
 

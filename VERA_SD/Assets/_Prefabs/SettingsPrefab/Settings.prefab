@@ -4567,6 +4567,7 @@ MonoBehaviour:
   slider: {fileID: 6700466497525854373}
   player: {fileID: 0}
   sliderText: {fileID: 408716690}
+  MenuTab: {fileID: 0}
 --- !u!1 &6700466497765039230
 GameObject:
   m_ObjectHideFlags: 0
