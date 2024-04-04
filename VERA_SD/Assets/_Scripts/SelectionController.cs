@@ -30,7 +30,7 @@ public class SelectionController : MonoBehaviour
     [SerializeField] Color outlineColor;
     [SerializeField] float outlineWidth = 5f;
     [SerializeField] float highlightDuration = 3f;
-    private GameObject Arrow;
+    private Arrow arrow;
     private TextMeshPro Text;
     [SerializeField] bool useCameraSelect = false;
 
@@ -46,7 +46,7 @@ public class SelectionController : MonoBehaviour
         interactSub = GameObject.Find("Interact Sub");
         //Debug.Log(interactSub);
         playerCam = Camera.main;
-        Arrow = FindObjectOfType<Arrow>().gameObject;
+        arrow = FindObjectOfType<Arrow>();
 
     }
 
@@ -71,9 +71,9 @@ public class SelectionController : MonoBehaviour
     private void Update()
     //--------------------------------------//
     {
-        if (lookTarget != null)
+        if (lookTarget != null && arrow != null)
         {
-            Arrow.transform.LookAt(lookTarget.transform);
+            arrow.transform.LookAt(lookTarget.transform);
         }
         SelectedOutOfRange();
     } // END Update
@@ -140,10 +140,13 @@ public class SelectionController : MonoBehaviour
         outline.OutlineWidth = outlineWidth;
 
         // Disable arrow if object is grabbed
-        if (grabTracker.GetGrabbedObject() == interactables[counter])
-            Arrow.SetActive(false);
-        else
-            Arrow.SetActive(true);
+        if (arrow != null)
+        {
+            if (grabTracker.GetGrabbedObject() == interactables[counter])
+                arrow.gameObject.SetActive(false);
+            else
+                arrow.gameObject.SetActive(true);
+        }
 
         // Make sure the camera doesn't snap to the grabbed object
         if (useCameraSelect && (grabTracker.GetGrabbedObject() != interactables[counter]))
@@ -274,7 +277,7 @@ public class SelectionController : MonoBehaviour
         bool isOffScreen = targetScreenPos.x <= 10 || targetScreenPos.x >= Screen.width || targetScreenPos.y <= 10
                             || targetScreenPos.y >= Screen.height;
 
-        if (Arrow != null || Text != null) // REFACTOR
+        if (arrow != null || Text != null) // REFACTOR
         {
             if (isOffScreen)
             {
@@ -388,7 +391,10 @@ public class SelectionController : MonoBehaviour
     {
         // This assumes that the radius is drawn from player's camera, may not be true later!
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(playerCam.transform.position, selectRadius);
+        if (playerCam != null)
+        {
+            Gizmos.DrawWireSphere(playerCam.transform.position, selectRadius);
+        }
 
     } // END OnDrawGizmosSelected
 

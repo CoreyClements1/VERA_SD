@@ -127,10 +127,14 @@ public class GrabTracker : MonoBehaviour
     public void SetGrabbedObject(GameObject obj)
     //--------------------------------------//
     {
-        if (obj != null)
-            arrow.SetActive(false);
-        else 
-            arrow.SetActive(true);
+        if (arrow != null)
+        {
+            if (obj != null)
+                arrow.SetActive(false);
+            else
+                arrow.SetActive(true);
+        }
+        
         grabbedObject = obj;
     }//End SetGrabbedObject
 
