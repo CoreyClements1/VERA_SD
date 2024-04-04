@@ -10479,7 +10479,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f32149c5c37f1ef4aa9001af626bce51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grabbedObject: {fileID: 0}
 --- !u!1001 &605774406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31345,15 +31344,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7439cb1a51611d84ba7877ebd1203edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treeBase: {fileID: 0}
-  currentObj: {fileID: 0}
   selectRadius: 2.92
-  playerCam: {fileID: 0}
   outlineColor: {r: 1, g: 0, b: 0.98853016, a: 1}
   outlineWidth: 5
   highlightDuration: 3
-  Arrow: {fileID: 5210274879046961130}
-  Text: {fileID: 0}
   useCameraSelect: 0
 --- !u!4 &1753548985
 Transform:
@@ -36025,6 +36019,11 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 293902703527971212, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 293902704569043560, guid: 30b3007ed7f0c114d9411712e3d5634a,
         type: 3}
       propertyPath: m_Name
@@ -36660,9 +36659,54 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3126698829086313797, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3126698829086313797, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.000042574746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3126698829086313797, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.0011920929
+      objectReference: {fileID: 0}
+    - target: {fileID: 3126698829086313797, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -75.00063
+      objectReference: {fileID: 0}
     - target: {fileID: 3303140367865871052, guid: 30b3007ed7f0c114d9411712e3d5634a,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3455265430270942155, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3455265430270942155, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3455265430270942155, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3455265430270942155, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3455265430270942155, guid: 30b3007ed7f0c114d9411712e3d5634a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3524093548848350289, guid: 30b3007ed7f0c114d9411712e3d5634a,
@@ -44446,7 +44490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f32149c5c37f1ef4aa9001af626bce51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grabbedObject: {fileID: 0}
 --- !u!4 &2232254819483237569
 Transform:
   m_ObjectHideFlags: 0
@@ -44492,15 +44535,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7439cb1a51611d84ba7877ebd1203edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treeBase: {fileID: 0}
-  currentObj: {fileID: 0}
   selectRadius: 5
-  playerCam: {fileID: 1069487749405059056}
   outlineColor: {r: 1, g: 0, b: 0.76454115, a: 1}
   outlineWidth: 5
   highlightDuration: 3
-  Arrow: {fileID: 0}
-  Text: {fileID: 0}
   useCameraSelect: 0
 --- !u!114 &2365874034418829593
 MonoBehaviour:
@@ -48604,15 +48642,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7439cb1a51611d84ba7877ebd1203edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treeBase: {fileID: 0}
-  currentObj: {fileID: 0}
   selectRadius: 2.92
-  playerCam: {fileID: 2519280445305879471}
   outlineColor: {r: 1, g: 0, b: 0.76454115, a: 1}
   outlineWidth: 5
   highlightDuration: 3
-  Arrow: {fileID: 2412435069557569421}
-  Text: {fileID: 3195237143313557167}
   useCameraSelect: 0
 --- !u!4 &3381075302032719754
 Transform:
@@ -48659,7 +48692,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f32149c5c37f1ef4aa9001af626bce51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grabbedObject: {fileID: 0}
 --- !u!1 &3381075302038352912
 GameObject:
   m_ObjectHideFlags: 0
@@ -52836,12 +52868,6 @@ Transform:
   m_Father: {fileID: 4761869324635048156}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5210274879046961130 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 217270779599996640, guid: 89ce521c20736814390cb873381ab498,
-    type: 3}
-  m_PrefabInstance: {fileID: 5426129443038757130}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5405445155170967447
 Transform:
   m_ObjectHideFlags: 0

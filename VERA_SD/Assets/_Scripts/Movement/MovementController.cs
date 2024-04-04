@@ -33,6 +33,8 @@ public class MovementController : MonoBehaviour
     float lastPressTime = 0f;
     // determines which level of accessibity the user is on
     [System.NonSerialized] public int currentLvl = 1;
+    private bool useOneTapMove = false;
+    private bool continualMoveOn = false;
     #endregion
 
     #region START
@@ -60,42 +62,64 @@ public class MovementController : MonoBehaviour
         if(_characterController.isGrounded == false)
         {
             _userMoveInput += Physics.gravity;
-            _characterController.Move(_userMoveInput * speed * Time.deltaTime);
+            _characterController.Move(new Vector3(0f, _userMoveInput.y, 0f) * speed * Time.deltaTime);
+        }
+
+        if (continualMoveOn)
+        {
+            UserMove();
         }
 
         // Level 1 Accessibity controls 
         if(currentLvl == 1){
-            if(switchDown1){
-                Debug.Log(_input.buttonPress1 + " Turn L");
+            if (switchDown1){
+                //Debug.Log(_input.buttonPress1 + " Turn L");
                 _userLookInput = GetTurnLInput();
                 UserLook();
                 _input.buttonPress1 = 0;
             }
 
             if(switchDown2){
-                Debug.Log(_input.buttonPress2 + " Forward");
+                //Debug.Log(_input.buttonPress2 + " Forward");
                 _userMoveInput = GetMoveInput();
-                UserMove();
-                _input.buttonPress2 = 0;
+                // If using one tap move, begin continual movement
+                if (useOneTapMove)
+                {
+                    if (continualMoveOn)
+                    {
+                        continualMoveOn = false;
+                        _input.buttonPress2 = 0;
+                    }
+                    else
+                    {
+                        continualMoveOn = true;
+                        _input.buttonPress2 = 0;
+                    }
+                }
+                else
+                {
+                    UserMove();
+                    _input.buttonPress2 = 0;
+                }
             }
 
             if(switchDown3)
             {
-                Debug.Log(_input.buttonPress3 + " Turn R");
+                //Debug.Log(_input.buttonPress3 + " Turn R");
                 _userLookInput = GetTurnRInput();
                 UserLook();
                 _input.buttonPress3 = 0;
             }
             if(switchDown4)
             {
-                Debug.Log("Back to tree");
+                //Debug.Log("Back to tree");
                 _input.buttonPress4 = 0;
             }
             if(statePressed)
             {
                 currentLvl = 2;
                 _input.state = 0;
-                Debug.Log("Level: " + currentLvl);
+                //Debug.Log("Level: " + currentLvl);
             }
         } else if(currentLvl == 2){
 
@@ -103,14 +127,14 @@ public class MovementController : MonoBehaviour
             UserMoveAnalog();
 
             if(switchDown1){
-                Debug.Log(_input.buttonPress1 + " Turn U");
+                //Debug.Log(_input.buttonPress1 + " Turn U");
                 _userLookInput = GetLookUpInput();
                 UserLookVertical();
                 _input.buttonPress1 = 0;
             }
 
             if(switchDown2){
-                Debug.Log(_input.buttonPress2 + " Turn D");
+                //Debug.Log(_input.buttonPress2 + " Turn D");
                 _userLookInput = GetLookDownInput();
                 UserLookVertical();
                 _input.buttonPress2 = 0;
@@ -118,18 +142,18 @@ public class MovementController : MonoBehaviour
 
             if(switchDown3)
             {
-                Debug.Log("Interact change goes here");
+                //Debug.Log("Interact change goes here");
                 _input.buttonPress3 = 0;
             }
             if(switchDown4)
             {
-                Debug.Log("Menu change goes here");
+                //Debug.Log("Menu change goes here");
                 _input.buttonPress4 = 0;
             }
             if(statePressed)
             {
                 currentLvl = 1;
-                Debug.Log("Lvl" + currentLvl);
+                //Debug.Log("Lvl" + currentLvl);
                 _input.state = 0;
             }
         }
@@ -153,22 +177,26 @@ public class MovementController : MonoBehaviour
         return new Vector3 (0, rotationValue, 0);
     }
 
+    // Sets whether we are using one-tap movement
+    public void SetOneTapMove(bool newVal)
+    {
+        useOneTapMove = newVal;
+    }
+
 
     // Controls forward movement for level 1
     private void UserMove(){
         _userMoveInput = new Vector3(_userMoveInput.x, _userMoveInput.y, _userMoveInput.z);
         _userMoveInput = new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
-        
-        /*
-        Vector3 camFwd = Camera.main.transform.forward;
-        Debug.Log(camFwd);
-        camFwd.y = 0f;
-        camFwd.Normalize();
-        Quaternion oldRot = _characterController.transform.rotation;
-        _characterController.transform.rotation = Quaternion.LookRotation(camFwd);
-        */
 
-        _characterController.Move(_userMoveInput * speed * Time.deltaTime * 1.5f);
+        if (useOneTapMove)
+        {
+            _characterController.Move(_userMoveInput * speed * Time.deltaTime * .15f);
+        }
+        else
+        {
+            _characterController.Move(_userMoveInput * speed * .02f);
+        }
     }
 
 

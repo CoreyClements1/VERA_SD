@@ -48,10 +48,6 @@ public class SettingsManager : MonoBehaviour
     private void Start()
     //--------------------------------------//
     {
-        XRController[] objs = GameObject.FindObjectsOfType<XRController>();
-        //virtualHand1 = objs[0].gameObject;
-        //virtualHand2 = objs[1].gameObject;
-
         movementController = FindObjectOfType<MovementController>();
         defaultMoveSpeed = movementController.speed;
 
@@ -73,7 +69,25 @@ public class SettingsManager : MonoBehaviour
     public void OnJoystickToggleChange()
     //--------------------------------------//
     {
-        // TODO
+        if (movementController == null)
+        {
+            movementController = FindObjectOfType<MovementController>();
+        }
+
+        if (movementController != null)
+        {
+            if (joystickToggle != null)
+            {
+                if (joystickToggle.isOn)
+                {
+                    movementController.currentLvl = 2;
+                }
+                else
+                {
+                    movementController.currentLvl = 1;
+                }
+            }
+        }
 
     } // END OnChange
 
@@ -83,7 +97,18 @@ public class SettingsManager : MonoBehaviour
     public void OnTapActivationToggleChange()
     //--------------------------------------//
     {
-        // TODO
+        if (movementController == null)
+        {
+            movementController = FindObjectOfType<MovementController>();
+        }
+
+        if (movementController != null)
+        {
+            if (tapActivationToggle != null)
+            {
+                movementController.SetOneTapMove(tapActivationToggle.isOn);
+            }
+        }
 
     } // END OnChange
 
@@ -93,20 +118,26 @@ public class SettingsManager : MonoBehaviour
     public void OnDisableVirtualHandsToggleChange()
     //--------------------------------------//
     {
-        // TODO
+        XRDirectInteractor[] objs = GameObject.FindObjectsOfType<XRDirectInteractor>();
+        if (objs.Length > 0 && objs[0] != null)
+            virtualHand1 = objs[0].gameObject;
+        if (objs.Length > 1 && objs[1] != null)
+            virtualHand2 = objs[1].gameObject;
 
-        /*
-        if(disableVirtualHandsToggle.isOn)
+        if (disableVirtualHandsToggle.isOn)
         {
-            virtualHand1.SetActive(true);
-            virtualHand2.SetActive(true);
+            if (virtualHand1 != null)
+                virtualHand1.SetActive(true);
+            if (virtualHand2 != null)
+                virtualHand2.SetActive(true);
         }
         else
         {
-            virtualHand1.SetActive(false);
-            virtualHand2.SetActive(false);
+            if (virtualHand1 != null)
+                virtualHand1.SetActive(false);
+            if (virtualHand2 != null)
+                virtualHand2.SetActive(false);
         }
-        */
 
     } // END OnChange
 
@@ -114,7 +145,7 @@ public class SettingsManager : MonoBehaviour
     #endregion
 
 
-    #region SLIDER ON CHANGE
+    #region MOVE SLIDER ON CHANGE
 
 
     // Called on change
@@ -142,7 +173,7 @@ public class SettingsManager : MonoBehaviour
                 break;
         }
 
-        if (menuNav == null)
+        if (movementController == null)
         {
             movementController = FindObjectOfType<MovementController>();
         }
@@ -202,6 +233,12 @@ public class SettingsManager : MonoBehaviour
     } // END OnChange
 
 
+    #endregion
+
+
+    #region MENU SLIDER ON CHANGE
+
+
     // Called on change
     //--------------------------------------//
     public void OnMenuTiltToggleChange()
@@ -227,10 +264,10 @@ public class SettingsManager : MonoBehaviour
                 turnAmt = 50f;
                 break;
             case 5:
-                turnAmt = 70f;
+                turnAmt = 60f;
                 break;
             case 6:
-                turnAmt = 90f;
+                turnAmt = 70f;
                 break;
         }
 
@@ -241,10 +278,9 @@ public class SettingsManager : MonoBehaviour
 
         if (menuNav != null)
         {
-            //menuNav.transform.localRotation = Quaternion.Euler(defaultMenuRotX + turnAmt, menuNav.transform.localRotation.eulerAngles.y, menuNav.transform.localRotation.eulerAngles.z);
-            turnAmtText.text = "" + Mathf.FloorToInt(turnAmt) + "°";
+            menuNav.RotTo(turnAmt);
+            menuTiltText.text = "" + Mathf.FloorToInt(turnAmt) + "°";
         }
-        
 
     } // END OnChange
 
@@ -254,35 +290,43 @@ public class SettingsManager : MonoBehaviour
     public void OnMenuHeightToggleChange()
     //--------------------------------------//
     {
-        float turnAmt = 30f;
+        float multiplier = 1f;
 
-        switch (turnAmtSlider.value)
+        switch (menuHeightSlider.value)
         {
             case 0:
-                turnAmt = -.15f;
+                multiplier = 0f;
                 break;
             case 1:
-                turnAmt = -.1f;
+                multiplier = .35f;
                 break;
             case 2:
-                turnAmt = -.5f;
+                multiplier = .7f;
                 break;
             case 3:
-                turnAmt = 0f;
+                multiplier = 1f;
                 break;
             case 4:
-                turnAmt = .5f;
+                multiplier = 1.3f;
                 break;
             case 5:
-                turnAmt = 1f;
+                multiplier = 1.65f;
                 break;
             case 6:
-                turnAmt = 1.5f;
+                multiplier = 2f;
                 break;
         }
 
-        //menuNav.transform.localPosition = Vector3.zero;
-        turnAmtText.text = "" + Mathf.FloorToInt(turnAmt) + "°";
+        if (menuNav == null)
+        {
+            menuNav = FindObjectOfType<NewMenuNavigation>();
+        }
+
+        if (menuNav != null)
+        {
+            menuNav.HeightTo(multiplier);
+            menuHeightText.text = "" + Mathf.FloorToInt(multiplier * 100f) + "%";
+        }
 
     } // END OnChange
 
@@ -292,7 +336,43 @@ public class SettingsManager : MonoBehaviour
     public void OnMenuOpacityToggleChange()
     //--------------------------------------//
     {
-        // TODO
+        float op = 1f;
+
+        switch (menuOpacitySlider.value)
+        {
+            case 0:
+                op = .4f;
+                break;
+            case 1:
+                op = .5f;
+                break;
+            case 2:
+                op = .6f;
+                break;
+            case 3:
+                op = .7f;
+                break;
+            case 4:
+                op = .8f;
+                break;
+            case 5:
+                op = .9f;
+                break;
+            case 6:
+                op = 1f;
+                break;
+        }
+
+        if (menuNav == null)
+        {
+            menuNav = FindObjectOfType<NewMenuNavigation>();
+        }
+
+        if (menuNav != null)
+        {
+            menuNav.GetComponent<CanvasGroup>().alpha = op;
+            menuOpacityText.text = "" + Mathf.FloorToInt(op * 100f) + "%";
+        }
 
     } // END OnChange
 

@@ -17,21 +17,21 @@ public class SelectionController : MonoBehaviour
 
     private List<VERA_Interactable> interactables = new List<VERA_Interactable>();
     private int counter = 0;
-    [SerializeField] HandleInteractables treeBase;
+    private HandleInteractables treeBase;
     private VERA_Interactable previousObj;
     private Outline outline;
     private GameObject lookTarget;
-    public VERA_Interactable currentObj;
+    [System.NonSerialized] public VERA_Interactable currentObj;
     private bool manualHighlightCancel = false;
     private GrabTracker grabTracker;
 
     [SerializeField] float selectRadius;
-    [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
+    private Camera playerCam; // The point where all distance calculations are made (may change later)
     [SerializeField] Color outlineColor;
     [SerializeField] float outlineWidth = 5f;
     [SerializeField] float highlightDuration = 3f;
-    [SerializeField] GameObject Arrow;
-    [SerializeField] TextMeshPro Text;
+    private GameObject Arrow;
+    private TextMeshPro Text;
     [SerializeField] bool useCameraSelect = false;
 
     private GameObject interactSub;

@@ -51,6 +51,8 @@ public class NewMenuNavigation : MonoBehaviour
     private float settingsStartPosY;
     private float settingsOldSize = 100f;
     private float settingsNewSize = 300f;
+    private float currentTurnAmt = 0f;
+    public float defaultLocalY;
 
 
     #endregion
@@ -83,6 +85,7 @@ public class NewMenuNavigation : MonoBehaviour
         interactionsMenuManager = FindObjectOfType<InteractionsMenuManager>();
 
         settingsStartPosY = transform.localPosition.y;
+        defaultLocalY = transform.GetChild(0).localPosition.y;
 
     } // END Start
 
@@ -409,6 +412,7 @@ public class NewMenuNavigation : MonoBehaviour
         settingsCanvasGroup.LeanAlpha(1f, .25f);
 
         transform.LeanMoveLocalY(settingsStartPosY + (settingsNewSize - settingsStartPosY) / 2f, .25f).setEaseOutQuad();
+        
         RectTransform rectTrans = mainAreaManager.GetComponent<RectTransform>();
         LeanTween.value(mainAreaManager.gameObject, rectTrans.sizeDelta.y, settingsNewSize, .25f).setEaseOutQuad().setOnUpdate((value) =>
         {
@@ -430,6 +434,7 @@ public class NewMenuNavigation : MonoBehaviour
         settingsCanvasGroup.LeanAlpha(0f, .25f);
 
         transform.LeanMoveLocalY(settingsStartPosY, .25f).setEaseOutQuad();
+
         RectTransform rectTrans = mainAreaManager.GetComponent<RectTransform>();
         LeanTween.value(mainAreaManager.gameObject, rectTrans.sizeDelta.y, settingsOldSize, .25f).setEaseOutQuad().setOnUpdate((value) =>
         {
@@ -443,6 +448,28 @@ public class NewMenuNavigation : MonoBehaviour
         settingsNavigator.StopMenuNavigation();
 
     } // END CloseSettings
+
+
+    // Rotates menu to specified amt
+    //--------------------------------------//
+    public void RotTo(float turnAmt)
+    //--------------------------------------//
+    {
+        currentTurnAmt = turnAmt;
+        transform.localRotation = Quaternion.Euler(turnAmt, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
+    
+    } // END RotTo
+
+
+    // Changes height of menu to given percent val
+    //--------------------------------------//
+    public void HeightTo(float heightMultiplier)
+    //--------------------------------------//
+    {
+        heightMultiplier -= 1f;
+        transform.GetChild(0).localPosition = new Vector3(transform.localPosition.x, defaultLocalY + 50f * heightMultiplier, transform.localPosition.z);
+
+    } // END HeightTo
 
 
     #endregion
