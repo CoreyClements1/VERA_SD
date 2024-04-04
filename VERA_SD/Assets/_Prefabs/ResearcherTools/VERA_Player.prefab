@@ -45,15 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7439cb1a51611d84ba7877ebd1203edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treeBase: {fileID: 0}
-  currentObj: {fileID: 0}
   selectRadius: 2.92
-  playerCam: {fileID: 0}
   outlineColor: {r: 1, g: 0, b: 0.76454115, a: 1}
   outlineWidth: 5
   highlightDuration: 3
-  Arrow: {fileID: 0}
-  Text: {fileID: 0}
   useCameraSelect: 0
 --- !u!114 &293902703198379671
 MonoBehaviour:
@@ -67,7 +62,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f32149c5c37f1ef4aa9001af626bce51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grabbedObject: {fileID: 0}
 --- !u!1 &293902703527971211
 GameObject:
   m_ObjectHideFlags: 0
@@ -3273,6 +3267,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VERA_Menu_FINAL
       objectReference: {fileID: 0}
+    - target: {fileID: 4021224747615184904, guid: ac159c79e5831c1429eda1b91621d5ed,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4147636945001406082, guid: ac159c79e5831c1429eda1b91621d5ed,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3952,6 +3951,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7254720141798533761, guid: ac159c79e5831c1429eda1b91621d5ed,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7254720141798533761, guid: ac159c79e5831c1429eda1b91621d5ed,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.000042574746
+      objectReference: {fileID: 0}
+    - target: {fileID: 7254720141798533761, guid: ac159c79e5831c1429eda1b91621d5ed,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.0011920929
+      objectReference: {fileID: 0}
+    - target: {fileID: 7254720141798533761, guid: ac159c79e5831c1429eda1b91621d5ed,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -75.00063
       objectReference: {fileID: 0}
     - target: {fileID: 7350278664656959257, guid: ac159c79e5831c1429eda1b91621d5ed,
         type: 3}
