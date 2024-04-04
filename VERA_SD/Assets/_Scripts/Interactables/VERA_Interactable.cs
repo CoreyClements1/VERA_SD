@@ -12,6 +12,7 @@ public class VERA_Interactable : MonoBehaviour, IInteractable
     #region VARIABLES
 
 
+    public string interactableName;
     public List<InteractionInfo> interactions;
 
 

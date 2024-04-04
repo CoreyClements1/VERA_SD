@@ -9,7 +9,7 @@ public class GrabTracker : MonoBehaviour
     #region VARIABLES
 
 
-    public GameObject grabbedObject;
+    [System.NonSerialized] public GameObject grabbedObject;
     private Transform objParent;
     private bool useGravity;
     private bool freezeRotation;

@@ -15,23 +15,23 @@ public class SelectionController : MonoBehaviour
     #region VARIABLES
 
 
-    private List<GameObject> interactables = new List<GameObject>();
+    private List<VERA_Interactable> interactables = new List<VERA_Interactable>();
     private int counter = 0;
-    [SerializeField] HandleInteractables treeBase;
-    private GameObject previousObj;
+    private HandleInteractables treeBase;
+    private VERA_Interactable previousObj;
     private Outline outline;
     private GameObject lookTarget;
-    public string currentObj;
+    [System.NonSerialized] public VERA_Interactable currentObj;
     private bool manualHighlightCancel = false;
     private GrabTracker grabTracker;
 
     [SerializeField] float selectRadius;
-    [SerializeField] Camera playerCam; // The point where all distance calculations are made (may change later)
+    private Camera playerCam; // The point where all distance calculations are made (may change later)
     [SerializeField] Color outlineColor;
     [SerializeField] float outlineWidth = 5f;
     [SerializeField] float highlightDuration = 3f;
-    [SerializeField] GameObject Arrow;
-    [SerializeField] TextMeshPro Text;
+    private GameObject Arrow;
+    private TextMeshPro Text;
     [SerializeField] bool useCameraSelect = false;
 
     private GameObject interactSub;
@@ -86,20 +86,20 @@ public class SelectionController : MonoBehaviour
     public void SelectedOutOfRange()
     {
         // UpdateSelectables();
-        if (previousObj != null)
+        if (currentObj != null)
         {
-            float outside = Vector3.Distance(playerCam.transform.position, previousObj.transform.position);
+            float outside = Vector3.Distance(playerCam.transform.position, currentObj.transform.position);
             if (outside > selectRadius)
             {
                 // Previous current object is out of range, deselect it
                 // Debug.Log("Entered Deselect");
                 // Debug.Log("preob: " + previousObj);
-                previousObj.GetComponent<Outline>().enabled = false;
-                previousObj = null;
-                lookTarget = null;
-                treeBase.RemoveListeners();
-                //treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
+                currentObj.GetComponent<Outline>().enabled = false;
                 currentObj = null;
+                lookTarget = null;
+                FindObjectOfType<NewMenuNavigation>().InteractOutOfRange();
+                //treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
+                //currentObj = null;
             }
         }
     }
@@ -115,12 +115,12 @@ public class SelectionController : MonoBehaviour
         if (!UpdateSelectables()) return; // If there is nothing to select, skip for now
 
         if (counter >= interactables.Count) counter = 0;
-        currentObj = interactables[counter].name;
+        currentObj = interactables[counter];
 
         // De-highlight previous object
         if (previousObj != null)
         {
-            previousObj.GetComponent<Outline>().enabled = false;
+            previousObj.gameObject.GetComponent<Outline>().enabled = false;
         }
 
         // Get current object and get / add outline component
@@ -130,7 +130,7 @@ public class SelectionController : MonoBehaviour
         }
         else
         {
-            outline = interactables[counter].AddComponent<Outline>();
+            outline = interactables[counter].gameObject.AddComponent<Outline>();
         }
 
         // Enable outline
@@ -147,7 +147,7 @@ public class SelectionController : MonoBehaviour
 
         // Make sure the camera doesn't snap to the grabbed object
         if (useCameraSelect && (grabTracker.GetGrabbedObject() != interactables[counter]))
-            CameraSnap(interactables[counter]);
+            CameraSnap(interactables[counter].gameObject);
 
         // Logic for determining target's object position relative to player
         ObjectInView();
@@ -187,7 +187,7 @@ public class SelectionController : MonoBehaviour
                 {
                     if (hits[0].collider == collider)
                     {
-                        interactables.Add(collider.gameObject);
+                        interactables.Add(collider.gameObject.GetComponent<VERA_Interactable>());
                     }
                 }
                 else
@@ -208,7 +208,7 @@ public class SelectionController : MonoBehaviour
                         }
                         if (isIn == false)
                         {
-                            break;
+                            continue;
                         }
                         else if (hitCollider.collider != collider)
                         {
@@ -216,7 +216,7 @@ public class SelectionController : MonoBehaviour
                         }
                         else
                         {
-                            interactables.Add(collider.gameObject);
+                            interactables.Add(collider.gameObject.GetComponent<VERA_Interactable>());
                         }
                     }
                 }
@@ -260,7 +260,7 @@ public class SelectionController : MonoBehaviour
 
     void ObjectInView()
     {
-        lookTarget = interactables[counter];
+        lookTarget = interactables[counter].gameObject;
         Vector3 target = lookTarget.transform.position;
 
         // Normally this would have the player's position relative to camera but not yet!
@@ -321,8 +321,9 @@ public class SelectionController : MonoBehaviour
     {
         manualHighlightCancel = false;
 
-        foreach (GameObject obj in interactables)
+        foreach (VERA_Interactable inter in interactables)
         {
+            GameObject obj = inter.gameObject;
             if (obj.GetComponent<Outline>() != null)
             {
                 outline = obj.GetComponent<Outline>();
@@ -345,9 +346,9 @@ public class SelectionController : MonoBehaviour
         // If we manually cancelled highlighting during coroutine, don't cancel highlighting again
         if (!manualHighlightCancel)
         {
-            foreach (GameObject obj in interactables)
+            foreach (VERA_Interactable inter in interactables)
             {
-                obj.GetComponent<Outline>().enabled = false;
+                inter.gameObject.GetComponent<Outline>().enabled = false;
             }
         }
 
@@ -361,8 +362,9 @@ public class SelectionController : MonoBehaviour
     {
         manualHighlightCancel = true;
 
-        foreach (GameObject obj in interactables)
+        foreach (VERA_Interactable inter in interactables)
         {
+            GameObject obj = inter.gameObject;
             if (obj.GetComponent<Outline>() != null)
             {
                 outline = obj.GetComponent<Outline>();

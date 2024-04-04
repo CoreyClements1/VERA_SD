@@ -56,6 +56,8 @@ public class LockedDoor : MonoBehaviour
                 {
                     linkedKey.Unlock();
                     locked = false;
+                    leftDoor.OpenAndClose();
+                    rightDoor.OpenAndClose();
                 }
             }
         }
