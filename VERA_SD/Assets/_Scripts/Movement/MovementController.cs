@@ -243,7 +243,7 @@ public class MovementController : MonoBehaviour
         }
         else if(movementCheck)
         {
-            _userMoveInput = transform.right * _userMoveInput.x + transform.forward * _userMoveInput.z;
+            _userMoveInput = Camera.main.transform.right * _userMoveInput.x + Camera.main.transform.forward * _userMoveInput.z;
             // Continous forward movement
             if(_characterController.isGrounded == false)
             {
