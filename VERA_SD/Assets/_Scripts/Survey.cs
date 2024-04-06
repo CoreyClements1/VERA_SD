@@ -89,6 +89,7 @@ public class Survey : MonoBehaviour
        
     public void SubmitSurveyQuestion()
     {
+        //
         if (questionCounter != questionList.questions.Length-1)
         {
             questionList.questions[questionCounter].response = surveyValue;
@@ -96,6 +97,7 @@ public class Survey : MonoBehaviour
             surveyQuestionDisplay.text = questionList.questions[questionCounter].question;
         } 
         else {
+            questionList.questions[questionCounter].response = surveyValue;
             surveyQuestionDisplay.text = "Your responses have been recorded";
             SaveResponse(questionList);
         }
