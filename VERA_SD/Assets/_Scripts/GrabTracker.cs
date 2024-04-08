@@ -40,7 +40,7 @@ public class GrabTracker : MonoBehaviour
     void Update()
     //--------------------------------------//
     {
-        Debug.Log("Grabbed Object: " + grabbedObject);
+        // Debug.Log("Grabbed Object: " + grabbedObject);
     }//End Update
 
 

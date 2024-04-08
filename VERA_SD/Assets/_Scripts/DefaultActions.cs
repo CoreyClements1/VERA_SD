@@ -143,17 +143,17 @@ public class DefaultActions : MonoBehaviour
             Vector3 zero = Camera.main.ViewportToWorldPoint(Vector3.zero);
             Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
             //Checks if there is a collision between player and held object //to account for teleporting past a wall or something
-            if (CheckCollisions(zero, targetPosition))
-            {
-                // If there is a collision, move to the point just before the collision
-                Vector3 adjustedPosition = FindAdjustedPosition(zero, targetPosition, obj);
-                obj.transform.position = adjustedPosition;
-            }
-            else
-            {
-                // If no collision, move to the target position
-                obj.transform.position = targetPosition;
-            }
+            // if (CheckCollisions(zero, targetPosition))
+            // {
+            //     // If there is a collision, move to the point just before the collision
+            //     Vector3 adjustedPosition = FindAdjustedPosition(zero, targetPosition, obj);
+            //     obj.transform.position = adjustedPosition;
+            // }
+            // else
+            // {
+            // If no collision, move to the target position
+            obj.transform.position = targetPosition;
+            // }
 
 
             //Setting RigidBody back to normal
