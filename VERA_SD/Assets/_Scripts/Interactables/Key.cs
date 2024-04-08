@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -14,8 +15,11 @@ public class Key : MonoBehaviour
 
     [SerializeField] private Transform lockTransform;
     [SerializeField] private XRGrabInteractable doorGrabInteractable1, doorGrabInteractable2;
+    [SerializeField] private Rigidbody doorRb1, doorRb2;
+    [SerializeField] private HingeJoint doorHinge1, doorHinge2;
     [SerializeField] private ParticleSystem keyUnlockParticles;
     private bool canUnlock = true;
+    private GrabTracker grabHandler;
 
 
     #endregion
@@ -29,6 +33,7 @@ public class Key : MonoBehaviour
     private void Start()
     //--------------------------------------//
     {
+        grabHandler = FindObjectOfType<GrabTracker>();
         LockDoors();
 
     } // END Start
@@ -57,7 +62,9 @@ public class Key : MonoBehaviour
     //--------------------------------------//
     {
         doorGrabInteractable1.enabled = false;
-        doorGrabInteractable2.enabled = false;  
+        doorGrabInteractable2.enabled = false;
+        doorRb1.isKinematic = true;
+        doorRb2.isKinematic = true;
 
     } // END LockDoors
 
@@ -69,8 +76,11 @@ public class Key : MonoBehaviour
     {
         if ((lockTransform.position - transform.position).magnitude < 0.5f)
         {
-            Unlock();
-            canUnlock = false;
+            if (grabHandler.grabbedObject == null)
+            {
+                Unlock();
+                canUnlock = false;
+            }
         }
 
     } // END TryUnlock
@@ -83,6 +93,9 @@ public class Key : MonoBehaviour
     {
         doorGrabInteractable1.enabled = true;
         doorGrabInteractable2.enabled = true;
+        doorRb1.isKinematic = false;
+        doorRb2.isKinematic = false;
+
         lockTransform.LeanScale(Vector3.zero, .5f).setEaseInExpo();
         transform.LeanScale(Vector3.zero, .5f).setEaseInExpo();
         GameObject.Destroy(GameObject.Instantiate(keyUnlockParticles, lockTransform.position, Quaternion.identity), 2f);

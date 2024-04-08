@@ -9,7 +9,7 @@ public class GrabTracker : MonoBehaviour
     #region VARIABLES
 
 
-    public GameObject grabbedObject;
+    [System.NonSerialized] public GameObject grabbedObject;
     private Transform objParent;
     private bool useGravity;
     private bool freezeRotation;
@@ -29,10 +29,10 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         arrow = GameObject.Find("Arrow");
-        if (arrow == null)
-            Debug.LogError("Arrow UI object not found!");
-        else
-            Debug.Log("Arrow UI object found");
+       // if (arrow == null)
+           // Debug.LogError("Arrow UI object not found!");
+        //else
+            //Debug.Log("Arrow UI object found");
     } //End Start
 
     // UPDATE
@@ -127,10 +127,14 @@ public class GrabTracker : MonoBehaviour
     public void SetGrabbedObject(GameObject obj)
     //--------------------------------------//
     {
-        if (obj != null)
-            arrow.SetActive(false);
-        else 
-            arrow.SetActive(true);
+        if (arrow != null)
+        {
+            if (obj != null)
+                arrow.SetActive(false);
+            else
+                arrow.SetActive(true);
+        }
+        
         grabbedObject = obj;
     }//End SetGrabbedObject
 
