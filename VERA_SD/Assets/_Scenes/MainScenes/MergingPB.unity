@@ -8465,6 +8465,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 395634618}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &407025574 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 293902703198379669, guid: 30b3007ed7f0c114d9411712e3d5634a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2016277011}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &407025578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407025574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4aeca779d3dcc148a45d9c8b9cbb65a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lineRenderer: {fileID: 807862323}
+  _lineSegmentCount: 100
 --- !u!1001 &407647543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11294,8 +11314,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 604804290}
-  - component: {fileID: 604804291}
-  - component: {fileID: 604804292}
   m_Layer: 0
   m_Name: Interactables
   m_TagString: Untagged
@@ -11324,32 +11342,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &604804291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 604804289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f32149c5c37f1ef4aa9001af626bce51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &604804292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 604804289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4aeca779d3dcc148a45d9c8b9cbb65a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lineRenderer: {fileID: 807862323}
-  _lineSegmentCount: 100
 --- !u!1001 &605774406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16389,7 +16381,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 807862322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 69.79391, y: 58.810577, z: 29.269003}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
