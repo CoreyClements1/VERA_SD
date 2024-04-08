@@ -29,10 +29,10 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         arrow = GameObject.Find("Arrow");
-       // if (arrow == null)
-           // Debug.LogError("Arrow UI object not found!");
+        // if (arrow == null)
+        // Debug.LogError("Arrow UI object not found!");
         //else
-            //Debug.Log("Arrow UI object found");
+        //Debug.Log("Arrow UI object found");
     } //End Start
 
     // UPDATE
@@ -40,6 +40,7 @@ public class GrabTracker : MonoBehaviour
     void Update()
     //--------------------------------------//
     {
+        Debug.Log("Grabbed Object: " + grabbedObject);
     }//End Update
 
 
@@ -134,7 +135,7 @@ public class GrabTracker : MonoBehaviour
             else
                 arrow.SetActive(true);
         }
-        
+
         grabbedObject = obj;
     }//End SetGrabbedObject
 

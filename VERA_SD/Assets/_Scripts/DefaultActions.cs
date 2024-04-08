@@ -205,108 +205,136 @@ public class DefaultActions : MonoBehaviour
     public void aimUp()
     {
         //move tragectory line up n units
-        if (verticleAngle < 90)
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
         {
-            if (verticleAngle == -90)
+            if (verticleAngle < 90)
             {
-                verticleAngle += newVertChange;
-            }
-            else
-            {
-                if (verticleAngle + throwAngleChange > 90)
+                if (verticleAngle == -90)
                 {
-                    newVertChange = 90 - verticleAngle;
-                    verticleAngle = 90;
+                    verticleAngle += newVertChange;
                 }
                 else
                 {
-                    verticleAngle += throwAngleChange;
-                    newVertChange = throwAngleChange;
+                    if (verticleAngle + throwAngleChange > 90)
+                    {
+                        newVertChange = 90 - verticleAngle;
+                        verticleAngle = 90;
+                    }
+                    else
+                    {
+                        verticleAngle += throwAngleChange;
+                        newVertChange = throwAngleChange;
+                    }
                 }
             }
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
+            //update Trajectory line
         }
-        DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
-        //update Trajectory line
     }
     public void aimDown()
     {
         //move tragectory line down n units
         //IF CURRENTDIRECTION == UP DIRECTION ROTATE NEGATIVE FROM RADIANS
-        if (verticleAngle > -90)
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
         {
-            if (verticleAngle == 90)
+            if (verticleAngle > -90)
             {
-                verticleAngle -= newVertChange;
-            }
-            else
-            {
-                if (verticleAngle - throwAngleChange < -90)
+                if (verticleAngle == 90)
                 {
-                    newVertChange = 90 + verticleAngle;
-                    verticleAngle = -90;
+                    verticleAngle -= newVertChange;
                 }
                 else
                 {
-                    verticleAngle -= throwAngleChange;
-                    newVertChange = throwAngleChange;
+                    if (verticleAngle - throwAngleChange < -90)
+                    {
+                        newVertChange = 90 + verticleAngle;
+                        verticleAngle = -90;
+                    }
+                    else
+                    {
+                        verticleAngle -= throwAngleChange;
+                        newVertChange = throwAngleChange;
+                    }
                 }
-            }
 
+            }
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
         }
-        DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
         //update Trajectory line
     }
     public void aimRight()
     {
         //move tragectory line right n units
-        if (horizontalAngle < 90)
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
         {
-            if (horizontalAngle == -90)
+            if (horizontalAngle < 90)
             {
-                horizontalAngle += newHorzChange;
-            }
-            else
-            {
-                if (horizontalAngle + throwAngleChange > 90)
+                if (horizontalAngle == -90)
                 {
-                    newHorzChange = 90 - horizontalAngle;
-                    horizontalAngle = 90;
+                    horizontalAngle += newHorzChange;
                 }
                 else
                 {
-                    horizontalAngle += throwAngleChange;
-                    newHorzChange = throwAngleChange;
+                    if (horizontalAngle + throwAngleChange > 90)
+                    {
+                        newHorzChange = 90 - horizontalAngle;
+                        horizontalAngle = 90;
+                    }
+                    else
+                    {
+                        horizontalAngle += throwAngleChange;
+                        newHorzChange = throwAngleChange;
+                    }
                 }
             }
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
         }
-        DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
         //update Trajectory line
     }
     public void aimLeft()
     {
         //move tragectory line left n units
-        if (horizontalAngle > -90)
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
         {
-            if (horizontalAngle == 90)
+            if (horizontalAngle > -90)
             {
-                horizontalAngle -= newHorzChange;
-            }
-            else
-            {
-                if (horizontalAngle - throwAngleChange < -90)
+                if (horizontalAngle == 90)
                 {
-                    newHorzChange = 90 + horizontalAngle;
-                    horizontalAngle = -90;
+                    horizontalAngle -= newHorzChange;
                 }
                 else
                 {
-                    horizontalAngle -= throwAngleChange;
-                    newHorzChange = throwAngleChange;
+                    if (horizontalAngle - throwAngleChange < -90)
+                    {
+                        newHorzChange = 90 + horizontalAngle;
+                        horizontalAngle = -90;
+                    }
+                    else
+                    {
+                        horizontalAngle -= throwAngleChange;
+                        newHorzChange = throwAngleChange;
+                    }
                 }
-            }
 
+            }
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
         }
-        DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
         //update Trajectory line
     }
     //back and throw will unshow tragectory line
