@@ -112,6 +112,10 @@ public class DefaultActions : MonoBehaviour
         {
             Debug.LogError("Not A Grab Interactable");
         }
+        verticleAngle = 0;
+        newVertChange = throwAngleChange;
+        horizontalAngle = 0;
+        newHorzChange = throwAngleChange;
     }//END Grab/Release
 
 
@@ -178,6 +182,10 @@ public class DefaultActions : MonoBehaviour
                 }
                 rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
                 DisplayTrajectory.Instance.hideLine();
+                verticleAngle = 0;
+                newVertChange = throwAngleChange;
+                horizontalAngle = 0;
+                newHorzChange = throwAngleChange;
             }
             grabHandler.SetGrabbedObject(null);
 

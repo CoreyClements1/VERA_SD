@@ -27,15 +27,22 @@ public class DisplayTrajectory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (showLine == true)
+        if (grabHandler.GetGrabbedObject() != null)
         {
-            Vector3 x = Camera.main.transform.forward;
-            x = Quaternion.AngleAxis(-vA, Camera.main.transform.right) * x;
-            x = Quaternion.AngleAxis(hA, Camera.main.transform.up) * x;
-            setThrowAngle(x);
-            Vector3 forceDirection = x * throwForce;
-            GameObject obj = grabHandler.GetGrabbedObject();
-            calculateLine(forceDirection, obj.transform.position);
+            if (showLine == true)
+            {
+                Vector3 x = Camera.main.transform.forward;
+                x = Quaternion.AngleAxis(-vA, Camera.main.transform.right) * x;
+                x = Quaternion.AngleAxis(hA, Camera.main.transform.up) * x;
+                setThrowAngle(x);
+                Vector3 forceDirection = x * throwForce;
+                GameObject obj = grabHandler.GetGrabbedObject();
+                calculateLine(forceDirection, obj.transform.position);
+            }
+        }
+        else
+        {
+            hideLine();
         }
     }
     private void setThrowAngle(Vector3 x)

@@ -75,7 +75,7 @@ public class SelectionController : MonoBehaviour
         {
             arrow.transform.LookAt(lookTarget.transform);
         }
-        // SelectedOutOfRange();
+        SelectedOutOfRange();
     } // END Update
 
 
