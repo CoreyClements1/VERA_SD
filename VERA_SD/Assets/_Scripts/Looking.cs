@@ -19,6 +19,8 @@ public class Looking : MonoBehaviour
 
     private void LateUpdate()
     {
+
+
     }
 
     public void LookUp()
@@ -40,5 +42,12 @@ public class Looking : MonoBehaviour
             Camera.main.transform.parent.parent.Rotate(speed, 0f, 0f, Space.Self);
             mainCam.parent.position = oldPos;
         }
+    }
+
+    public void ResetAngle()
+    {
+        Vector3 oldPos = mainCam.parent.position;
+        Camera.main.transform.parent.parent.rotation = Quaternion.Euler(0, mainCam.parent.rotation.eulerAngles.y, mainCam.parent.rotation.eulerAngles.z);
+        mainCam.parent.position = oldPos;
     }
 }
