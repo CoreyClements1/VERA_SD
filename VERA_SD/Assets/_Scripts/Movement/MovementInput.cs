@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class MovementInput : MonoBehaviour
 {
 
+    // MovementInput handles the inputs relating to movement
+
 
     #region VARIABLES
 
@@ -28,8 +30,11 @@ public class MovementInput : MonoBehaviour
 
     #region ENABLE / DISABLE INPUT ACTIONS
 
+
     // Enabling actionmaps and subscribing to their events
+    //--------------------------------------//
     private void OnEnable()
+    //--------------------------------------//
     {
         // Level 1 of accessibility 
         // if (accessLevel == 1)
@@ -68,9 +73,14 @@ public class MovementInput : MonoBehaviour
         //     // _input.MovementT2.Switch.performed += SetState;
         // }
 
-    }
+    } // END OnEnable
 
-    private void OnDisable(){
+
+    // OnDisable
+    //--------------------------------------//
+    private void OnDisable()
+    //--------------------------------------//
+    {
         // Level 1 of accessibility 
         // if (accessLevel == 1 && !movementControlledByTree)
         _input.Movement.StickInput.performed -= SetStickMovement;
@@ -104,39 +114,64 @@ public class MovementInput : MonoBehaviour
         //     _input.MovementT2.Disable();
         // }
         
-    }
+    } // END OnDisable
 
 
     #endregion
 
-    #region ACCESS LEVEL 1
+
     #region HANDLE PERFORMANCE OF INPUT
 
 
     // These functions set the value to 1 to signify that it was pressed
-    private void SetPressed1(InputAction.CallbackContext ctx){
+    //--------------------------------------//
+    private void SetPressed1(InputAction.CallbackContext ctx)
+    //--------------------------------------//
+    {
         if (!movementControlledByTree)
             buttonPress1 = ctx.ReadValue<float>();
-    }
 
-    private void SetPressed2(InputAction.CallbackContext ctx){
+    } // END SetPressed1
+
+
+    // 2
+    //--------------------------------------//
+    private void SetPressed2(InputAction.CallbackContext ctx)
+    //--------------------------------------//
+    {
         if (!movementControlledByTree)
             buttonPress2 = ctx.ReadValue<float>();
-    }
+    
+    } // END SetPressed2
 
-    private void SetPressed3(InputAction.CallbackContext ctx){
+
+    // 3
+    //--------------------------------------//
+    private void SetPressed3(InputAction.CallbackContext ctx)
+    //--------------------------------------//
+    {
         if (!movementControlledByTree)
             buttonPress3 = ctx.ReadValue<float>();
-    }
+    
+    } // END SetPressed3
 
-    private void SetPressed4(InputAction.CallbackContext ctx){
+
+    // 4
+    //--------------------------------------//
+    private void SetPressed4(InputAction.CallbackContext ctx)
+    //--------------------------------------//
+    {
         if (!movementControlledByTree)
             buttonPress4 = ctx.ReadValue<float>();
-    }
+    
+    } // END SetPressed4
+
 
     // private void SetStage2(InputAction.CallbackContext ctx){
     //     state = ctx.ReadValue<float>();
     // }
+
+
     #endregion
 
 
@@ -146,50 +181,88 @@ public class MovementInput : MonoBehaviour
     // These functions manually activate input functions as if called from input,
     //     but is instead done so via a call from the main tree UI.
 
+
+    // TreeTurnLeft
+    //--------------------------------------//
     public void TreeTurnLeft()
+    //--------------------------------------//
     {
         buttonPress1 = 1f;
-    }
+
+    } // END TreeTurnLeft
+
+
+    // TreeMoveForward
+    //--------------------------------------//
     public void TreeMoveForward()
+    //--------------------------------------//
     {
         buttonPress2 = 1f;
-    }
+
+    } // END TreeMoveForward
+
+
+    // TreeTurnRight
+    //--------------------------------------//
     public void TreeTurnRight()
+    //--------------------------------------//
     {
         buttonPress3 = 1f;
-    }
-    #endregion
+
+    } // END TreeTurnRight
+
+
     #endregion
 
-    // #region ACCESS LEVEL 2
+
+    #region TYPE 2
+
+
+    // SetStickMovement
+    //--------------------------------------//
     private void SetStickMovement(InputAction.CallbackContext ctx)
+    //--------------------------------------//
     {
         stickInput = ctx.ReadValue<Vector2>();
-    }
+    
+    } // END SetStickMovement
+
+
     // private void SetLookUp(InputAction.CallbackContext ctx)
     // {
     //     upPress = ctx.ReadValue<float>();
     // }
+
 
     // private void SetLookDown(InputAction.CallbackContext ctx)
     // {
     //     downPress = ctx.ReadValue<float>();
     // }
 
+
     // private void SetInteract(InputAction.CallbackContext ctx)
     // {
     //     interactPress = ctx.ReadValue<float>();
     // }
+
 
     // private void SetMenu(InputAction.CallbackContext ctx)
     // {
     //     menuPress = ctx.ReadValue<float>();
     // }
 
+
+    // SetState
+    //--------------------------------------//
     private void SetState(InputAction.CallbackContext ctx)
+    //--------------------------------------//
     {
         state = ctx.ReadValue<float>();
-    }
-    // #endregion
+    
+    } // END SetState
 
-}
+
+    #endregion
+
+
+} // END MovementInput.cs

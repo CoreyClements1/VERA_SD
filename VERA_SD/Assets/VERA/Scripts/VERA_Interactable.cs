@@ -136,4 +136,5 @@ public class InteractionInfo
 
     #endregion
 
+
 } // END InteractionInfo.cs

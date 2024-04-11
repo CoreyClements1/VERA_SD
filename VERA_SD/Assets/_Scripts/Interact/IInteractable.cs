@@ -6,6 +6,7 @@ public interface IInteractable
 {
 
     // IInteractable is an interface which provides general functionality for all interactables
+    // All VERA Interactables inherit from this interface
 
 
     #region FUNCTIONS
@@ -16,5 +17,6 @@ public interface IInteractable
 
 
     #endregion
+
 
 } // END IInteractable.cs

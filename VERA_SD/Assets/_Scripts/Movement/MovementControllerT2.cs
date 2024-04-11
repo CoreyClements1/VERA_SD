@@ -5,7 +5,12 @@ using UnityEngine;
 
 public class MovementControllerT2 : MonoBehaviour
 {
-#region VARIABLES
+
+    // MovementControllerT2 handles type 2 movement
+    // NOTE: CURRENTLY UNUSED
+
+
+    #region VARIABLES
 
     Rigidbody _rigidbody = null;
     [SerializeField] Transform Rig;
@@ -23,12 +28,19 @@ public class MovementControllerT2 : MonoBehaviour
     #endregion
 
 
-    #region FIXED UPDATE
+    #region MONOBEHAVIOUR
 
+
+    // Awake
+    //--------------------------------------//
     private void Awake()
+    //--------------------------------------//
     {
         _rigidbody = GetComponent<Rigidbody>();
-    }
+    
+    } // END Awake
+
+
     // private void FixedUpdate(){
     //     // Switch input checks
     //     bool lookUpPressed = _input.upPress > 0.1f;
@@ -40,7 +52,6 @@ public class MovementControllerT2 : MonoBehaviour
     //     // Movement
     //     _userMoveInput = GetMoveInput();
     //     UserMove();
-        
 
     //     // if(_userMoveInput != Vector3.zero)
     //     // {
@@ -79,7 +90,7 @@ public class MovementControllerT2 : MonoBehaviour
     //     {
     //         Debug.Log("State changed to 1");
     //         _input.state = 0;
-            
+
     //     }
     // }
 
@@ -88,12 +99,23 @@ public class MovementControllerT2 : MonoBehaviour
 
 
     #region MOVEMENT FUNCTIONS
+
+
+    // GetMoveInput
+    //--------------------------------------//
     private Vector3 GetMoveInput()
+    //--------------------------------------//
     {
         return new Vector3(_input.stickInput.x, 0.0f, _input.stickInput.y);
-    }
+    
+    } // END GetMoveInput
+
+
+    // UserMove
+    //--------------------------------------//
     private void UserMove()
-    {   
+    //--------------------------------------//
+    {
         // Checks input for the movement while limiting left and right movement
         bool movementCheck = (_userMoveInput.z > 0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f) || 
                              (_userMoveInput.z < -0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f);
@@ -133,26 +155,52 @@ public class MovementControllerT2 : MonoBehaviour
         //                                 0);
         //     // Debug.Log("Not Moving");
         // }
-    }
+
+    } // END UserMove
+
+
+    // GetLookUpInput
+    //--------------------------------------//
     private Vector3 GetLookUpInput()
+    //--------------------------------------//
     {
         return new Vector3 (-rotationValueVertical, 0, 0);
-    }
+    
+    } // END GetLookUpInput
+
+
+    // GetLookDownInput
+    //--------------------------------------//
     private Vector3 GetLookDownInput()
+    //--------------------------------------//
     {
         return new Vector3 (rotationValueVertical, 0, 0);
-    }
+    
+    } // END GetLookDownInput
+
+
     // References the camera instead of the rig itself since vertical adjustsments caused the rig to 
     //      rotate instead of just the camera.
+    //--------------------------------------//
     private void UserLook()
+    //--------------------------------------//
     {
         Camera.transform.eulerAngles = Camera.transform.eulerAngles + _userLookInput;
-    }
+    
+    } // END UserLook
+
+
+    // UserLookHorizontal
+    //--------------------------------------//
     private void UserLookHorizontal()
+    //--------------------------------------//
     {
         Rig.transform.eulerAngles = Rig.transform.eulerAngles + _userLookInput;
-    }
+    
+    } // END UserLookHorizontal
+
+
     #endregion
 
 
-}
+} // END MovementControllerT2

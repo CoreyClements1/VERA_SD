@@ -6,6 +6,9 @@ using UnityEngine;
 public class VERA_DefaultActions : MonoBehaviour
 {
 
+    // VERA_DefaultActions provides various simple default interactions, such as pick up, throw, etc.
+
+
     #region VARIABLES
 
 
@@ -23,14 +26,13 @@ public class VERA_DefaultActions : MonoBehaviour
     private float newDistance = 0;
 
 
-
     #endregion
 
 
     #region MONOBEHAVIOUR
 
 
-    // Start
+    // Awake
     //--------------------------------------//
     private void Awake()
     //--------------------------------------//
@@ -50,15 +52,9 @@ public class VERA_DefaultActions : MonoBehaviour
             // Debug.Log("GrabTracker found.");
         }
         rend = GetComponent<Renderer>();
-    } // END Start
 
-    // Update
-    //--------------------------------------//
-    private void Update()
-    //--------------------------------------//
-    {
+    } // END Awake
 
-    }//End Update
 
     #endregion
 
@@ -98,6 +94,7 @@ public class VERA_DefaultActions : MonoBehaviour
         {
             Debug.LogError("Not A Grab Interactable");
         }
+
     }//END Grab/Release
 
 
@@ -159,7 +156,9 @@ public class VERA_DefaultActions : MonoBehaviour
             grabHandler.SetGrabbedObject(null);
 
         }
-    }//End Throw
+
+    } // END Throw
+
 
     //OpenAndClose
     //--------------------------------------//
@@ -315,9 +314,14 @@ public class VERA_DefaultActions : MonoBehaviour
         //but will require to know which direction the player is opening door from and has to decide based on that to open with min or max
         //might also want to have a smooth animation for opening
         */
-    }//End OpenAndClose
 
+    } // END OpenAndClose
+
+
+    // Drawer
+    //--------------------------------------//
     public void Drawer()
+    //--------------------------------------//
     {
         Vector3 movementDirection = Vector3.zero;
 
@@ -458,12 +462,19 @@ public class VERA_DefaultActions : MonoBehaviour
             gReverse = !gReverse;
         }
 
-    }
+    } // END Drawer
+
+
     #endregion
 
 
     #region HELPER FUNCTIONS
+
+
+    // testFunction
+    //--------------------------------------//
     bool testFunction(Vector3 direction, Vector3 pos, float limit)
+    //--------------------------------------//
     {
         Physics.queriesHitBackfaces = true;
         Collider[] relaventColliders = this.GetComponentsInChildren<Collider>();
@@ -506,7 +517,10 @@ public class VERA_DefaultActions : MonoBehaviour
         {
             return true;
         }
-    }
+
+    } // END testFunction
+    
+    
     // GrabObject
     //--------------------------------------//
     void GrabObject(GameObject obj)
@@ -561,10 +575,10 @@ public class VERA_DefaultActions : MonoBehaviour
 
         }
 
-    }//End GrabObject
+    } // END GrabObject
 
 
-    //ReleaseObject
+    // ReleaseObject
     //--------------------------------------//
     void ReleaseObject()
     //--------------------------------------//
@@ -610,7 +624,8 @@ public class VERA_DefaultActions : MonoBehaviour
         }
         //Set Grabbed Object to none
         grabHandler.SetGrabbedObject(null);
-    }//End ReleaseObject
+
+    } // END ReleaseObject
 
 
     // CheckCollisions
@@ -621,7 +636,7 @@ public class VERA_DefaultActions : MonoBehaviour
         // Check for collisions using Physics.Linecast
         // This function returns true if there is a collision along the line
         return Physics.Linecast(start, end);
-    }//End CheckCollisions
+    } // END CheckCollisions
 
 
     // FindAdjustedPosition
@@ -668,7 +683,9 @@ public class VERA_DefaultActions : MonoBehaviour
             }
         }
         return adjustedPosition;
-    }//End FindAdjustedPosition
+
+    } // END FindAdjustedPosition
+
 
     #endregion
 

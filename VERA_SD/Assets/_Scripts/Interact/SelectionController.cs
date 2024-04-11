@@ -12,6 +12,9 @@ using System.Linq;
 public class SelectionController : MonoBehaviour
 {
 
+    // SelectionController controls the selection of nearby interactable objects
+
+
     #region VARIABLES
 
 
@@ -40,14 +43,20 @@ public class SelectionController : MonoBehaviour
 
 
     #region MONOBEHAVIOUR
+
+
+    // Awake
+    //--------------------------------------//
     void Awake()
+    //--------------------------------------//
     {
         interactSub = GameObject.Find("Interact Sub");
         //Debug.Log(interactSub);
         playerCam = Camera.main;
         arrow = FindObjectOfType<Arrow>();
 
-    }
+    } // END Awake
+
 
     // Start
     //--------------------------------------//
@@ -63,6 +72,7 @@ public class SelectionController : MonoBehaviour
         {
             // Debug.Log("GrabTracker found.");
         }
+
     } // END Start
 
     // Update
@@ -75,6 +85,7 @@ public class SelectionController : MonoBehaviour
             arrow.transform.LookAt(lookTarget.transform);
         }
         SelectedOutOfRange();
+
     } // END Update
 
 
@@ -82,7 +93,12 @@ public class SelectionController : MonoBehaviour
 
 
     #region SELECTION
+
+
+    // SelectedOutOfRange
+    //--------------------------------------//
     public void SelectedOutOfRange()
+    //--------------------------------------//
     {
         // UpdateSelectables();
         if (currentObj != null)
@@ -101,7 +117,9 @@ public class SelectionController : MonoBehaviour
                 //currentObj = null;
             }
         }
-    }
+
+    } // END SelectedOutOfRange
+
 
     // SelectionCycle
     //--------------------------------------//
@@ -232,6 +250,7 @@ public class SelectionController : MonoBehaviour
 
     } // END UpdateSelectables
 
+
     // Grabs all the selectables in the scene, is used to create associating buttons in tree UI
     //--------------------------------------//
     public List<GameObject> grabAllSelectables()
@@ -252,7 +271,9 @@ public class SelectionController : MonoBehaviour
         }
 
         return interactables;
+
     } // END grabAllSelectables
+
 
     #endregion
 
@@ -260,7 +281,10 @@ public class SelectionController : MonoBehaviour
     #region OBJECT IN VIEW
 
 
+    // ObjectInView
+    //--------------------------------------//
     void ObjectInView()
+    //--------------------------------------//
     {
         lookTarget = interactables[counter].gameObject;
         Vector3 target = lookTarget.transform.position;
@@ -290,13 +314,18 @@ public class SelectionController : MonoBehaviour
                 //Text.color = Color.green;
             }
         }
-    }
 
+    } // END ObjectInView
+
+
+    // CameraSnap
+    //--------------------------------------//
     void CameraSnap(GameObject target)
+    //--------------------------------------//
     {
-
         playerCam.transform.parent.LookAt(target.transform);
-    }
+
+    } // END CameraSnap
 
 
     #endregion
@@ -396,6 +425,7 @@ public class SelectionController : MonoBehaviour
         }
 
     } // END OnDrawGizmosSelected
+
 
     #endregion
 

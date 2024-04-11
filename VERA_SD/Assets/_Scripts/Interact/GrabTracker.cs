@@ -6,6 +6,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class GrabTracker : MonoBehaviour
 {
 
+    // GrabTracker tracks which interactable object is currently being held
+
+
     #region VARIABLES
 
 
@@ -23,7 +26,8 @@ public class GrabTracker : MonoBehaviour
 
     #region MONOBEHAVIOUR
 
-    // START
+
+    // Start
     //--------------------------------------//
     void Start()
     //--------------------------------------//
@@ -33,20 +37,11 @@ public class GrabTracker : MonoBehaviour
            // Debug.LogError("Arrow UI object not found!");
         //else
             //Debug.Log("Arrow UI object found");
-    } //End Start
 
-    // UPDATE
-    //--------------------------------------//
-    void Update()
-    //--------------------------------------//
-    {
-    }//End Update
+    } //End Start
 
 
     #endregion
-
-
-    #region GET/SET FUNCTIONS
 
 
     #region RIGIDBODY
@@ -61,7 +56,9 @@ public class GrabTracker : MonoBehaviour
         freezeRotation = rb.freezeRotation;
         isKinematic = rb.isKinematic;
         rigidbodyInterp = rb.interpolation;
-    }//End SetRB
+
+    }// End SetRB
+
 
     // Get Gravity Setting
     //--------------------------------------//
@@ -69,7 +66,9 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         return useGravity;
-    }//End GetGravity
+
+    } //End GetGravity
+
 
     // Get Freeze Rotation Setting
     //--------------------------------------//
@@ -77,7 +76,9 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         return freezeRotation;
-    }//End GetfreezeRotation
+
+    } //End GetfreezeRotation
+
 
     // Get Kinematic Setting
     //--------------------------------------//
@@ -85,7 +86,9 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         return isKinematic;
-    }//End GetKinematic
+
+    } //End GetKinematic
+
 
     // Get Interpolation Setting
     //--------------------------------------//
@@ -93,7 +96,8 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         return rigidbodyInterp;
-    }//End GetInterpolation
+
+    } //End GetInterpolation
 
     #endregion
 
@@ -107,7 +111,9 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         objParent = obj;
-    }//End SetGrabParent
+
+    } //End SetGrabParent
+
 
     // Get Grabbed Object Parent
     //--------------------------------------//
@@ -115,12 +121,15 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         return objParent;
-    }//End GetGrabParent
+
+    } //End GetGrabParent
+
 
     #endregion
 
 
     #region GRABBED OBJECT
+
 
     // SetGrabbedObject // Store Grabbed Object //
     //--------------------------------------//
@@ -134,9 +143,11 @@ public class GrabTracker : MonoBehaviour
             else
                 arrow.SetActive(true);
         }
-        
+
         grabbedObject = obj;
-    }//End SetGrabbedObject
+ 
+    } //End SetGrabbedObject
+
 
     // Get Grabbed Object
     //--------------------------------------//
@@ -144,11 +155,11 @@ public class GrabTracker : MonoBehaviour
     //--------------------------------------//
     {
         return grabbedObject;
-    }//End GetGrabbedObject
+
+    } //End GetGrabbedObject
 
 
     #endregion
 
 
-    #endregion
-}
+} // END GrabTracker.cs
