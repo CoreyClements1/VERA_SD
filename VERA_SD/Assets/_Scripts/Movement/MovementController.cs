@@ -13,8 +13,12 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class MovementController : MonoBehaviour
 {
 
+    // MovementController is the main controller which moves the player
+
 
     #region VARIABLES
+
+
     CharacterController _characterController;
     private Transform xrRig;
     private Transform mainCam;
@@ -35,22 +39,32 @@ public class MovementController : MonoBehaviour
     [System.NonSerialized] public int currentLvl = 1;
     private bool useOneTapMove = false;
     private bool continualMoveOn = false;
+
+
     #endregion
 
-    #region START
+
+    #region MONOBEHAVIOUR
+
+
+    // Start
+    //--------------------------------------//
     void Start()
+    //--------------------------------------//
     {
         _characterController = FindObjectOfType<CharacterController>();
         _input = GetComponent<MovementInput>();
         mainCam = Camera.main.transform;
         xrRig = FindObjectOfType<XROrigin>().transform;
-    }
-    #endregion
-
-    #region FIXED UPDATE
+    
+    } // END Start
 
 
-    private void FixedUpdate(){
+    // FixedUpdate
+    //--------------------------------------//
+    private void FixedUpdate()
+    //--------------------------------------//
+    {
         // These check if the switch has been pressed
         bool switchDown1 = _input.buttonPress1 > 0.1f;
         bool switchDown2 = _input.buttonPress2 > 0.1f;
@@ -157,7 +171,8 @@ public class MovementController : MonoBehaviour
                 _input.state = 0;
             }
         }
-    }
+
+    } // END FixedUpdate
 
 
     #endregion
@@ -165,27 +180,52 @@ public class MovementController : MonoBehaviour
 
     #region MOVEMENT FUNCTIONS
 
+
     // Returns a value to be used to calculate the distance traveled for level 1 movement
-    private Vector3 GetMoveInput(){
+    //--------------------------------------//
+    private Vector3 GetMoveInput()
+    //--------------------------------------//
+    {
         return xrRig.transform.forward * speed;
-    }
+
+    } // END GetMoveInput
+
+
     // Returns a value to be used to turn the rig a set amount of degrees
-    private Vector3 GetTurnLInput(){
+    //--------------------------------------//
+    private Vector3 GetTurnLInput()
+    //--------------------------------------//
+    {
         return new Vector3 (0, -rotationValue, 0);
-    }
-    private Vector3 GetTurnRInput(){
+    
+    } // END GetTurnLInput
+
+
+    // GetTurnRInput
+    //--------------------------------------//
+    private Vector3 GetTurnRInput()
+    //--------------------------------------//
+    {
         return new Vector3 (0, rotationValue, 0);
-    }
+    
+    } // END GetTurnRInput
+
 
     // Sets whether we are using one-tap movement
+    //--------------------------------------//
     public void SetOneTapMove(bool newVal)
+    //--------------------------------------//
     {
         useOneTapMove = newVal;
-    }
+    
+    } // END SetOneTapMove
 
 
     // Controls forward movement for level 1
-    private void UserMove(){
+    //--------------------------------------//
+    private void UserMove()
+    //--------------------------------------//
+    {
         _userMoveInput = new Vector3(_userMoveInput.x, _userMoveInput.y, _userMoveInput.z);
         _userMoveInput = new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
 
@@ -197,30 +237,48 @@ public class MovementController : MonoBehaviour
         {
             _characterController.Move(_userMoveInput * speed * .02f);
         }
-    }
+    
+    } // END UserMove
 
 
     // Rotates the rig based on if the rotation is left or right.
-    private void UserLook(){
+    //--------------------------------------//
+    private void UserLook()
+    //--------------------------------------//
+    {
         xrRig.transform.eulerAngles = xrRig.transform.eulerAngles + _userLookInput;
-    }   
+    
+    } // END UserLook
+
+
     // References the camera instead of the rig itself since vertical adjustsments caused the rig to 
     //      rotate instead of just the camera.
+    //--------------------------------------//
     private void UserLookVertical()
+    //--------------------------------------//
     {
         mainCam.eulerAngles = mainCam.eulerAngles + _userLookInput;
-    }
+    
+    } // END UserLookVertical
+
 
     // Translates user stick input into a vector value for movement
+    //--------------------------------------//
     private Vector3 GetMoveInputAnalog()
+    //--------------------------------------//
     {
         return new Vector3(_input.stickInput.x, 0.0f, _input.stickInput.y);
-    }
+    
+    } // END GetMoveInputAnalog
+
+
     // Controls movement through the stick
     //      Direct forward and back on the stick does locomotion in the respective directions
     //      Left and right causes the rig to turn left and right which gets put on a cooldown
+    //--------------------------------------//
     private void UserMoveAnalog()
-    {   
+    //--------------------------------------//
+    {
         // Checks input for the movement while limiting left and right movement
         bool movementCheck = (_userMoveInput.z > 0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f) || 
                              (_userMoveInput.z < -0.9f && _userMoveInput.x < 0.2f && _userMoveInput.x > -0.2f);
@@ -252,18 +310,32 @@ public class MovementController : MonoBehaviour
             Debug.Log(_userMoveInput);
             _characterController.Move(_userMoveInput * speed * Time.deltaTime);
         } 
-    }
+
+    } // END UserMoveAnalog
+
+
     // Generates a rotation value to be used later
+    //--------------------------------------//
     private Vector3 GetLookUpInput()
+    //--------------------------------------//
     {
         return new Vector3 (-rotationValueVertical, 0, 0);
-    }
+    
+    } // END GetLookUpInput
+
+
+    // GetLookDownInput
+    //--------------------------------------//
     private Vector3 GetLookDownInput()
+    //--------------------------------------//
     {
         return new Vector3 (rotationValueVertical, 0, 0);
-    }
+
+    } // END GetLookDownInput
 
 
     #endregion
-}
+
+
+} // END MovementController.cs
 
