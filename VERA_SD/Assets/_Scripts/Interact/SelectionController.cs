@@ -51,7 +51,6 @@ public class SelectionController : MonoBehaviour
     //--------------------------------------//
     {
         interactSub = GameObject.Find("Interact Sub");
-        //Debug.Log(interactSub);
         playerCam = Camera.main;
         arrow = FindObjectOfType<Arrow>();
 
@@ -96,25 +95,20 @@ public class SelectionController : MonoBehaviour
 
 
     // SelectedOutOfRange
+    // Ensures any object that somehow gets out of range is made non-selectable and deselects in necessary
     //--------------------------------------//
     public void SelectedOutOfRange()
     //--------------------------------------//
     {
-        // UpdateSelectables();
         if (currentObj != null)
         {
             float outside = Vector3.Distance(playerCam.transform.position, currentObj.transform.position);
             if (outside > selectRadius)
             {
-                // Previous current object is out of range, deselect it
-                // Debug.Log("Entered Deselect");
-                // Debug.Log("preob: " + previousObj);
                 currentObj.GetComponent<Outline>().enabled = false;
                 currentObj = null;
                 lookTarget = null;
                 FindObjectOfType<NewMenuNavigation>().InteractOutOfRange();
-                //treeBase.back(interactSub, GameObject.Find(currentObj + "1"));
-                //currentObj = null;
             }
         }
 
@@ -122,6 +116,7 @@ public class SelectionController : MonoBehaviour
 
 
     // SelectionCycle
+    // Probably good practice to separate the functions that happened to all cram inside this
     //--------------------------------------//
     public void SelectionCycle()
     //--------------------------------------//
@@ -165,7 +160,7 @@ public class SelectionController : MonoBehaviour
                 arrow.gameObject.SetActive(true);
         }
 
-        // Make sure the camera doesn't snap to the grabbed object
+        // If camera select is enabled, snap view to the object
         if (useCameraSelect && (grabTracker.GetGrabbedObject() != interactables[counter]))
             CameraSnap(interactables[counter].gameObject);
 
@@ -197,7 +192,7 @@ public class SelectionController : MonoBehaviour
         {
             if (collider.gameObject.GetComponent<IInteractable>() != null)
             {
-                // RaycastHit hit;
+                // RaycastHit hit, lets not grab objects behind walls;
                 Vector3 directionToInteractable = collider.gameObject.transform.position - playerCam.transform.position;
                 Collider[] cameraColliders = playerCam.GetComponentsInChildren<Collider>();
                 Collider[] objChildColliders = collider.gameObject.GetComponentsInChildren<Collider>();
@@ -243,9 +238,6 @@ public class SelectionController : MonoBehaviour
                 //if is child of camera or child of object
             }
         }
-
-        // Return whether there are interactables nearby or not
-        // Debug.Log("I see " + interactables.Count);
         return (interactables.Count > 0) ? true : false;
 
     } // END UpdateSelectables
@@ -260,7 +252,6 @@ public class SelectionController : MonoBehaviour
         List<GameObject> interactables = new List<GameObject>();
 
         // Get all GameObjects nearby
-        //Collider[] colliders = Physics.OverlapSphere(playerCam.transform.position, selectRadius);
         GameObject[] objects = FindObjectsOfType<GameObject>();
 
         // On each object, check if there is an interactable component, add to interactables list if yes
@@ -282,6 +273,7 @@ public class SelectionController : MonoBehaviour
 
 
     // ObjectInView
+    // Unused currently, but has potential
     //--------------------------------------//
     void ObjectInView()
     //--------------------------------------//
@@ -296,7 +288,7 @@ public class SelectionController : MonoBehaviour
         // Grab the vector to the target
         Vector3 targetPosition = new Vector3(target.x, target.y, target.z);
 
-        // 10 hardcoded, goofy code
+        // 10 hardcoded based on the size of the player view, change this later
         bool isOffScreen = targetScreenPos.x <= 10 || targetScreenPos.x >= Screen.width || targetScreenPos.y <= 10
                             || targetScreenPos.y >= Screen.height;
 
