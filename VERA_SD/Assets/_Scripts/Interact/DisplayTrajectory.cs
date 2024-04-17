@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class DisplayTrajectory : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    // DisplayTrajectory handles the throwing trajectory display
+
+
+    #region VARIABLES
+
+
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField][Range(20, 100)] private int _lineSegmentCount = 100;
     private List<Vector3> _linePoints = new List<Vector3>();
@@ -16,16 +22,34 @@ public class DisplayTrajectory : MonoBehaviour
     private Vector3 throwDirection;
     private float throwForce;
 
+
+    #endregion
+
+
+    #region MONOBEHAVIOUR
+
+
+    // Awake
+    //--------------------------------------//
     private void Awake()
     //--------------------------------------//
     {
         Instance = this;
         showLine = false;
         grabHandler = FindObjectOfType<GrabTracker>();
-    }
 
-    // Update is called once per frame
+        if (_lineRenderer != null)
+        {
+            _lineRenderer.transform.position = Vector3.zero;
+        }
+
+    } // END Awake
+
+
+    // Update
+    //--------------------------------------//
     void Update()
+    //--------------------------------------//
     {
         if (grabHandler.GetGrabbedObject() != null)
         {
@@ -44,23 +68,53 @@ public class DisplayTrajectory : MonoBehaviour
         {
             hideLine();
         }
-    }
+
+    } // END Update
+
+
+    #endregion
+
+
+    #region ANGLE
+
+
+    // setThrowingAngle
+    //--------------------------------------//
     private void setThrowAngle(Vector3 x)
+    //--------------------------------------//
     {
         throwDirection = x;
-    }
+
+    } // END setThrowingAngle
+
+
+    // getThrowAngle
+    //--------------------------------------//
     public Vector3 getThrowAngle()
+    //--------------------------------------//
     {
         return throwDirection;
-    }
+
+    } // END getThrowAngle
+
+
+    // setValues
+    //--------------------------------------//
     public void setValues(float vertAng, float horAng, float tForce)
+    //--------------------------------------//
     {
         showLine = true;
         vA = vertAng;
         hA = horAng;
         throwForce = tForce;
-    }
+
+    } // END setValues
+
+
+    // calculateLine
+    //--------------------------------------//
     public void calculateLine(Vector3 forceVector, Vector3 startingPoint)
+    //--------------------------------------//
     {
         //Transform force to velocity vector
         // Vector3 velocity = (forceVector / rigidBody.mass) * Time.fixedDeltaTime;
@@ -95,14 +149,32 @@ public class DisplayTrajectory : MonoBehaviour
         // Compose the line renderer using the positions
         _lineRenderer.positionCount = _linePoints.Count;
         _lineRenderer.SetPositions(_linePoints.ToArray());
-    }
+
+    } // END calculateValues
+
+
+    // hideLine
+    //--------------------------------------//
     public void hideLine()
+    //--------------------------------------//
     {
         _lineRenderer.positionCount = 0;
         showLine = false;
-    }
+
+    } // END hideLine
+
+
+    // lineCount
+    //--------------------------------------//
     public int lineCount()
+    //--------------------------------------//
     {
         return _lineRenderer.positionCount;
-    }
-}
+    
+    } // END lineCount
+
+
+    #endregion
+
+
+} // END DisplayTrajectory.cs
