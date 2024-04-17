@@ -25,6 +25,13 @@ public class VERA_DefaultActions : MonoBehaviour
     private bool cantMove;
     private float newDistance = 0;
 
+    [SerializeField][Range(0, 90)] private float throwAngleChange = 10;
+    [SerializeField][Range(0, 90)] private float throwForce = 10;
+    private float newVertChange;
+    private float verticleAngle;
+    private float newHorzChange;
+    private float horizontalAngle;
+
 
     #endregion
 
@@ -96,68 +103,6 @@ public class VERA_DefaultActions : MonoBehaviour
         }
 
     }//END Grab/Release
-
-
-    //Throw
-    //--------------------------------------//
-    public void Throw()
-    //--------------------------------------//
-    {
-        //Get Grabbed object
-        GameObject obj = grabHandler.GetGrabbedObject();
-
-        //Checks if you are grabing because if you are not holding an object you cant throw 
-        //maybe change to allow to grab if not holding object similar to grab/release
-        if (obj != null)
-        {
-            isGrabbing = false;
-            //Setting object parent back to original
-            obj.transform.SetParent(grabHandler.GetGrabParent(), true);
-
-            //if object had a different orientation set using Attach Transform in XRGrabInteractable then restore original parent for it
-            XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
-            if (grabInteractable != null && grabInteractable.attachTransform != null)
-            {
-                grabInteractable.attachTransform.SetParent(obj.transform, true);
-            }
-
-            // Adjust the offset as needed//
-            Vector3 offset = new Vector3(0.5f, 0.5f, 0.5f);
-            Vector3 zero = Camera.main.ViewportToWorldPoint(Vector3.zero);
-            Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
-            //Checks if there is a collision between player and held object //to account for teleporting past a wall or something
-            if (CheckCollisions(zero, targetPosition))
-            {
-                // If there is a collision, move to the point just before the collision
-                Vector3 adjustedPosition = FindAdjustedPosition(zero, targetPosition, obj);
-                obj.transform.position = adjustedPosition;
-            }
-            else
-            {
-                // If no collision, move to the target position
-                obj.transform.position = targetPosition;
-            }
-
-
-            //Setting RigidBody back to normal
-            Rigidbody rb = obj.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                //Gravity must be true else object wont fall to the ground
-                rb.useGravity = true;
-                rb.freezeRotation = grabHandler.GetfreezeRotation();
-                //Kinematic must be false or else force cannot be acted on it
-                rb.isKinematic = false;
-                rb.interpolation = grabHandler.GetInterpolation();
-                //Force acted in the direction the user is looking
-                Vector3 throwDirection = Camera.main.transform.forward;
-                rb.AddForce(throwDirection * 10f, ForceMode.Impulse);
-            }
-            grabHandler.SetGrabbedObject(null);
-
-        }
-
-    } // END Throw
 
 
     //OpenAndClose
@@ -318,115 +263,299 @@ public class VERA_DefaultActions : MonoBehaviour
     } // END OpenAndClose
 
 
-    // Drawer
+    #endregion
+
+
+    #region THROW / AIM
+
+
+    //Throw
     //--------------------------------------//
+    public void Throw()
+    //--------------------------------------//
+    {
+        //Get Grabbed object
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
+        {
+            isGrabbing = false;
+            //Setting object parent back to original
+            obj.transform.SetParent(grabHandler.GetGrabParent(), true);
+
+            //if object had a different orientation set using Attach Transform in XRGrabInteractable then restore original parent for it
+            XRGrabInteractable grabInteractable = obj.GetComponent<XRGrabInteractable>();
+            if (grabInteractable != null && grabInteractable.attachTransform != null)
+            {
+                grabInteractable.attachTransform.SetParent(obj.transform, true);
+            }
+
+            // Adjust the offset as needed//
+            Vector3 offset = new Vector3(0.75f, 0.25f, 0.5f);
+            Vector3 zero = Camera.main.ViewportToWorldPoint(Vector3.zero);
+            Vector3 targetPosition = Camera.main.ViewportToWorldPoint(offset);
+            //Checks if there is a collision between player and held object //to account for teleporting past a wall or something
+            // if (CheckCollisions(zero, targetPosition))
+            // {
+            //     // If there is a collision, move to the point just before the collision
+            //     Vector3 adjustedPosition = FindAdjustedPosition(zero, targetPosition, obj);
+            //     obj.transform.position = adjustedPosition;
+            // }
+            // else
+            // {
+            // If no collision, move to the target position
+            obj.transform.position = targetPosition;
+            // }
+
+
+            //Setting RigidBody back to normal
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                //Gravity must be true else object wont fall to the ground
+                rb.useGravity = true;
+                rb.freezeRotation = grabHandler.GetfreezeRotation();
+                //Kinematic must be false or else force cannot be acted on it
+                rb.isKinematic = false;
+                rb.interpolation = grabHandler.GetInterpolation();
+                //Force acted in the direction the user is looking
+                Vector3 throwDirection;
+                if (DisplayTrajectory.Instance.lineCount() == 0)
+                {
+                    throwDirection = Camera.main.transform.forward;
+                }
+                else
+                {
+                    throwDirection = DisplayTrajectory.Instance.getThrowAngle();
+                }
+                rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+                DisplayTrajectory.Instance.hideLine();
+                verticleAngle = 0;
+                newVertChange = throwAngleChange;
+                horizontalAngle = 0;
+                newHorzChange = throwAngleChange;
+            }
+            grabHandler.SetGrabbedObject(null);
+
+        }
+    }//End Throw
+
+    #region TRAJECTORY
+
+    public void aimThrow()
+    {
+        //show tragectory line with regular force
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
+        {
+            verticleAngle = 0;
+            newVertChange = throwAngleChange;
+            horizontalAngle = 0;
+            newHorzChange = throwAngleChange;
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
+        }
+    }
+    public void aimUp()
+    {
+        //move tragectory line up n units
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
+        {
+            if (verticleAngle < 90)
+            {
+                if (verticleAngle == -90)
+                {
+                    verticleAngle += newVertChange;
+                }
+                else
+                {
+                    if (verticleAngle + throwAngleChange > 90)
+                    {
+                        newVertChange = 90 - verticleAngle;
+                        verticleAngle = 90;
+                    }
+                    else
+                    {
+                        verticleAngle += throwAngleChange;
+                        newVertChange = throwAngleChange;
+                    }
+                }
+            }
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
+            //update Trajectory line
+        }
+    }
+    public void aimDown()
+    {
+        //move tragectory line down n units
+        //IF CURRENTDIRECTION == UP DIRECTION ROTATE NEGATIVE FROM RADIANS
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
+        {
+            if (verticleAngle > -90)
+            {
+                if (verticleAngle == 90)
+                {
+                    verticleAngle -= newVertChange;
+                }
+                else
+                {
+                    if (verticleAngle - throwAngleChange < -90)
+                    {
+                        newVertChange = 90 + verticleAngle;
+                        verticleAngle = -90;
+                    }
+                    else
+                    {
+                        verticleAngle -= throwAngleChange;
+                        newVertChange = throwAngleChange;
+                    }
+                }
+
+            }
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
+        }
+        //update Trajectory line
+    }
+    public void aimRight()
+    {
+        //move tragectory line right n units
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
+        {
+            if (horizontalAngle < 90)
+            {
+                if (horizontalAngle == -90)
+                {
+                    horizontalAngle += newHorzChange;
+                }
+                else
+                {
+                    if (horizontalAngle + throwAngleChange > 90)
+                    {
+                        newHorzChange = 90 - horizontalAngle;
+                        horizontalAngle = 90;
+                    }
+                    else
+                    {
+                        horizontalAngle += throwAngleChange;
+                        newHorzChange = throwAngleChange;
+                    }
+                }
+            }
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
+        }
+        //update Trajectory line
+    }
+    public void aimLeft()
+    {
+        //move tragectory line left n units
+        GameObject obj = grabHandler.GetGrabbedObject();
+
+        //Checks if you are grabing because if you are not holding an object you cant throw 
+        //maybe change to allow to grab if not holding object similar to grab/release
+        if (obj != null)
+        {
+            if (horizontalAngle > -90)
+            {
+                if (horizontalAngle == 90)
+                {
+                    horizontalAngle -= newHorzChange;
+                }
+                else
+                {
+                    if (horizontalAngle - throwAngleChange < -90)
+                    {
+                        newHorzChange = 90 + horizontalAngle;
+                        horizontalAngle = -90;
+                    }
+                    else
+                    {
+                        horizontalAngle -= throwAngleChange;
+                        newHorzChange = throwAngleChange;
+                    }
+                }
+
+            }
+            DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
+        }
+        //update Trajectory line
+    }
+    //back and throw will unshow tragectory line
+    #endregion
+    //end of Trajectory
+
     public void Drawer()
-    //--------------------------------------//
     {
         Vector3 movementDirection = Vector3.zero;
 
         if (gJoint.xMotion != ConfigurableJointMotion.Locked)
         {
-            movementDirection += this.transform.TransformDirection(gJoint.axis);
+            movementDirection += transform.TransformDirection(gJoint.axis);
         }
         if (gJoint.yMotion != ConfigurableJointMotion.Locked)
         {
-            movementDirection += this.transform.TransformDirection(gJoint.secondaryAxis);
+            movementDirection += transform.TransformDirection(gJoint.secondaryAxis);
         }
         if (gJoint.zMotion != ConfigurableJointMotion.Locked)
         {
             Vector3 crossAxis = Vector3.Cross(gJoint.axis, gJoint.secondaryAxis);
-            movementDirection += this.transform.TransformDirection(crossAxis);
+            movementDirection += transform.TransformDirection(crossAxis);
         }
 
-        // Debug.Log(CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit));
-        // Debug.Log(CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit));
-
-        // if (startP == true)
-        // {
-        //     if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true && CheckCollisionAndMove(-movementDirection, gJoint.linearLimit.limit) == true)
-        //     {
-        //         if (gReverse == false)
-        //         {
-        //             this.transform.position += movementDirection * gJoint.linearLimit.limit;
-        //         }
-        //         else
-        //         {
-        //             this.transform.position -= movementDirection * gJoint.linearLimit.limit;
-        //         }
-        //         startP = false;
-        //     }
-        //     else
-        //     {
-        //         if (CheckCollisionAndMove(movementDirection, gJoint.linearLimit.limit) == true)
-        //         {
-        //             gReverse = false;
-        //             this.transform.position += movementDirection * gJoint.linearLimit.limit;
-        //             startP = false;
-        //         }
-        //         else
-        //         {
-        //             gReverse = true;
-        //             this.transform.position -= movementDirection * gJoint.linearLimit.limit;
-        //             startP = false;
-        //         }
-        //     }
-        // }
-        // else
-        // {
-        //     if (gReverse == false)
-        //     {
-        //         this.transform.position -= movementDirection * gJoint.linearLimit.limit;
-        //     }
-        //     else
-        //     {
-        //         this.transform.position += movementDirection * gJoint.linearLimit.limit;
-        //     }
-        //     startP = true;
-        //     gReverse = !gReverse;
-        // }
-
-        // Debug.Log("positive: " + testFunction(movementDirection, transform.position, gJoint.linearLimit.limit));
-        // Debug.Log("negative: " + testFunction(-movementDirection, transform.position, gJoint.linearLimit.limit));
-        if (startP == true)
+        if (startP)
         {
-            if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true && testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+            if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) && testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit))
             {
-                if (gReverse == false)
+                if (!gReverse)
                 {
-                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position + movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
                 else
                 {
-                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position - movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
                 startP = false;
             }
             else
             {
-                if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+                if (testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit))
                 {
                     gReverse = false;
-                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position + movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                     startP = false;
                 }
-                else if (testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit) == true)
+                else if (testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit))
                 {
                     gReverse = true;
-                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position - movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                     startP = false;
                 }
                 else
                 {
-                    if (gReverse == false)
+                    if (!gReverse)
                     {
                         testFunction(movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit);
-                        this.transform.position += movementDirection * newDistance;
+                        LeanTween.move(gameObject, transform.position + movementDirection * newDistance, .5f).setEase(LeanTweenType.easeInOutQuad);
                     }
                     else
                     {
                         testFunction(-movementDirection, gJoint.connectedAnchor, gJoint.linearLimit.limit);
-                        this.transform.position -= movementDirection * newDistance;
+                        LeanTween.move(gameObject, transform.position - movementDirection * newDistance, .5f).setEase(LeanTweenType.easeInOutQuad);
                     }
                     cantMove = true;
                     startP = false;
@@ -435,26 +564,26 @@ public class VERA_DefaultActions : MonoBehaviour
         }
         else
         {
-            if (gReverse == false)
+            if (!gReverse)
             {
-                if (cantMove == true)
+                if (cantMove)
                 {
-                    this.transform.position -= movementDirection * newDistance;
+                    LeanTween.move(gameObject, transform.position - movementDirection * newDistance, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
                 else
                 {
-                    this.transform.position -= movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position - movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
             }
             else
             {
-                if (cantMove == true)
+                if (cantMove)
                 {
-                    this.transform.position += movementDirection * newDistance;
+                    LeanTween.move(gameObject, transform.position + movementDirection * newDistance, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
                 else
                 {
-                    this.transform.position += movementDirection * gJoint.linearLimit.limit;
+                    LeanTween.move(gameObject, transform.position + movementDirection * gJoint.linearLimit.limit, .5f).setEase(LeanTweenType.easeInOutQuad);
                 }
             }
             cantMove = false;
@@ -462,7 +591,7 @@ public class VERA_DefaultActions : MonoBehaviour
             gReverse = !gReverse;
         }
 
-    } // END Drawer
+    }
 
 
     #endregion
