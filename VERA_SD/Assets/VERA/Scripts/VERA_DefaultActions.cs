@@ -344,7 +344,7 @@ public class VERA_DefaultActions : MonoBehaviour
 
     #region TRAJECTORY
 
-    public void aimThrow()
+    public void ThrowAimActivate()
     {
         //show tragectory line with regular force
         GameObject obj = grabHandler.GetGrabbedObject();
@@ -360,7 +360,7 @@ public class VERA_DefaultActions : MonoBehaviour
             DisplayTrajectory.Instance.setValues(verticleAngle, horizontalAngle, throwForce);
         }
     }
-    public void aimUp()
+    public void ThrowAimUp()
     {
         //move tragectory line up n units
         GameObject obj = grabHandler.GetGrabbedObject();
@@ -393,7 +393,7 @@ public class VERA_DefaultActions : MonoBehaviour
             //update Trajectory line
         }
     }
-    public void aimDown()
+    public void ThrowAimDown()
     {
         //move tragectory line down n units
         //IF CURRENTDIRECTION == UP DIRECTION ROTATE NEGATIVE FROM RADIANS
@@ -428,7 +428,7 @@ public class VERA_DefaultActions : MonoBehaviour
         }
         //update Trajectory line
     }
-    public void aimRight()
+    public void ThrowAimRight()
     {
         //move tragectory line right n units
         GameObject obj = grabHandler.GetGrabbedObject();
@@ -461,7 +461,7 @@ public class VERA_DefaultActions : MonoBehaviour
         }
         //update Trajectory line
     }
-    public void aimLeft()
+    public void ThrowAimLeft()
     {
         //move tragectory line left n units
         GameObject obj = grabHandler.GetGrabbedObject();
