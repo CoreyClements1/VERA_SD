@@ -75,6 +75,7 @@ void loop()
 
 	boolean invert = true;
 
+	// You may have to flip these around
 	XInput.setJoystickX(JOY_RIGHT, rightJoyX);
 	XInput.setJoystickY(JOY_RIGHT, rightJoyY, invert);
   XInput.send();
