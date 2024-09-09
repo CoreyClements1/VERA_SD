@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b57bec5be19884fb6f9b873ff20167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xrPlayerLocation: {fileID: 0}
+  xrPlayerParent: {fileID: 0}
   xrPlayerRadius: 0.2
   xrPlayerHeight: 2
   interactionRadius: 5
