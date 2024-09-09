@@ -27,7 +27,6 @@ public class NewMenuNavigation : MonoBehaviour
     public UiState currentUiState { get; private set; } = UiState.Header;
     private int currentButtonHighlight = 0;
 
-    private InputActions inputActions;
     private FolderTabsManager folderTabsManager;
     private MainAreaManager mainAreaManager;
 
@@ -35,7 +34,7 @@ public class NewMenuNavigation : MonoBehaviour
     [SerializeField] private ButtonTabberManager moveTabberManager;
     [SerializeField] private ButtonTabberManager interactTabberManager;
     [SerializeField] private ButtonTabberManager interactSubTabberManager;
-    [SerializeField] private VERA_MenuNavigator settingsNavigator;
+    [SerializeField] private VLAT_MenuNavigator settingsNavigator;
     [SerializeField] private CanvasGroup settingsCanvasGroup;
 
     private UiInputDistributor uiInputDistributor;
@@ -47,7 +46,7 @@ public class NewMenuNavigation : MonoBehaviour
     public HighlightableTab buttonHighlightPrefab;
 
     private bool navigatingExternalMenu = false;
-    private VERA_MenuNavigator externalMenuNavigator;
+    private VLAT_MenuNavigator externalMenuNavigator;
     private float settingsStartPosY;
     private float settingsOldSize = 100f;
     private float settingsNewSize = 300f;
@@ -72,14 +71,6 @@ public class NewMenuNavigation : MonoBehaviour
         mainAreaManager = FindObjectOfType<MainAreaManager>();
         mainAreaManager.SwapMainAreaToMode(UiState.Look);
 
-        inputActions = new InputActions();
-        inputActions.Movement.Enable();
-
-        inputActions.Movement.Switch1.performed += Button1;
-        inputActions.Movement.Switch2.performed += Button2;
-        inputActions.Movement.Switch3.performed += Button3;
-        inputActions.Movement.Switch4.performed += Button4;
-
         uiInputDistributor = FindObjectOfType<UiInputDistributor>();
         selectionController = FindObjectOfType<SelectionController>();
         interactionsMenuManager = FindObjectOfType<InteractionsMenuManager>();
@@ -98,7 +89,7 @@ public class NewMenuNavigation : MonoBehaviour
 
     // Button 1 (left)
     //--------------------------------------//
-    private void Button1(InputAction.CallbackContext ctx)
+    public void Button1(InputAction.CallbackContext ctx)
     //--------------------------------------//
     {
         if (navigatingExternalMenu)
@@ -155,7 +146,7 @@ public class NewMenuNavigation : MonoBehaviour
 
     // Button 2 (right)
     //--------------------------------------//
-    private void Button2(InputAction.CallbackContext ctx)
+    public void Button2(InputAction.CallbackContext ctx)
     //--------------------------------------//
     {
         if (navigatingExternalMenu)
@@ -212,7 +203,7 @@ public class NewMenuNavigation : MonoBehaviour
 
     // Button 3 (select)
     //--------------------------------------//
-    private void Button3(InputAction.CallbackContext ctx)
+    public void Button3(InputAction.CallbackContext ctx)
     //--------------------------------------//
     {
         if (navigatingExternalMenu)
@@ -316,7 +307,7 @@ public class NewMenuNavigation : MonoBehaviour
 
     // Button 4 (back)
     //--------------------------------------//
-    private void Button4(InputAction.CallbackContext ctx)
+    public void Button4(InputAction.CallbackContext ctx)
     //--------------------------------------//
     {
         if (navigatingExternalMenu)
@@ -374,7 +365,7 @@ public class NewMenuNavigation : MonoBehaviour
 
     // Sets whether we are navigating an external menu
     //--------------------------------------//
-    public void StartNavigateExternalMenu(VERA_MenuNavigator menuToNavigate)
+    public void StartNavigateExternalMenu(VLAT_MenuNavigator menuToNavigate)
     //--------------------------------------//
     {
         navigatingExternalMenu = true;

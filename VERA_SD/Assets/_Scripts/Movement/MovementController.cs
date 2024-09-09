@@ -40,11 +40,13 @@ public class MovementController : MonoBehaviour
     private bool useOneTapMove = false;
     private bool continualMoveOn = false;
 
+    private bool movementActive = false;
+
 
     #endregion
 
 
-    #region MONOBEHAVIOUR
+    #region SETUP
 
 
     // Start
@@ -52,7 +54,6 @@ public class MovementController : MonoBehaviour
     void Start()
     //--------------------------------------//
     {
-        _characterController = FindObjectOfType<CharacterController>();
         _input = GetComponent<MovementInput>();
         mainCam = Camera.main.transform;
         xrRig = FindObjectOfType<XROrigin>().transform;
@@ -60,20 +61,45 @@ public class MovementController : MonoBehaviour
     } // END Start
 
 
+    // Sets up the character controller for movement
+    //--------------------------------------//
+    public void SetupCharController(GameObject xrRig, float radius, float height)
+    //--------------------------------------//
+    {
+        // Spawn character controller for movement capabilities
+        _characterController = xrRig.AddComponent<CharacterController>();
+        _characterController.radius = radius;
+        _characterController.height = height / 2f;
+        _characterController.center = Vector3.up * height;
+
+        movementActive = true;
+
+    } // END SetupCharController
+
+
+    #endregion
+
+
+    #region FIXED UPDATE
+
+
     // FixedUpdate
     //--------------------------------------//
     private void FixedUpdate()
     //--------------------------------------//
     {
+        if (!movementActive)
+            return;
+
         // These check if the switch has been pressed
         bool switchDown1 = _input.buttonPress1 > 0.1f;
         bool switchDown2 = _input.buttonPress2 > 0.1f;
-        bool switchDown3 =  _input.buttonPress3 > 0.1f;
+        bool switchDown3 = _input.buttonPress3 > 0.1f;
         bool switchDown4 = _input.buttonPress4 > 0.1f;
         bool statePressed = _input.state > 0.1f;
 
         // If the user is in the air then gravity will bring them down until grounded
-        if(_characterController.isGrounded == false)
+        if (_characterController.isGrounded == false)
         {
             _userMoveInput += Physics.gravity;
             _characterController.Move(new Vector3(0f, _userMoveInput.y, 0f) * speed * Time.deltaTime);
@@ -335,7 +361,7 @@ public class MovementController : MonoBehaviour
 
 
     #endregion
-
+    
 
 } // END MovementController.cs
 

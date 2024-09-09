@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MovementControllerT2 : MonoBehaviour
 {
-
     // MovementControllerT2 handles type 2 movement
     // NOTE: CURRENTLY UNUSED
 
@@ -139,7 +138,7 @@ public class MovementControllerT2 : MonoBehaviour
         }
         else if(movementCheck)
         {
-            _rigidbody.constraints = /*RigidbodyConstraints.FreezePositionY |*/ RigidbodyConstraints.FreezeRotation;
+            _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             _userMoveInput = new Vector3(_userMoveInput.x,
                                         _userMoveInput.y,
                                         _userMoveInput.z * speed * _rigidbody.mass);
@@ -201,6 +200,5 @@ public class MovementControllerT2 : MonoBehaviour
 
 
     #endregion
-
 
 } // END MovementControllerT2

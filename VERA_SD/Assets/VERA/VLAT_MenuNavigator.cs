@@ -4,10 +4,10 @@ using System.Transactions;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VERA_MenuNavigator : MonoBehaviour
+public class VLAT_MenuNavigator : MonoBehaviour
 {
 
-    // VERA_MenuNavigator allows menu navigation via VERA controls
+    // VLAT_MenuNavigator allows menu navigation via VERA controls
 
 
     #region VARIABLES
@@ -286,4 +286,4 @@ public class VERA_MenuNavigator : MonoBehaviour
     #endregion
 
 
-} // END VERA_MenuNavigator
+} // END VLAT_MenuNavigator

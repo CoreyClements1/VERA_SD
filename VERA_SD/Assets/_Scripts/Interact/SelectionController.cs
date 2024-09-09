@@ -18,12 +18,12 @@ public class SelectionController : MonoBehaviour
     #region VARIABLES
 
 
-    private List<VERA_Interactable> interactables = new List<VERA_Interactable>();
+    private List<VLAT_Interactable> interactables = new List<VLAT_Interactable>();
     private int counter = 0;
-    private VERA_Interactable previousObj;
+    private VLAT_Interactable previousObj;
     private Outline outline;
     private GameObject lookTarget;
-    [System.NonSerialized] public VERA_Interactable currentObj;
+    [System.NonSerialized] public VLAT_Interactable currentObj;
     private bool manualHighlightCancel = false;
     private GrabTracker grabTracker;
 
@@ -207,7 +207,7 @@ public class SelectionController : MonoBehaviour
                 {
                     if (hits[0].collider == collider)
                     {
-                        interactables.Add(collider.gameObject.GetComponent<VERA_Interactable>());
+                        interactables.Add(collider.gameObject.GetComponent<VLAT_Interactable>());
                     }
                 }
                 else
@@ -236,7 +236,7 @@ public class SelectionController : MonoBehaviour
                         }
                         else
                         {
-                            interactables.Add(collider.gameObject.GetComponent<VERA_Interactable>());
+                            interactables.Add(collider.gameObject.GetComponent<VLAT_Interactable>());
                         }
                     }
                 }
@@ -352,7 +352,7 @@ public class SelectionController : MonoBehaviour
     {
         manualHighlightCancel = false;
 
-        foreach (VERA_Interactable inter in interactables)
+        foreach (VLAT_Interactable inter in interactables)
         {
             GameObject obj = inter.gameObject;
             if (obj.GetComponent<Outline>() != null)
@@ -377,7 +377,7 @@ public class SelectionController : MonoBehaviour
         // If we manually cancelled highlighting during coroutine, don't cancel highlighting again
         if (!manualHighlightCancel)
         {
-            foreach (VERA_Interactable inter in interactables)
+            foreach (VLAT_Interactable inter in interactables)
             {
                 inter.gameObject.GetComponent<Outline>().enabled = false;
             }
@@ -393,7 +393,7 @@ public class SelectionController : MonoBehaviour
     {
         manualHighlightCancel = true;
 
-        foreach (VERA_Interactable inter in interactables)
+        foreach (VLAT_Interactable inter in interactables)
         {
             GameObject obj = inter.gameObject;
             if (obj.GetComponent<Outline>() != null)

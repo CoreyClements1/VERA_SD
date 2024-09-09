@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
 
-public class VERA_DefaultActions : MonoBehaviour
+public class VLAT_DefaultActions : MonoBehaviour
 {
 
-    // VERA_DefaultActions provides various simple default interactions, such as pick up, throw, etc.
+    // VLAT_DefaultActions provides various simple default interactions, such as pick up, throw, etc.
 
 
     #region VARIABLES
@@ -819,4 +819,4 @@ public class VERA_DefaultActions : MonoBehaviour
     #endregion
 
 
-} // END VERA_DefaultActions.cs
+} // END VLAT_DefaultActions.cs

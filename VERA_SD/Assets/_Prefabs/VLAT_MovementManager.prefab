@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7731151140359574277}
   - component: {fileID: 4507520620131436699}
   m_Layer: 0
-  m_Name: VERA_MovementManager
+  m_Name: VLAT_MovementManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,6 +65,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1728fa3e1a4cd3c4295b78eaaae6dbfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vlatCharControllerPrefab: {fileID: 7284165642300215197, guid: 89ae1e54d374fa74b8f7c1321f1edc0f,
+    type: 3}
   speed: 3
   rotationValue: 45
   rotationValueVertical: 10

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class VERA_Interactable : MonoBehaviour, IInteractable
+public class VLAT_Interactable : MonoBehaviour, IInteractable
 {
 
-    // VERA_Interactable provides a base for all interactable objects
+    // VLAT_Interactable provides a base for all interactable objects
 
 
     #region VARIABLES
@@ -117,7 +117,7 @@ public class VERA_Interactable : MonoBehaviour, IInteractable
     #endregion
 
 
-} // END VERA_Interactable.cs
+} // END VLAT_Interactable.cs
 
 
 [System.Serializable]

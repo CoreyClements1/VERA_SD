@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2582774303097288377}
   - component: {fileID: 2582774303097288378}
   m_Layer: 0
-  m_Name: VERA_InputActionManager
+  m_Name: VLAT_InputActionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

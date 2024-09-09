@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 6818631350841866658}
   - component: {fileID: 789216054549335274}
   m_Layer: 0
-  m_Name: VERA_SelectionController
+  m_Name: VLAT_SelectionController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

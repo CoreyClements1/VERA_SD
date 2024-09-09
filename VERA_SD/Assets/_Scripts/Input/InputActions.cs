@@ -24,7 +24,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     ""name"": ""InputActions"",
     ""maps"": [
         {
-            ""name"": ""Movement"",
+            ""name"": ""VlatControls"",
             ""id"": ""642c6098-82ed-42cf-b600-68fedf660957"",
             ""actions"": [
                 {
@@ -337,14 +337,14 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": []
 }");
-        // Movement
-        m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
-        m_Movement_StickInput = m_Movement.FindAction("StickInput", throwIfNotFound: true);
-        m_Movement_Switch1 = m_Movement.FindAction("Switch1", throwIfNotFound: true);
-        m_Movement_Switch2 = m_Movement.FindAction("Switch2", throwIfNotFound: true);
-        m_Movement_Switch3 = m_Movement.FindAction("Switch3", throwIfNotFound: true);
-        m_Movement_Switch4 = m_Movement.FindAction("Switch4", throwIfNotFound: true);
-        m_Movement_SwitchLevel = m_Movement.FindAction("SwitchLevel", throwIfNotFound: true);
+        // VlatControls
+        m_VlatControls = asset.FindActionMap("VlatControls", throwIfNotFound: true);
+        m_VlatControls_StickInput = m_VlatControls.FindAction("StickInput", throwIfNotFound: true);
+        m_VlatControls_Switch1 = m_VlatControls.FindAction("Switch1", throwIfNotFound: true);
+        m_VlatControls_Switch2 = m_VlatControls.FindAction("Switch2", throwIfNotFound: true);
+        m_VlatControls_Switch3 = m_VlatControls.FindAction("Switch3", throwIfNotFound: true);
+        m_VlatControls_Switch4 = m_VlatControls.FindAction("Switch4", throwIfNotFound: true);
+        m_VlatControls_SwitchLevel = m_VlatControls.FindAction("SwitchLevel", throwIfNotFound: true);
         // MovementT2
         m_MovementT2 = asset.FindActionMap("MovementT2", throwIfNotFound: true);
         m_MovementT2_Movement = m_MovementT2.FindAction("Movement", throwIfNotFound: true);
@@ -411,34 +411,34 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Movement
-    private readonly InputActionMap m_Movement;
-    private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
-    private readonly InputAction m_Movement_StickInput;
-    private readonly InputAction m_Movement_Switch1;
-    private readonly InputAction m_Movement_Switch2;
-    private readonly InputAction m_Movement_Switch3;
-    private readonly InputAction m_Movement_Switch4;
-    private readonly InputAction m_Movement_SwitchLevel;
-    public struct MovementActions
+    // VlatControls
+    private readonly InputActionMap m_VlatControls;
+    private List<IVlatControlsActions> m_VlatControlsActionsCallbackInterfaces = new List<IVlatControlsActions>();
+    private readonly InputAction m_VlatControls_StickInput;
+    private readonly InputAction m_VlatControls_Switch1;
+    private readonly InputAction m_VlatControls_Switch2;
+    private readonly InputAction m_VlatControls_Switch3;
+    private readonly InputAction m_VlatControls_Switch4;
+    private readonly InputAction m_VlatControls_SwitchLevel;
+    public struct VlatControlsActions
     {
         private @InputActions m_Wrapper;
-        public MovementActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @StickInput => m_Wrapper.m_Movement_StickInput;
-        public InputAction @Switch1 => m_Wrapper.m_Movement_Switch1;
-        public InputAction @Switch2 => m_Wrapper.m_Movement_Switch2;
-        public InputAction @Switch3 => m_Wrapper.m_Movement_Switch3;
-        public InputAction @Switch4 => m_Wrapper.m_Movement_Switch4;
-        public InputAction @SwitchLevel => m_Wrapper.m_Movement_SwitchLevel;
-        public InputActionMap Get() { return m_Wrapper.m_Movement; }
+        public VlatControlsActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @StickInput => m_Wrapper.m_VlatControls_StickInput;
+        public InputAction @Switch1 => m_Wrapper.m_VlatControls_Switch1;
+        public InputAction @Switch2 => m_Wrapper.m_VlatControls_Switch2;
+        public InputAction @Switch3 => m_Wrapper.m_VlatControls_Switch3;
+        public InputAction @Switch4 => m_Wrapper.m_VlatControls_Switch4;
+        public InputAction @SwitchLevel => m_Wrapper.m_VlatControls_SwitchLevel;
+        public InputActionMap Get() { return m_Wrapper.m_VlatControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MovementActions set) { return set.Get(); }
-        public void AddCallbacks(IMovementActions instance)
+        public static implicit operator InputActionMap(VlatControlsActions set) { return set.Get(); }
+        public void AddCallbacks(IVlatControlsActions instance)
         {
-            if (instance == null || m_Wrapper.m_MovementActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MovementActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_VlatControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_VlatControlsActionsCallbackInterfaces.Add(instance);
             @StickInput.started += instance.OnStickInput;
             @StickInput.performed += instance.OnStickInput;
             @StickInput.canceled += instance.OnStickInput;
@@ -459,7 +459,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @SwitchLevel.canceled += instance.OnSwitchLevel;
         }
 
-        private void UnregisterCallbacks(IMovementActions instance)
+        private void UnregisterCallbacks(IVlatControlsActions instance)
         {
             @StickInput.started -= instance.OnStickInput;
             @StickInput.performed -= instance.OnStickInput;
@@ -481,21 +481,21 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @SwitchLevel.canceled -= instance.OnSwitchLevel;
         }
 
-        public void RemoveCallbacks(IMovementActions instance)
+        public void RemoveCallbacks(IVlatControlsActions instance)
         {
-            if (m_Wrapper.m_MovementActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_VlatControlsActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IMovementActions instance)
+        public void SetCallbacks(IVlatControlsActions instance)
         {
-            foreach (var item in m_Wrapper.m_MovementActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_VlatControlsActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_MovementActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_VlatControlsActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public MovementActions @Movement => new MovementActions(this);
+    public VlatControlsActions @VlatControls => new VlatControlsActions(this);
 
     // MovementT2
     private readonly InputActionMap m_MovementT2;
@@ -582,7 +582,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         }
     }
     public MovementT2Actions @MovementT2 => new MovementT2Actions(this);
-    public interface IMovementActions
+    public interface IVlatControlsActions
     {
         void OnStickInput(InputAction.CallbackContext context);
         void OnSwitch1(InputAction.CallbackContext context);

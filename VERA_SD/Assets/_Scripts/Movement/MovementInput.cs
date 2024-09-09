@@ -9,11 +9,10 @@ public class MovementInput : MonoBehaviour
 
     // MovementInput handles the inputs relating to movement
 
-
+    
     #region VARIABLES
 
 
-    InputActions _input = null;
     public float buttonPress1 = 0;
     public float buttonPress2 = 0;
     public float buttonPress3 = 0;
@@ -24,98 +23,6 @@ public class MovementInput : MonoBehaviour
     [SerializeField] private bool movementControlledByTree = false;
     // Variable to change the accessibility level to change controls for movement.
     // [SerializeField] public int accessLevel = 1;
-
-    #endregion
-
-
-    #region ENABLE / DISABLE INPUT ACTIONS
-
-
-    // Enabling actionmaps and subscribing to their events
-    //--------------------------------------//
-    private void OnEnable()
-    //--------------------------------------//
-    {
-        // Level 1 of accessibility 
-        // if (accessLevel == 1)
-        // {
-        _input = new InputActions();
-        _input.Movement.Enable();
-
-        _input.Movement.StickInput.performed += SetStickMovement;
-
-        _input.Movement.Switch1.performed += SetPressed1;
-
-        _input.Movement.Switch2.performed += SetPressed2;
-
-        _input.Movement.Switch3.performed += SetPressed3;
-        
-        _input.Movement.Switch4.performed += SetPressed4;
-
-        _input.Movement.SwitchLevel.performed += SetState;
-        // }
-        // // Level 2 of accessibility 
-        // else if (accessLevel == 2)
-        // {
-        //     _input = new InputActions();
-        //     _input.MovementT2.Enable();
-
-        //     _input.MovementT2.Movement.performed += SetStickMovement;
-
-        //     _input.MovementT2.LookUp.performed += SetLookUp;
-
-        //     _input.MovementT2.LookDown.performed += SetLookDown;
-
-        //     _input.MovementT2.Interact.performed += SetInteract;
-
-        //     _input.MovementT2.Menu.performed += SetMenu;
-
-        //     // _input.MovementT2.Switch.performed += SetState;
-        // }
-
-    } // END OnEnable
-
-
-    // OnDisable
-    //--------------------------------------//
-    private void OnDisable()
-    //--------------------------------------//
-    {
-        // Level 1 of accessibility 
-        // if (accessLevel == 1 && !movementControlledByTree)
-        _input.Movement.StickInput.performed -= SetStickMovement;
-
-        _input.Movement.Switch1.performed -= SetPressed1;
-
-        _input.Movement.Switch2.performed -= SetPressed2;
-
-        _input.Movement.Switch3.performed -= SetPressed3;
-
-        _input.Movement.Switch4.performed -= SetPressed4;
-
-        _input.Movement.SwitchLevel.performed -= SetState;
-
-        _input.Movement.Disable();
-        // // Level 2 of accessibility 
-        // else if (accessLevel == 2 && !movementControlledByTree)
-        // {
-        //     _input.MovementT2.Movement.performed -= SetStickMovement;
-
-        //     _input.MovementT2.LookUp.performed -= SetLookUp;
-
-        //     _input.MovementT2.LookDown.performed -= SetLookDown;
-
-        //     _input.MovementT2.Interact.performed -= SetInteract;
-
-        //     _input.MovementT2.Menu.performed -= SetMenu;
-
-        //     // _input.MovementT2.Switch.performed -= SetState;
-
-        //     _input.MovementT2.Disable();
-        // }
-        
-    } // END OnDisable
-
 
     #endregion
 
@@ -263,6 +170,6 @@ public class MovementInput : MonoBehaviour
 
 
     #endregion
-
+    
 
 } // END MovementInput.cs

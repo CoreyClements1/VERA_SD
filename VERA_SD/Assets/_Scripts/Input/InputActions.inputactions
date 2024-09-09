@@ -2,7 +2,7 @@
     "name": "InputActions",
     "maps": [
         {
-            "name": "Movement",
+            "name": "VlatControls",
             "id": "642c6098-82ed-42cf-b600-68fedf660957",
             "actions": [
                 {

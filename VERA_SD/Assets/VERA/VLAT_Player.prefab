@@ -46,7 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 293902704569043561}
   m_Layer: 0
-  m_Name: VERA_Player
+  m_Name: VLAT_Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

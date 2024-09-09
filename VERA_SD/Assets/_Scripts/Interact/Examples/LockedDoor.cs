@@ -10,8 +10,8 @@ public class LockedDoor : MonoBehaviour
 
 
     [SerializeField] private Key linkedKey;
-    [SerializeField] private VERA_DefaultActions leftDoor;
-    [SerializeField] private VERA_DefaultActions rightDoor;
+    [SerializeField] private VLAT_DefaultActions leftDoor;
+    [SerializeField] private VLAT_DefaultActions rightDoor;
     private GrabTracker grabHandler;
     private bool locked = true;
 
