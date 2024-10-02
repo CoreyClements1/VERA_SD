@@ -51,10 +51,14 @@ public class MovementController : MonoBehaviour
 
         this.xrRig = xrRig.transform;
         // Spawn character controller for movement capabilities
-        _characterController = xrRig.AddComponent<CharacterController>();
-        _characterController.radius = radius;
-        _characterController.height = height / 2f;
-        _characterController.center = Vector3.up * (height / 4f);
+        _characterController = xrRig.GetComponent<CharacterController>();
+        if (_characterController == null)
+        {
+            _characterController = xrRig.AddComponent<CharacterController>();
+            _characterController.radius = radius;
+            _characterController.height = height / 2f;
+            _characterController.center = Vector3.up * (height / 4f);
+        }
 
         speed = moveSpeed;
 
