@@ -129,9 +129,9 @@ public class SettingsManager : MonoBehaviour
         if (disableVirtualHandsToggle.isOn)
         {
             if (leftVirtualHand != null)
-                leftVirtualHand.gameObject.SetActive(false);
+                leftVirtualHand.gameObject.SetActive(true);
             if (rightVirtualHand != null)
-                rightVirtualHand.gameObject.SetActive(false);
+                rightVirtualHand.gameObject.SetActive(true);
         }
         else
         {
